@@ -46,7 +46,7 @@ Run these deterministic checks against the candidate's repo. Record pass/fail fo
 |----|-------|--------------|
 | G1 | `package.json` exists | File check |
 | G2 | `npm install` succeeds | Run command |
-| G3 | `npm run build` or `npm run dev` succeeds | Run command |
+| G3 | Project runs: try `npm run build` first; if that fails, try `npm run dev` | Run command(s) — passes if either succeeds |
 | G4 | Route exists at `/matrix` | Check `src/app/matrix/` or router config |
 | G5 | At least 3 project markdown files in `_content/projects/` | Count files |
 | G6 | Chart/scatter library installed | Check `package.json` deps (recharts, d3, chart.js, visx, nivo) |
@@ -56,7 +56,7 @@ Run these deterministic checks against the candidate's repo. Record pass/fail fo
 | G10 | Tooltips implemented on data points | Check for tooltip component/config |
 
 **Automatic failure conditions** (flag regardless of other scores):
-- G3 fails (project doesn't build)
+- G3 fails (neither `npm run build` nor `npm run dev` succeeds)
 - G4 fails (no `/matrix` route)
 - G9 fails (no chart renders)
 - Quadrant assignments are fundamentally wrong (e.g., Quick Wins placed in bottom-right, axes inverted)
@@ -293,19 +293,27 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
 }
 ```
 
-**Key schema constraints:**
+**Schema-enforced constraints** (validation will reject your file if violated):
 - `candidate_id`: must match `C-` + exactly 3 digits (regex: `^C-\d{3}$`)
 - `framework_version`: must be exactly `"1.0"`
-- `weight` values: must match the table above exactly (e.g., A = `0.30`, not `0.3`)
+- `weight` values: must match the table above exactly (const-locked in schema)
 - Rubric scores: integers 0-4
-- Git bonus: H1/H2 are 0-2, H3 is 0-1, `bonus_total` is 0-5 (must equal H1+H2+H3)
+- Git bonus: H1/H2 are 0-2, H3 is 0-1, `bonus_total` is 0-5
 - `evidence`: non-empty string for ALL scores (including 0)
-- `category_score`: must equal `(sum of criteria / (count × 4)) × 100`
 - `top_strengths` / `top_weaknesses`: 1-5 items each (cannot be empty)
 - `standout_moments`: can be empty
 - `score_band`: one of `Exceptional`, `Strong`, `Competent`, `Below Expectations`, `Insufficient`
 - `recommendation`: one of `Strong Hire`, `Hire`, `Lean Hire`, `Lean No Hire`, `No Hire`
 - G5 requires `count` field, G6 requires `library` field (see gate table above)
+
+**Computed constraints** (not schema-enforced — you must calculate these correctly):
+- `bonus_total` must equal H1 + H2 + H3
+- `category_score` must equal `(sum of criteria / (count × 4)) × 100`
+- `weighted_score` must equal the sum of `(category_score × weight)` across all categories
+- `final_score` must equal `weighted_score + git_bonus`
+- `score_band` must match the band table for your `final_score`
+
+> **Note:** This JSON skeleton reflects schema v1.0. If `framework_version` changes in the future, re-derive the exact field structure from `evaluation/schema.json`.
 
 ---
 

@@ -57,7 +57,7 @@ These are deterministic, binary checks. They can be run by script or verified me
 |----|-------|--------|-----------|
 | G1 | Repository contains a `package.json` | File exists | |
 | G2 | `npm install` (or equivalent) completes without errors | Run command | |
-| G3 | `npm run build` (or `npm run dev`) succeeds | Run command | |
+| G3 | Project runs: try `npm run build` first; if that fails, try `npm run dev` | Run command(s) — passes if either succeeds | |
 | G4 | A route exists at `/matrix` | Check `src/app/matrix/` or equivalent routing | |
 | G5 | At least 3 project markdown files exist in `_content/projects/` | Count files | |
 | G6 | A chart/scatter plot library is installed (e.g., recharts, d3, chart.js, visx, nivo) | Check `package.json` dependencies | |
