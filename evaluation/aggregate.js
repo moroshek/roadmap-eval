@@ -317,16 +317,23 @@ function buildConsensus(candidateId, evals) {
   const evaluatorIds = evals.map((e) => e.evaluation_metadata?.evaluator || "unknown");
   const divergences = []; // criteria where std dev > 1.0
 
-  // --- Gate consensus: fail if ANY evaluator flagged failure ---
+  // --- Gate consensus: majority pass (>50% of evaluators) ---
+  // Unanimous is too conservative for AI evaluators — transient environment
+  // issues (npm timeouts, port conflicts) can produce false negatives.
+  // Split results are flagged for human review via the agreement field.
   const gateConsensus = {};
   for (const gk of GATE_CHECKS) {
     const results = extractGateResults(evals, gk);
-    const anyFailed = results.some((r) => r === false);
-    const allPassed = results.length > 0 && results.every((r) => r === true);
+    const passCount = results.filter((r) => r === true).length;
+    const failCount = results.filter((r) => r === false).length;
+    const majorityPass = results.length > 0 && passCount > failCount;
+    const allAgree = results.length > 0 && (passCount === 0 || failCount === 0);
     gateConsensus[gk] = {
-      consensus_pass: allPassed,
+      consensus_pass: majorityPass,
       evaluator_results: results,
-      agreement: results.length > 0 ? (allPassed || results.every((r) => !r) ? "unanimous" : "split") : "no_data",
+      pass_count: passCount,
+      fail_count: failCount,
+      agreement: results.length > 0 ? (allAgree ? "unanimous" : "split") : "no_data",
     };
   }
 

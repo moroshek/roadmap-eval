@@ -416,7 +416,7 @@ Check against these PRD-specified details:
 | 0 | Nothing beyond explicit requirements |
 | 1 | Minor additions (e.g., a footer, about page) |
 | 2 | Useful additions: dark mode toggle, print stylesheet, data export |
-| 3 | Impressive additions: Gantt chart, AI ingestion prototype, animated transitions, PDF generation |
+| 3 | Impressive additions: Gantt chart, AI ingestion prototype, animated transitions, PDF generation, WCAG 2.1 AA accessibility compliance |
 | 4 | Exceptional: features that demonstrate deep product thinking or technical creativity. Something that makes the evaluator say "I didn't expect that" |
 
 ---
@@ -566,7 +566,7 @@ Every evaluation produces a JSON object with this structure. This ensures machin
   },
   "rubric_scores": {
     "A_strategy_matrix": {
-      "weight": 0.25,
+      "weight": 0.30,
       "criteria": {
         "A1_data_population": { "score": 0, "evidence": "", "notes": "" },
         "A2_score_normalization": { "score": 0, "evidence": "", "notes": "" },
@@ -590,7 +590,7 @@ Every evaluation produces a JSON object with this structure. This ensures machin
       "category_commentary": ""
     },
     "C_ui_ux_quality": {
-      "weight": 0.20,
+      "weight": 0.15,
       "criteria": {
         "C1_visual_design": { "score": 0, "evidence": "", "notes": "" },
         "C2_responsive_design": { "score": 0, "evidence": "", "notes": "" },
@@ -613,7 +613,7 @@ Every evaluation produces a JSON object with this structure. This ensures machin
       "category_commentary": ""
     },
     "E_code_quality": {
-      "weight": 0.15,
+      "weight": 0.20,
       "criteria": {
         "E1_separation_of_concerns": { "score": 0, "evidence": "", "notes": "" },
         "E2_readability_naming": { "score": 0, "evidence": "", "notes": "" },
@@ -624,7 +624,7 @@ Every evaluation produces a JSON object with this structure. This ensures machin
       "category_commentary": ""
     },
     "F_bonus_features": {
-      "weight": 0.10,
+      "weight": 0.05,
       "criteria": {
         "F1_dashboard": { "score": 0, "evidence": "", "notes": "" },
         "F2_additional_pages": { "score": 0, "evidence": "", "notes": "" },
@@ -709,7 +709,7 @@ INSTRUCTIONS:
 RULES:
 - Do NOT compare to other submissions. Score against the rubric only.
 - Do NOT infer intent. Score what exists, not what was attempted.
-- Every score MUST have evidence. If you cannot find evidence, the score is 0.
+- Every score MUST have evidence. If you cannot find evidence, the score is 0. For scores of 0, write "Not attempted" or "No evidence found" as the evidence string (do not leave it blank).
 - Use the EXACT quadrant reference truth:
   - PRJ-001 (8.6 value, 3.2 complexity) → 86/32 → Quick Wins
   - PRJ-002 (9.1 value, 8.2 complexity) → 91/82 → Big Bets
@@ -746,7 +746,7 @@ Each JSON file validates against `evaluation/schema.json` (JSON Schema 2020-12).
 | Data Type | Aggregation Method | Rationale |
 |-----------|-------------------|-----------|
 | **Rubric scores (0–4)** | **Median** per criterion | Robust to one outlier evaluator. A single harsh or generous agent doesn't skew results. |
-| **Automated gate checks** | **Unanimous pass required** | If ANY evaluator flags a gate failure, it's flagged in consensus. Conservative — a broken build is a broken build. |
+| **Automated gate checks** | **Majority pass** (>50% of evaluators) | Majority-rules prevents a single evaluator's transient environment issue (npm timeout, port conflict) from failing a candidate. Split results are flagged for human review. |
 | **Git history bonus** | **Max** across evaluators | If one evaluator noticed good commit practices, credit it. Bonus should not be lost because one agent didn't inspect git. |
 | **Recommendation** | **Median by ordinal position** | Maps recommendations to ordinal (Strong Hire=0 ... No Hire=4), takes median, maps back. |
 | **Qualitative notes** | **Collected, not merged** | All strengths, weaknesses, and standout moments from all evaluators are preserved. Human reviewer sees the full picture. |
