@@ -1,0 +1,548 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "roadmap-eval-submission",
+  "title": "Roadmap Engine Developer Assessment Evaluation",
+  "description": "Strongly-typed schema for evaluating a single candidate submission. Each evaluation JSON file must validate against this schema.",
+  "type": "object",
+  "required": [
+    "evaluation_metadata",
+    "automated_gate",
+    "rubric_scores",
+    "git_history_bonus",
+    "scoring_summary",
+    "qualitative_summary"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "evaluation_metadata": {
+      "type": "object",
+      "required": ["candidate_id", "repo_url", "evaluated_at", "evaluator", "framework_version"],
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "description": "Anonymized candidate identifier (e.g., 'C-001')",
+          "pattern": "^C-\\d{3}$"
+        },
+        "repo_url": {
+          "type": "string",
+          "description": "URL of the candidate's repository"
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of when evaluation was completed"
+        },
+        "evaluator": {
+          "type": "string",
+          "description": "Identifier for the evaluator agent or human (e.g., 'agent-opus-1', 'agent-sonnet-2', 'human-reviewer')"
+        },
+        "framework_version": {
+          "type": "string",
+          "const": "1.0",
+          "description": "Version of the evaluation framework used"
+        }
+      }
+    },
+
+    "automated_gate": {
+      "type": "object",
+      "required": [
+        "G1_package_json_exists",
+        "G2_install_succeeds",
+        "G3_build_succeeds",
+        "G4_matrix_route_exists",
+        "G5_project_files_exist",
+        "G6_chart_library_installed",
+        "G7_normalization_logic_exists",
+        "G8_quadrant_logic_exists",
+        "G9_chart_renders_data",
+        "G10_tooltips_implemented",
+        "gate_summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "G1_package_json_exists": { "$ref": "#/$defs/gate_check" },
+        "G2_install_succeeds": { "$ref": "#/$defs/gate_check" },
+        "G3_build_succeeds": { "$ref": "#/$defs/gate_check" },
+        "G4_matrix_route_exists": { "$ref": "#/$defs/gate_check" },
+        "G5_project_files_exist": {
+          "type": "object",
+          "required": ["pass", "count", "notes"],
+          "additionalProperties": false,
+          "properties": {
+            "pass": { "type": "boolean" },
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of project markdown files found in _content/projects/"
+            },
+            "notes": { "type": "string" }
+          }
+        },
+        "G6_chart_library_installed": {
+          "type": "object",
+          "required": ["pass", "library", "notes"],
+          "additionalProperties": false,
+          "properties": {
+            "pass": { "type": "boolean" },
+            "library": {
+              "type": "string",
+              "description": "Name of the charting library (e.g., 'recharts', 'd3', 'chart.js', 'visx', 'nivo', 'none')"
+            },
+            "notes": { "type": "string" }
+          }
+        },
+        "G7_normalization_logic_exists": { "$ref": "#/$defs/gate_check" },
+        "G8_quadrant_logic_exists": { "$ref": "#/$defs/gate_check" },
+        "G9_chart_renders_data": { "$ref": "#/$defs/gate_check" },
+        "G10_tooltips_implemented": { "$ref": "#/$defs/gate_check" },
+        "gate_summary": {
+          "type": "object",
+          "required": ["total_passed", "total_failed", "automatic_failure_triggered", "failure_reasons"],
+          "additionalProperties": false,
+          "properties": {
+            "total_passed": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "total_failed": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "automatic_failure_triggered": {
+              "type": "boolean",
+              "description": "True if any automatic failure condition from Section 6.5 is met"
+            },
+            "failure_reasons": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "List of specific automatic failure conditions triggered"
+            }
+          }
+        }
+      }
+    },
+
+    "rubric_scores": {
+      "type": "object",
+      "required": [
+        "A_strategy_matrix",
+        "B_technical_foundation",
+        "C_ui_ux_quality",
+        "D_prd_compliance",
+        "E_code_quality",
+        "F_bonus_features",
+        "G_decision_making"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "A_strategy_matrix": {
+          "type": "object",
+          "required": ["weight", "criteria", "category_score", "category_commentary"],
+          "additionalProperties": false,
+          "properties": {
+            "weight": { "type": "number", "const": 0.30 },
+            "criteria": {
+              "type": "object",
+              "required": [
+                "A1_data_population",
+                "A2_score_normalization",
+                "A3_quadrant_assignment",
+                "A4_scatter_plot_rendering",
+                "A5_tooltip_implementation",
+                "A6_logic_ui_separation"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "A1_data_population": { "$ref": "#/$defs/rubric_score" },
+                "A2_score_normalization": { "$ref": "#/$defs/rubric_score" },
+                "A3_quadrant_assignment": { "$ref": "#/$defs/rubric_score" },
+                "A4_scatter_plot_rendering": { "$ref": "#/$defs/rubric_score" },
+                "A5_tooltip_implementation": { "$ref": "#/$defs/rubric_score" },
+                "A6_logic_ui_separation": { "$ref": "#/$defs/rubric_score" }
+              }
+            },
+            "category_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Calculated: (sum of criteria / (count * 4)) * 100"
+            },
+            "category_commentary": { "type": "string" }
+          }
+        },
+        "B_technical_foundation": {
+          "type": "object",
+          "required": ["weight", "criteria", "category_score", "category_commentary"],
+          "additionalProperties": false,
+          "properties": {
+            "weight": { "type": "number", "const": 0.15 },
+            "criteria": {
+              "type": "object",
+              "required": [
+                "B1_project_setup",
+                "B2_routing_navigation",
+                "B3_type_safety",
+                "B4_data_layer"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "B1_project_setup": { "$ref": "#/$defs/rubric_score" },
+                "B2_routing_navigation": { "$ref": "#/$defs/rubric_score" },
+                "B3_type_safety": { "$ref": "#/$defs/rubric_score" },
+                "B4_data_layer": { "$ref": "#/$defs/rubric_score" }
+              }
+            },
+            "category_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "category_commentary": { "type": "string" }
+          }
+        },
+        "C_ui_ux_quality": {
+          "type": "object",
+          "required": ["weight", "criteria", "category_score", "category_commentary"],
+          "additionalProperties": false,
+          "properties": {
+            "weight": { "type": "number", "const": 0.15 },
+            "criteria": {
+              "type": "object",
+              "required": [
+                "C1_visual_design",
+                "C2_responsive_design",
+                "C3_interactivity",
+                "C4_empty_error_loading_states",
+                "C5_design_token_usage"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "C1_visual_design": { "$ref": "#/$defs/rubric_score" },
+                "C2_responsive_design": { "$ref": "#/$defs/rubric_score" },
+                "C3_interactivity": { "$ref": "#/$defs/rubric_score" },
+                "C4_empty_error_loading_states": { "$ref": "#/$defs/rubric_score" },
+                "C5_design_token_usage": { "$ref": "#/$defs/rubric_score" }
+              }
+            },
+            "category_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "category_commentary": { "type": "string" }
+          }
+        },
+        "D_prd_compliance": {
+          "type": "object",
+          "required": ["weight", "criteria", "category_score", "category_commentary"],
+          "additionalProperties": false,
+          "properties": {
+            "weight": { "type": "number", "const": 0.10 },
+            "criteria": {
+              "type": "object",
+              "required": [
+                "D1_schema_adherence",
+                "D2_quadrant_logic_accuracy",
+                "D3_route_structure",
+                "D4_specification_details"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "D1_schema_adherence": { "$ref": "#/$defs/rubric_score" },
+                "D2_quadrant_logic_accuracy": { "$ref": "#/$defs/rubric_score" },
+                "D3_route_structure": { "$ref": "#/$defs/rubric_score" },
+                "D4_specification_details": { "$ref": "#/$defs/rubric_score" }
+              }
+            },
+            "category_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "category_commentary": { "type": "string" }
+          }
+        },
+        "E_code_quality": {
+          "type": "object",
+          "required": ["weight", "criteria", "category_score", "category_commentary"],
+          "additionalProperties": false,
+          "properties": {
+            "weight": { "type": "number", "const": 0.20 },
+            "criteria": {
+              "type": "object",
+              "required": [
+                "E1_separation_of_concerns",
+                "E2_readability_naming",
+                "E3_error_handling",
+                "E4_dependency_choices"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "E1_separation_of_concerns": { "$ref": "#/$defs/rubric_score" },
+                "E2_readability_naming": { "$ref": "#/$defs/rubric_score" },
+                "E3_error_handling": { "$ref": "#/$defs/rubric_score" },
+                "E4_dependency_choices": { "$ref": "#/$defs/rubric_score" }
+              }
+            },
+            "category_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "category_commentary": { "type": "string" }
+          }
+        },
+        "F_bonus_features": {
+          "type": "object",
+          "required": ["weight", "criteria", "category_score", "category_commentary"],
+          "additionalProperties": false,
+          "properties": {
+            "weight": { "type": "number", "const": 0.05 },
+            "criteria": {
+              "type": "object",
+              "required": [
+                "F1_dashboard",
+                "F2_additional_pages",
+                "F3_search_filtering",
+                "F4_creative_additions"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "F1_dashboard": { "$ref": "#/$defs/rubric_score" },
+                "F2_additional_pages": { "$ref": "#/$defs/rubric_score" },
+                "F3_search_filtering": { "$ref": "#/$defs/rubric_score" },
+                "F4_creative_additions": { "$ref": "#/$defs/rubric_score" }
+              }
+            },
+            "category_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "category_commentary": { "type": "string" }
+          }
+        },
+        "G_decision_making": {
+          "type": "object",
+          "required": ["weight", "criteria", "category_score", "category_commentary"],
+          "additionalProperties": false,
+          "properties": {
+            "weight": { "type": "number", "const": 0.05 },
+            "criteria": {
+              "type": "object",
+              "required": [
+                "G1_prioritization",
+                "G2_pr_description"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "G1_prioritization": { "$ref": "#/$defs/rubric_score" },
+                "G2_pr_description": { "$ref": "#/$defs/rubric_score" }
+              }
+            },
+            "category_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "category_commentary": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "git_history_bonus": {
+      "type": "object",
+      "required": [
+        "H1_commit_cadence",
+        "H2_message_quality",
+        "H3_logical_progression",
+        "bonus_total"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "H1_commit_cadence": { "$ref": "#/$defs/bonus_score_2" },
+        "H2_message_quality": { "$ref": "#/$defs/bonus_score_2" },
+        "H3_logical_progression": { "$ref": "#/$defs/bonus_score_1" },
+        "bonus_total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        }
+      }
+    },
+
+    "scoring_summary": {
+      "type": "object",
+      "required": [
+        "category_scores",
+        "weighted_score",
+        "git_bonus",
+        "final_score",
+        "score_band",
+        "automatic_failure",
+        "automatic_failure_reasons"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "category_scores": {
+          "type": "object",
+          "required": [
+            "A_strategy_matrix",
+            "B_technical_foundation",
+            "C_ui_ux_quality",
+            "D_prd_compliance",
+            "E_code_quality",
+            "F_bonus_features",
+            "G_decision_making"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "A_strategy_matrix": { "type": "number", "minimum": 0, "maximum": 100 },
+            "B_technical_foundation": { "type": "number", "minimum": 0, "maximum": 100 },
+            "C_ui_ux_quality": { "type": "number", "minimum": 0, "maximum": 100 },
+            "D_prd_compliance": { "type": "number", "minimum": 0, "maximum": 100 },
+            "E_code_quality": { "type": "number", "minimum": 0, "maximum": 100 },
+            "F_bonus_features": { "type": "number", "minimum": 0, "maximum": 100 },
+            "G_decision_making": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        },
+        "weighted_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Sum of (category_score * weight) across all categories"
+        },
+        "git_bonus": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "final_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 105,
+          "description": "weighted_score + git_bonus"
+        },
+        "score_band": {
+          "type": "string",
+          "enum": ["Exceptional", "Strong", "Competent", "Below Expectations", "Insufficient"]
+        },
+        "automatic_failure": {
+          "type": "boolean"
+        },
+        "automatic_failure_reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "qualitative_summary": {
+      "type": "object",
+      "required": [
+        "top_strengths",
+        "top_weaknesses",
+        "standout_moments",
+        "hiring_signal",
+        "recommendation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "top_strengths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "maxItems": 5,
+          "description": "Most notable strengths with specific evidence"
+        },
+        "top_weaknesses": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "maxItems": 5,
+          "description": "Most notable weaknesses with specific evidence"
+        },
+        "standout_moments": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Anything surprising, impressive, or concerning"
+        },
+        "hiring_signal": {
+          "type": "string",
+          "description": "2-3 sentence synthesis: what kind of developer is this, what role would they thrive in, what are the risks"
+        },
+        "recommendation": {
+          "type": "string",
+          "enum": ["Strong Hire", "Hire", "Lean Hire", "Lean No Hire", "No Hire"]
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "gate_check": {
+      "type": "object",
+      "required": ["pass", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "pass": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "rubric_score": {
+      "type": "object",
+      "required": ["score", "evidence", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4,
+          "description": "0=Missing, 1=Inadequate, 2=Functional, 3=Solid, 4=Excellent"
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Specific file:line references or observable behaviors justifying the score. REQUIRED for all scores > 0."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Brief qualitative commentary on the score"
+        }
+      }
+    },
+    "bonus_score_2": {
+      "type": "object",
+      "required": ["points", "evidence", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "points": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "evidence": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "bonus_score_1": {
+      "type": "object",
+      "required": ["points", "evidence", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "points": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}
