@@ -1,8 +1,26 @@
 {
-  "generated_at": "2026-02-13T21:38:26.835Z",
-  "total_candidates": 1,
-  "total_divergences": 0,
-  "all_divergences": [],
+  "generated_at": "2026-02-14T23:18:32.184Z",
+  "total_candidates": 2,
+  "total_divergences": 1,
+  "all_divergences": [
+    {
+      "candidate_id": "C-002",
+      "criterion": "B4_data_layer",
+      "category": "B_technical_foundation",
+      "scores": [
+        2,
+        2,
+        4
+      ],
+      "evaluators": [
+        "claude-opus-1",
+        "codex",
+        "gemini-cli"
+      ],
+      "std_dev": 1.15,
+      "note": "High disagreement — flag for human review"
+    }
+  ],
   "frequently_divergent_criteria": [],
-  "summary": "Strong inter-evaluator agreement across all candidates and criteria."
+  "summary": "1 high-divergence instances found across 2 candidates. 0 criteria show recurring disagreement and may need rubric refinement."
 }

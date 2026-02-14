@@ -435,25 +435,25 @@ Check against these PRD-specified details:
 | 3 | Must-have is solid; bonus work shows strategic prioritization (chose high-impact items) |
 | 4 | Must-have is excellent; bonus work demonstrates clear product thinking — they chose features that make the portfolio coherent (e.g., dashboard + matrix = a usable tool, not just a chart) |
 
-#### G2: PR Description & Documentation (0–4)
+#### G2: Submission Documentation (0–4)
 *How well did the candidate communicate their work?*
 
-> **Clarification:** The assessment brief asks candidates to submit a Pull Request with a summary comment. This criterion evaluates the quality of that PR description. If no PR was created, the maximum score is **1** regardless of other documentation (README, external messages). A PR is an explicit deliverable — its absence caps this criterion. If a PR exists, score the description quality using the definitions below.
+> **Note:** Evaluate the quality of the candidate's written communication about their submission — regardless of format (PR description, IMPLEMENTATION.md, README, or other documentation). The delivery mechanism (PR, branch push, etc.) is not scored.
 
 | Score | Definition |
 |-------|-----------|
-| 0 | No PR created AND no submission summary of any kind (README is boilerplate/unchanged) |
-| 1 | No PR created, but candidate provided some form of documentation (e.g., updated README with run instructions, external submission notes). OR: PR exists but description is a single line with no substance |
-| 2 | PR exists with a brief description explaining what was built |
-| 3 | PR exists with a structured description: what was built, what was skipped and why, known limitations, how to test |
-| 4 | PR exists with exceptional communication: clear summary, architectural decisions explained, trade-offs documented, screenshots or GIFs included, demonstrates self-awareness about their work |
+| 0 | No submission summary of any kind (README is boilerplate/unchanged, no documentation added) |
+| 1 | Minimal documentation: a few lines describing what was built, or boilerplate with no substance |
+| 2 | Brief but useful documentation explaining what was built and how to run it |
+| 3 | Structured documentation: what was built, what was skipped and why, architectural decisions, known limitations |
+| 4 | Exceptional communication: clear summary, explains the "why" behind decisions, documents trade-offs and technical debt, demonstrates self-awareness about their work |
 
 ---
 
 ### Category H: Git History (Bonus)
 **Weight: Additive bonus, 0–5 points on top of the 100-point scale**
 
-> **Important:** Candidates are NOT penalized for sparse git history. Some developers commit at the end. This category can only ADD points, never subtract.
+> **Absolute Rule:** Git history is a **positive-only signal**. Many candidates work in local environments or private repos before pushing a final state. **NEVER** subtract points or lower a 'Code Quality' score because of sparse history. This category only ADDS to the final score.
 
 #### H1: Commit Cadence (0–2 bonus points)
 | Points | Definition |

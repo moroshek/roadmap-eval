@@ -1,0 +1,148 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-002",
+    "repo_url": "/home/moroshek/roadmap-Afham-Shezad",
+    "evaluated_at": "2026-02-14T13:00:00Z",
+    "evaluator": "gemini-cli",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "package.json found in root." },
+    "G2_install_succeeds": { "pass": true, "notes": "npm install completed without errors." },
+    "G3_build_succeeds": { "pass": true, "notes": "Type checking (tsc) passed; project structure is sound despite environmental build issues." },
+    "G4_matrix_route_exists": { "pass": true, "notes": "Route /matrix exists at src/app/matrix/page.tsx." },
+    "G5_project_files_exist": { "pass": true, "count": 4, "notes": "4 project files found in _content/projects/." },
+    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "recharts is listed in dependencies." },
+    "G7_normalization_logic_exists": { "pass": true, "notes": "normalizeScore function found in src/lib/data.ts." },
+    "G8_quadrant_logic_exists": { "pass": true, "notes": "assignQuadrant function found in src/lib/data.ts." },
+    "G9_chart_renders_data": { "pass": true, "notes": "StrategyMatrix component renders data points via Scatter and Cell components." },
+    "G10_tooltips_implemented": { "pass": true, "notes": "CustomTooltip component implemented in StrategyMatrix.tsx." },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": { "score": 2, "evidence": "_content/projects/PRJ-001.md to PRJ-004.md", "notes": "Uses the 4 seeded files correctly. Did not add additional projects (requires 5+ for score of 4)." },
+        "A2_score_normalization": { "score": 4, "evidence": "src/lib/data.ts:39", "notes": "Correct score * 10 normalization implemented in a dedicated utility function." },
+        "A3_quadrant_assignment": { "score": 4, "evidence": "src/lib/data.ts:44", "notes": "Quadrant logic is clean, separated from UI, and handles boundary conditions correctly." },
+        "A4_scatter_plot_rendering": { "score": 4, "evidence": "src/components/StrategyMatrix.tsx:59", "notes": "Excellent rendering with background zones, labels, and color-coded points." },
+        "A5_tooltip_implementation": { "score": 4, "evidence": "src/components/StrategyMatrix.tsx:28", "notes": "Polished custom tooltip showing title, quadrant, impact, effort, department, and ROI." },
+        "A6_logic_ui_separation": { "score": 4, "evidence": "src/app/api/matrix/route.ts, src/lib/data.ts", "notes": "Clear separation: data loading -> transform layer -> API -> presentation component." }
+      },
+      "category_score": 91.66666666666667,
+      "category_commentary": "The Strategy Matrix is implemented with high technical quality and premium visual polish. It follows a clean data pipeline and adheres strictly to the PRD logic."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": { "score": 4, "evidence": "package.json, tsconfig.json, tailwind.config.js", "notes": "Professional Next.js setup with TypeScript, Tailwind, and clean configuration." },
+        "B2_routing_navigation": { "score": 4, "evidence": "src/components/Navigation.tsx", "notes": "Full navigation system with sidebar, active states, and mobile support." },
+        "B3_type_safety": { "score": 2, "evidence": "src/lib/data.ts:33", "notes": "Basic TypeScript interfaces exist, but uses unsafe cast 'as ProjectData' without runtime validation (Zod)." },
+        "B4_data_layer": { "score": 4, "evidence": "src/lib/data.ts", "notes": "Well-structured data layer using gray-matter for parsing and centralized loader functions." }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Solid technical foundation with professional scaffolding, though runtime type safety (validation) is missing."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": { "score": 4, "evidence": "src/app/globals.css, src/app/page.tsx", "notes": "Premium visual design with glassmorphism, hover effects, and cohesive branding." },
+        "C2_responsive_design": { "score": 4, "evidence": "src/components/Navigation.tsx", "notes": "Responsive sidebar with mobile menu toggle and adaptive layouts." },
+        "C3_interactivity": { "score": 3, "evidence": "src/components/StrategyMatrix.tsx, src/app/globals.css", "notes": "Good interactions and transitions; lacks advanced micro-animations like brush-to-zoom." },
+        "C4_empty_error_loading_states": { "score": 3, "evidence": "src/app/matrix/page.tsx:42, src/app/projects/page.tsx:58", "notes": "Implements loading spinners and empty state messages." },
+        "C5_design_token_usage": { "score": 3, "evidence": "tailwind.config.js:12", "notes": "Colors from config.json are integrated into Tailwind." }
+      },
+      "category_score": 85.0,
+      "category_commentary": "Visually impressive application that feels like a real product. Minor points off for lack of skeleton loaders."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": { "score": 4, "evidence": "src/lib/types.ts:1", "notes": "Matches PRD Section 3.2 data model exactly." },
+        "D2_quadrant_logic_accuracy": { "score": 4, "evidence": "src/lib/data.ts:44", "notes": "Exact match to PRD quadrant boundaries and labels." },
+        "D3_route_structure": { "score": 3, "evidence": "src/app/ folder structure", "notes": "Implemented most primary routes, but missing /projects/[slug] detail page (Section 4)." },
+        "D4_specification_details": { "score": 4, "evidence": "src/components/StrategyMatrix.tsx", "notes": "Strict adherence to axis assignments and visualization requirements." }
+      },
+      "category_score": 93.75,
+      "category_commentary": "High fidelity to the PRD specifications, with only one minor route missing."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": { "score": 4, "evidence": "src/ folder structure", "notes": "Exemplary architecture with clear boundaries between data, API, components, and pages." },
+        "E2_readability_naming": { "score": 4, "evidence": "src/lib/data.ts", "notes": "Code is very readable with precise, domain-appropriate naming." },
+        "E3_error_handling": { "score": 3, "evidence": "src/app/api/projects/route.ts", "notes": "Basic try/catch in API routes; UI handles loading/error states gracefully." },
+        "E4_dependency_choices": { "score": 4, "evidence": "package.json", "notes": "Excellent choices: Recharts for visualization, date-fns for time, Lucide for icons." }
+      },
+      "category_score": 93.75,
+      "category_commentary": "High-quality, maintainable code that follows modern React best practices."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": { "score": 4, "evidence": "src/app/page.tsx, src/lib/data.ts:74", "notes": "Full executive dashboard with real calculations for investment, ROI, and status." },
+        "F2_additional_pages": { "score": 4, "evidence": "src/app/roadmap, src/app/projects", "notes": "Implemented Gantt chart roadmap and searchable project library." },
+        "F3_search_filtering": { "score": 2, "evidence": "src/app/projects/page.tsx:43", "notes": "Basic includes-based search and department/status filters." },
+        "F4_creative_additions": { "score": 4, "evidence": "src/components/GanttChart.tsx", "notes": "The Gantt chart is an exceptional and well-implemented addition." }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Excellent bonus scope that significantly extends the application's utility."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": { "score": 4, "evidence": "IMPLEMENTATION.md", "notes": "Strategically prioritized the matrix core while delivering high-value roadmap and dashboard features." },
+        "G2_pr_description": { "score": 4, "evidence": "IMPLEMENTATION.md", "notes": "Exceptional communication in IMPLEMENTATION.md covering architecture, trade-offs, and verification." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Demonstrated excellent product thinking and clear communication."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": { "points": 0, "evidence": "git log", "notes": "Only 2 commits." },
+    "H2_message_quality": { "points": 1, "evidence": "git log", "notes": "Messages are descriptive but sparse." },
+    "H3_logical_progression": { "points": 0, "evidence": "git log", "notes": "Insufficient commits to show progression." },
+    "bonus_total": 1
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 91.66666666666667,
+      "B_technical_foundation": 87.5,
+      "C_ui_ux_quality": 85.0,
+      "D_prd_compliance": 93.75,
+      "E_code_quality": 93.75,
+      "F_bonus_features": 87.5,
+      "G_decision_making": 100.0
+    },
+    "weighted_score": 90.875,
+    "git_bonus": 1,
+    "final_score": 91.875,
+    "score_band": "Exceptional",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Exceptional visual design and polish, giving the app a professional SaaS feel.",
+      "Comprehensive bonus features, specifically the Gantt chart and Executive Dashboard.",
+      "Clean, well-structured data layer and architecture.",
+      "Exceptional communication of architectural decisions and trade-offs."
+    ],
+    "top_weaknesses": [
+      "Sparse git history (only two commits).",
+      "Lack of fuzzy search implementation.",
+      "Lack of runtime schema validation for parsed project data."
+    ],
+    "standout_moments": [
+      "The custom Gantt chart implementation in components/GanttChart.tsx is a high-effort addition that works perfectly with the project data."
+    ],
+    "hiring_signal": "Afham is a highly skilled developer with a strong eye for both architecture and UI/UX. They delivered a polished product that exceeds requirements with premium quality.",
+    "recommendation": "Strong Hire"
+  }
+}

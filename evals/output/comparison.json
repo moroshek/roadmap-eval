@@ -1,27 +1,48 @@
 {
-  "generated_at": "2026-02-13T21:38:26.834Z",
-  "candidate_count": 1,
+  "generated_at": "2026-02-14T23:18:32.183Z",
+  "candidate_count": 2,
   "ranking": [
     {
       "rank": 1,
       "candidate_id": "C-001",
-      "final_score": 91.94,
-      "score_band": "Exceptional",
-      "weighted_score": 87.94,
+      "final_score": 89.75,
+      "score_band": "Strong",
+      "weighted_score": 85.75,
       "git_bonus": 4,
       "automatic_failure": false,
       "category_scores": {
         "A_strategy_matrix": 95.83,
-        "B_technical_foundation": 87.5,
+        "B_technical_foundation": 81.25,
         "C_ui_ux_quality": 80,
         "D_prd_compliance": 93.75,
-        "E_code_quality": 87.5,
+        "E_code_quality": 81.25,
         "F_bonus_features": 93.75,
         "G_decision_making": 50
       },
       "consensus_recommendation": "Hire",
       "evaluator_count": 3,
       "evaluator_agreement": "strong"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "C-002",
+      "final_score": 74.19,
+      "score_band": "Competent",
+      "weighted_score": 72.19,
+      "git_bonus": 2,
+      "automatic_failure": false,
+      "category_scores": {
+        "A_strategy_matrix": 75,
+        "B_technical_foundation": 62.5,
+        "C_ui_ux_quality": 75,
+        "D_prd_compliance": 81.25,
+        "E_code_quality": 68.75,
+        "F_bonus_features": 68.75,
+        "G_decision_making": 75
+      },
+      "consensus_recommendation": "Lean Hire",
+      "evaluator_count": 3,
+      "evaluator_agreement": "moderate"
     }
   ]
 }

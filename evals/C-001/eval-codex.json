@@ -2,21 +2,53 @@
   "evaluation_metadata": {
     "candidate_id": "C-001",
     "repo_url": "https://github.com/moroshek/roadmap-coltigent",
-    "evaluated_at": "2026-02-13T21:30:00Z",
+    "evaluated_at": "2026-02-14T23:05:00Z",
     "evaluator": "codex-gpt-5",
     "framework_version": "1.0"
   },
   "automated_gate": {
-    "G1_package_json_exists": { "pass": true, "notes": "Found /package.json." },
-    "G2_install_succeeds": { "pass": true, "notes": "`npm ci` completed successfully (588 packages)." },
-    "G3_build_succeeds": { "pass": true, "notes": "`npm run build` completed successfully with static page generation." },
-    "G4_matrix_route_exists": { "pass": true, "notes": "Route exists at `src/app/matrix/page.tsx`." },
-    "G5_project_files_exist": { "pass": true, "count": 11, "notes": "11 markdown project files found in `_content/projects/`." },
-    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "`recharts` present in dependencies and used in matrix chart." },
-    "G7_normalization_logic_exists": { "pass": true, "notes": "0-10 to 0-100 normalization implemented in `scripts/governance/index.mjs:22`." },
-    "G8_quadrant_logic_exists": { "pass": true, "notes": "Quadrant assignment logic implemented in `scripts/governance/index.mjs:27`." },
-    "G9_chart_renders_data": { "pass": true, "notes": "`StrategyMatrixChart` maps projects to scatter points via x/y fields and renders `<Scatter data={data}>`." },
-    "G10_tooltips_implemented": { "pass": true, "notes": "Tooltip configured via `<Tooltip content={...}>` in `src/components/StrategyMatrixChart.tsx:75`." },
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "Found /package.json."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "`npm ci` completed successfully (588 packages)."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "`npm run build` completed successfully with static page generation."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "Route exists at `src/app/matrix/page.tsx`."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 11,
+      "notes": "11 markdown project files found in `_content/projects/`."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "`recharts` present in dependencies and used in matrix chart."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "0-10 to 0-100 normalization implemented in `scripts/governance/index.mjs:22`."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "Quadrant assignment logic implemented in `scripts/governance/index.mjs:27`."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "`StrategyMatrixChart` maps projects to scatter points via x/y fields and renders `<Scatter data={data}>`."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "Tooltip configured via `<Tooltip content={...}>` in `src/components/StrategyMatrixChart.tsx:75`."
+    },
     "gate_summary": {
       "total_passed": 10,
       "total_failed": 0,
@@ -212,12 +244,12 @@
         },
         "G2_pr_description": {
           "score": 0,
-          "evidence": "No PR description or explicit submission summary artifact was found in the repository; README content is assignment/project documentation, not a candidate delivery summary.",
-          "notes": "By rubric definition, this is a 0 when no PR/submission summary is present."
+          "evidence": "No submission-summary documentation artifact found in repository (docs contains only .gitkeep; README is the assessment brief, not candidate-authored implementation summary).",
+          "notes": "Using the updated format-agnostic rubric, this remains 0 because no substantive submission documentation was provided in any format."
         }
       },
       "category_score": 37.5,
-      "category_commentary": "Feature prioritization was solid, but formal delivery communication is missing per rubric."
+      "category_commentary": "Feature prioritization was solid, but submission communication was absent across PR/README/docs formats."
     }
   },
   "git_history_bonus": {
@@ -266,8 +298,7 @@
       "Operational instructions quality issue: candidate-provided command `npm run staging: promote` fails; correct command is `npm run staging:promote`.",
       "`TopBar` breadcrumb navigation uses raw `<a href>` links (`src/components/TopBar.tsx:83-85`) instead of Next.js `Link`, causing full page reload navigation for breadcrumb clicks.",
       "Error-path robustness is uneven (`src/context/DataContext.tsx:16-24` and update sorting comparator in `scripts/governance/index.mjs:151`).",
-      "Keyboard shortcut handling is Mac-only (`metaKey` only) in `src/components/TopBar.tsx:49`, reducing cross-platform UX."
-      ,
+      "Keyboard shortcut handling is Mac-only (`metaKey` only) in `src/components/TopBar.tsx:49`, reducing cross-platform UX.",
       "No PR description or explicit submission summary was provided, which scores 0 on rubric criterion G2."
     ],
     "standout_moments": [

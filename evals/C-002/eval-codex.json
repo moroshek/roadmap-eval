@@ -1,0 +1,307 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-002",
+    "repo_url": "https://github.com/moroshek/roadmap-Afham-Shezad",
+    "evaluated_at": "2026-02-14T20:53:40Z",
+    "evaluator": "codex",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "Found at package.json with Next.js scripts and dependencies."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "`npm install` completed successfully (up to date, audited packages)."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "`npm run build` succeeded and produced static pages for all routes; `npm run dev` also reached Ready state on port 4010."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "Route implemented at src/app/matrix/page.tsx."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 4,
+      "notes": "Found 4 markdown project files in _content/projects (PRJ-001..PRJ-004)."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "Dependency present in package.json and used in StrategyMatrix component."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "normalizeScore multiplies 0-10 scores by 10 in src/lib/data.ts:37-39."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "assignQuadrant implements threshold-based mapping in src/lib/data.ts:42-50."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "Scatter chart maps matrix data points via data.map into <Cell> nodes in src/components/StrategyMatrix.tsx:130-137."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "Custom tooltip component wired into Recharts <Tooltip> in src/components/StrategyMatrix.tsx:31-64 and 124."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.3,
+      "criteria": {
+        "A1_data_population": {
+          "score": 2,
+          "evidence": "_content/projects/PRJ-001.md, _content/projects/PRJ-002.md, _content/projects/PRJ-003.md, _content/projects/PRJ-004.md",
+          "notes": "Correctly uses the seeded PRD-shaped dataset (4 files), but no additional authored projects beyond the seed set."
+        },
+        "A2_score_normalization": {
+          "score": 3,
+          "evidence": "src/lib/data.ts:37-39, src/lib/data.ts:53-58",
+          "notes": "Normalization is correct and separated from rendering via utility + transform pipeline."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "src/lib/data.ts:42-50",
+          "notes": "Quadrant assignment is implemented in a dedicated function, readable, and handles boundary checks with >= 50 logic."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 4,
+          "evidence": "src/components/StrategyMatrix.tsx:87-139",
+          "notes": "Scatter chart is fully rendered with labeled axes, 0-100 scaling, quadrant dividers, and color-coded points."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "src/components/StrategyMatrix.tsx:31-64",
+          "notes": "Tooltip includes required fields (title + quadrant) and extra data (impact, effort, department, ROI) with clear styling."
+        },
+        "A6_logic_ui_separation": {
+          "score": 3,
+          "evidence": "src/lib/data.ts:15-75; src/app/api/matrix/route.ts:1-14; src/app/matrix/page.tsx:15-42; src/components/StrategyMatrix.tsx:66-144",
+          "notes": "Matrix pipeline is separated by concern: file parsing, transformation, API delivery, then presentational chart rendering."
+        }
+      },
+      "category_score": 75,
+      "category_commentary": "Core matrix requirement is implemented strongly with clean transformations and polished rendering."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 3,
+          "evidence": "package.json; tsconfig.json; .gitignore; successful npm run build output",
+          "notes": "Project is well scaffolded with TypeScript, Tailwind, and proper ignore rules; however lint is not configured non-interactively yet."
+        },
+        "B2_routing_navigation": {
+          "score": 3,
+          "evidence": "src/components/Navigation.tsx:8-14, src/components/Navigation.tsx:39-100; src/app/page.tsx; src/app/matrix/page.tsx; src/app/projects/page.tsx; src/app/roadmap/page.tsx; src/app/updates/page.tsx",
+          "notes": "Multiple PRD routes are implemented with a responsive sidebar and active states, but not full PRD global elements (e.g., breadcrumbs)."
+        },
+        "B3_type_safety": {
+          "score": 2,
+          "evidence": "src/lib/types.ts:1-66; tsconfig.json (strict=true)",
+          "notes": "Good baseline TypeScript typing is present, but schema-level runtime validation (e.g., Zod) is absent."
+        },
+        "B4_data_layer": {
+          "score": 2,
+          "evidence": "src/lib/data.ts:15-34; src/lib/data.ts:53-75; src/app/api/projects/route.ts:1-13",
+          "notes": "Data layer uses gray-matter and dedicated loader/transform functions, but lacks validation and malformed-content resilience."
+        }
+      },
+      "category_score": 62.5,
+      "category_commentary": "Foundation is functional and organized, with clear room for stronger validation and lint/tooling completeness."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 4,
+          "evidence": "src/app/globals.css:16-58; src/app/page.tsx:17-183; src/components/Navigation.tsx:39-100",
+          "notes": "UI is cohesive and product-like with consistent gradients, card styling, typography hierarchy, and spacing."
+        },
+        "C2_responsive_design": {
+          "score": 3,
+          "evidence": "src/components/Navigation.tsx:22-45; src/app/page.tsx:18-44; src/app/projects/page.tsx:108-166",
+          "notes": "Responsive behaviors are implemented for nav and layout breakpoints; mobile experience is solid but not deeply adaptive for chart interactions."
+        },
+        "C3_interactivity": {
+          "score": 3,
+          "evidence": "src/app/matrix/page.tsx:30-42; src/components/StrategyMatrix.tsx:124-137; src/app/page.tsx:154-180",
+          "notes": "Filters, hover interactions, and transitions are smooth; advanced interactions like brush-to-zoom are not implemented."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 2,
+          "evidence": "src/app/matrix/page.tsx:47-56, src/app/matrix/page.tsx:164-170; src/app/projects/page.tsx:70-79, src/app/projects/page.tsx:270-282",
+          "notes": "Loading and empty states exist and avoid crashes, but no skeleton loaders or robust error-boundary handling."
+        },
+        "C5_design_token_usage": {
+          "score": 3,
+          "evidence": "tailwind.config.js:10-20; src/app/layout.tsx:5-17; _content/config.json (design_tokens)",
+          "notes": "Brand colors and typography align with tenant tokens, but are statically copied into Tailwind config rather than dynamically consumed at runtime."
+        }
+      },
+      "category_score": 75,
+      "category_commentary": "The application feels polished and intentional, with good responsiveness and interaction quality."
+    },
+    "D_prd_compliance": {
+      "weight": 0.1,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 3,
+          "evidence": "_content/projects/PRJ-001.md through PRJ-004.md; src/lib/types.ts:1-34",
+          "notes": "Project schema aligns closely with PRD fields and types, but build-time schema enforcement is not implemented."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "src/lib/data.ts:42-50; src/components/StrategyMatrix.tsx:70-83; src/components/StrategyMatrix.tsx:121-122",
+          "notes": "Quadrant thresholds match PRD exactly, including boundary handling and visible background quadrant labels."
+        },
+        "D3_route_structure": {
+          "score": 3,
+          "evidence": "src/app/page.tsx; src/app/matrix/page.tsx; src/app/roadmap/page.tsx; src/app/projects/page.tsx; src/app/updates/page.tsx; src/app/projects/[slug]/page.tsx missing",
+          "notes": "Core routes are present and purposeful, but PRD route /projects/[slug] is missing."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "src/components/StrategyMatrix.tsx:92-109, src/components/StrategyMatrix.tsx:121-122; src/lib/data.ts:56-57",
+          "notes": "Matrix-specific details (axis orientation, field mapping, scatter type) are correct; broader PRD interaction details are partial."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "PRD alignment is strong around matrix behavior, with gaps in full route/page coverage and deeper governance features."
+    },
+    "E_code_quality": {
+      "weight": 0.2,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 3,
+          "evidence": "src/lib/data.ts; src/lib/types.ts; src/components/StrategyMatrix.tsx; src/components/GanttChart.tsx; src/app/api/*.ts; src/app/*/page.tsx",
+          "notes": "Overall architecture separates data, API, component, and page layers clearly."
+        },
+        "E2_readability_naming": {
+          "score": 3,
+          "evidence": "src/lib/data.ts:37-60; src/app/projects/page.tsx:38-61; src/components/GanttChart.tsx:69-88",
+          "notes": "Naming is clear and code is readable; minor issues remain (unused imports/vars and a few rough edges)."
+        },
+        "E3_error_handling": {
+          "score": 2,
+          "evidence": "src/app/api/projects/route.ts:4-13; src/app/api/matrix/route.ts:4-15; src/lib/data.ts:18-20",
+          "notes": "Basic try/catch handling exists and missing project folder is tolerated, but malformed frontmatter and validation failures are not robustly handled."
+        },
+        "E4_dependency_choices": {
+          "score": 3,
+          "evidence": "package.json dependencies (next, recharts, gray-matter, date-fns, lucide-react)",
+          "notes": "Dependency set is appropriate and lean for the implemented scope; no clearly unnecessary packages."
+        }
+      },
+      "category_score": 68.75,
+      "category_commentary": "Code quality is competent with solid organization, but robustness and validation depth are limited."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 3,
+          "evidence": "src/app/page.tsx:7-8, src/app/page.tsx:44-145; src/lib/data.ts:78-93",
+          "notes": "Dashboard includes multiple real metrics and status breakdowns; not all PRD widgets are implemented."
+        },
+        "F2_additional_pages": {
+          "score": 3,
+          "evidence": "src/app/roadmap/page.tsx; src/app/projects/page.tsx; src/app/updates/page.tsx",
+          "notes": "Several meaningful pages beyond matrix are implemented, though detail page coverage is incomplete."
+        },
+        "F3_search_filtering": {
+          "score": 2,
+          "evidence": "src/app/projects/page.tsx:41-58; src/app/matrix/page.tsx:33-39",
+          "notes": "Filtering across multiple dimensions works, but search is basic includes-based rather than PRD-recommended fuzzy search."
+        },
+        "F4_creative_additions": {
+          "score": 3,
+          "evidence": "src/components/GanttChart.tsx:20-219; src/app/updates/page.tsx:41-137",
+          "notes": "Gantt timeline and activity feed are substantial additions that extend beyond the matrix requirement."
+        }
+      },
+      "category_score": 68.75,
+      "category_commentary": "Bonus scope is meaningful and practical, especially dashboard and timeline capabilities."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 3,
+          "evidence": "README.md challenge focus + implemented matrix/dashboard/roadmap/projects routes",
+          "notes": "Time allocation appears sensible: must-have matrix delivered first, then high-value supporting views."
+        },
+        "G2_pr_description": {
+          "score": 2,
+          "evidence": "IMPLEMENTATION.md:1-259",
+          "notes": "Documentation is substantial and structured in a dedicated implementation summary, with clear build/run instructions and feature breakdown; however it has limited explicit discussion of skipped scope/known limitations."
+        }
+      },
+      "category_score": 62.5,
+      "category_commentary": "Prioritization is good and documentation is strong for a non-PR format, though communication is not fully reflective about scope trade-offs."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 0,
+      "evidence": "git log shows 2 commits: initial + final implementation",
+      "notes": "Sparse cadence does not show iterative commit progression."
+    },
+    "H2_message_quality": {
+      "points": 1,
+      "evidence": "Commit message: 'Implement Strategy Matrix with Governance Logic + UI Polish'",
+      "notes": "Messages are mostly descriptive, though history is brief."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Commit order shows initial scaffold then feature implementation",
+      "notes": "Sequence is logical even with few commits."
+    },
+    "bonus_total": 2
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 75,
+      "B_technical_foundation": 62.5,
+      "C_ui_ux_quality": 75,
+      "D_prd_compliance": 81.25,
+      "E_code_quality": 68.75,
+      "F_bonus_features": 68.75,
+      "G_decision_making": 62.5
+    },
+    "weighted_score": 71.5625,
+    "git_bonus": 2,
+    "final_score": 73.5625,
+    "score_band": "Competent",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Core matrix pipeline is correctly implemented end-to-end (markdown -> normalization -> quadrant assignment -> scatter render) with clean separation across src/lib/data.ts, src/app/api/matrix/route.ts, and src/components/StrategyMatrix.tsx.",
+      "UI polish is above baseline: consistent visual language, responsive sidebar navigation, and high-quality dashboard/card presentation across main routes.",
+      "Implemented meaningful bonus scope beyond the must-have, including a functional roadmap timeline and project library with filtering."
+    ],
+    "top_weaknesses": [
+      "PRD route coverage is incomplete because /projects/[slug] is missing (src/app/projects/[slug]/page.tsx absent).",
+      "Validation and governance robustness are limited: no Zod/build-time schema validation, and malformed frontmatter handling is minimal.",
+      "Tooling completeness is partial: npm run lint is currently interactive (ESLint not configured), which weakens CI readiness."
+    ],
+    "standout_moments": [
+      "The matrix visualization quality is notably strong for a timed submission, including quadrant background labeling and rich tooltips."
+    ],
+    "hiring_signal": "This submission shows a developer who can ship a polished, working product slice quickly and make pragmatic architecture choices. The candidate is strongest in UI delivery and feature integration, with moderate gaps in production hardening (validation, CI lint discipline, and full PRD completeness).",
+    "recommendation": "Lean Hire"
+  }
+}

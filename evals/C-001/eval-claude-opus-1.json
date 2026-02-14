@@ -244,12 +244,12 @@
         },
         "G2_pr_description": {
           "score": 1,
-          "evidence": "No pull request found on the repository (gh pr list --state all returns empty, GitHub API confirms []). However, the candidate provided external run instructions including: npm run dev, npm run ingestion, npm run staging:promote, and an OpenAI API key for the ingestion pipeline. The assessment deliverables (README Section 4) specify: '1. Code: Submit a Pull Request (PR) to this repo. 2. Summary: A brief comment on your PR explaining what you chose to focus on for the bonus objectives.'",
-          "notes": "Inadequate. The candidate pushed directly to main without creating the required PR. However, they did provide functional submission instructions externally (run commands for dev, ingestion, and staging promotion). This partially addresses the communication intent but completely misses the delivery mechanism (PR with summary). Score 1 rather than 0 because some documentation was provided, but the explicit deliverable was not created."
+          "evidence": "README.md is unchanged boilerplate (the assessment brief template). No IMPLEMENTATION.md, no PR description, no added documentation of any kind in the repo. Candidate provided external run instructions (npm run dev, npm run ingestion, npm run staging:promote, OPENAI_API_KEY) but no written summary of what was built, architectural decisions, or trade-offs.",
+          "notes": "Minimal documentation. The README is the original assessment template with no modifications. The only communication about the submission was brief external run instructions listing npm commands. No explanation of what was built, what was skipped, architectural choices, or known limitations. Score 1 (minimal) rather than 0 because some external instructions were provided."
         }
       },
       "category_score": 50.0,
-      "category_commentary": "Mixed decision making. Prioritization was solid — the candidate built the core requirement first and systematically added bonus features. The candidate provided functional run instructions externally but failed to create the required Pull Request, which was an explicit deliverable in the assessment brief."
+      "category_commentary": "Mixed decision making. Prioritization was solid — the candidate built the core requirement first and systematically added bonus features. However, the candidate provided no meaningful submission documentation — the README is unchanged boilerplate and no summary of what was built, skipped, or why was provided anywhere in the repo."
     }
   },
   "git_history_bonus": {
@@ -296,7 +296,7 @@
       "Excellent empty/loading/error state coverage with skeleton loaders on every page and context-appropriate empty state messages matching PRD spec text."
     ],
     "top_weaknesses": [
-      "No Pull Request submitted — assessment deliverables explicitly required a PR with a summary comment explaining bonus objective choices. Code was pushed directly to main.",
+      "No submission documentation — README is unchanged boilerplate, no IMPLEMENTATION.md or summary added. No written explanation of what was built, architectural decisions, trade-offs, or known limitations.",
       "Poor .gitignore — only 'node_modules' listed. The .next/ directory (200MB+ of webpack cache) and out/ directory (static export output) were both committed to the repository, requiring manual cleanup.",
       "Duplicated formatCurrency utility function appears in 3 separate files (StrategyMatrixChart.tsx, projects/page.tsx, ProjectDetailClient.tsx) instead of being extracted to a shared lib/utils module."
     ],
@@ -304,7 +304,7 @@
       "The full AI ingestion pipeline is remarkable for a 3-hour assessment — the candidate built a working LLM-powered ETL system with OpenAI integration, text normalization for multiple formats, and a staged promotion workflow with CI/CD. This demonstrates understanding of the full PRD architecture beyond just the UI layer.",
       "Generated 7 additional projects (PRJ-005 through PRJ-011) from 12 interview transcripts using the AI pipeline, demonstrating end-to-end functionality of the ingestion system."
     ],
-    "hiring_signal": "This developer demonstrates strong full-stack capabilities with a bias toward building complete systems rather than polished prototypes. They understand backend pipeline architecture (governance engine, CI/CD, LLM integration) and can deliver functional UIs with solid design systems. The main risks are attention to delivery process (no PR submitted) and project hygiene (committed build artifacts), suggesting they may prioritize building over operational discipline.",
+    "hiring_signal": "This developer demonstrates strong full-stack capabilities with a bias toward building complete systems rather than polished prototypes. They understand backend pipeline architecture (governance engine, CI/CD, LLM integration) and can deliver functional UIs with solid design systems. The main risks are communication discipline (no submission documentation) and project hygiene (committed build artifacts), suggesting they may prioritize building over operational discipline.",
     "recommendation": "Hire"
   }
 }

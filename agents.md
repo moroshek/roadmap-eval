@@ -325,7 +325,7 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
 - **Don't double-count.** A3 and D2 are different criteria (implementation quality vs correctness). A6 and E1 are different scopes (matrix pipeline vs whole codebase). Cite distinct evidence for each.
 - **Don't penalize missing git history.** It's bonus-only.
 - **Don't penalize tooltip interpretation.** README and PRD differ slightly. Accept either.
-- **G2 has a PR cap rule.** If no Pull Request was created, G2_pr_description is capped at 1 regardless of other documentation. A PR is an explicit assessment deliverable. See `evaluation-framework.md` Category G for the full rubric.
+- **G2 is format-agnostic.** Score the quality of the candidate's written communication about their submission — PR description, IMPLEMENTATION.md, README, or any other documentation. The delivery mechanism (PR vs branch push vs other) is not a factor. See `evaluation-framework.md` Category G for the full rubric.
 - **Don't forget metadata fields.** `repo_url`, `evaluated_at`, `evaluator`, and `framework_version` are all required. So is `category_commentary` on every category.
 - **Don't forget `gate_summary`.** After the 10 gate checks, include the summary object with `total_passed`, `total_failed`, `automatic_failure_triggered`, and `failure_reasons`.
 - **Don't forget special gate fields.** G5 needs `count`, G6 needs `library` — in addition to `pass` and `notes`.

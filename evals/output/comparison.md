@@ -1,13 +1,14 @@
 # Candidate Comparison Report
 
-Generated: 2026-02-13T21:38:26.834Z
-Candidates evaluated: 1
+Generated: 2026-02-14T23:18:32.183Z
+Candidates evaluated: 2
 
 ## Rankings
 
 | Rank | Candidate | Score | Band | Matrix | Tech | UI/UX | PRD | Code | Bonus | Decision | Rec | Agreement |
 |------|-----------|-------|------|--------|------|-------|-----|------|-------|----------|-----|-----------|
-| 1 | C-001 | 91.94 | Exceptional | 95.83 | 87.5 | 80 | 93.75 | 87.5 | 93.75 | 50 | Hire | strong |
+| 1 | C-001 | 89.75 | Strong | 95.83 | 81.25 | 80 | 93.75 | 81.25 | 93.75 | 50 | Hire | strong |
+| 2 | C-002 | 74.19 | Competent | 75 | 62.5 | 75 | 81.25 | 68.75 | 68.75 | 75 | Lean Hire | moderate |
 
 ## Category Weights
 
