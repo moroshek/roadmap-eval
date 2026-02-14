@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-02-13T21:38:26.834Z",
+  "candidate_count": 1,
+  "ranking": [
+    {
+      "rank": 1,
+      "candidate_id": "C-001",
+      "final_score": 91.94,
+      "score_band": "Exceptional",
+      "weighted_score": 87.94,
+      "git_bonus": 4,
+      "automatic_failure": false,
+      "category_scores": {
+        "A_strategy_matrix": 95.83,
+        "B_technical_foundation": 87.5,
+        "C_ui_ux_quality": 80,
+        "D_prd_compliance": 93.75,
+        "E_code_quality": 87.5,
+        "F_bonus_features": 93.75,
+        "G_decision_making": 50
+      },
+      "consensus_recommendation": "Hire",
+      "evaluator_count": 3,
+      "evaluator_agreement": "strong"
+    }
+  ]
+}

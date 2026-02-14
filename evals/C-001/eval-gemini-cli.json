@@ -1,0 +1,148 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-001",
+    "repo_url": "https://github.com/moroshek/roadmap-coltigent",
+    "evaluated_at": "2026-02-13T16:25:00Z",
+    "evaluator": "gemini-cli",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "Found package.json in root." },
+    "G2_install_succeeds": { "pass": true, "notes": "npm install completed without errors." },
+    "G3_build_succeeds": { "pass": true, "notes": "npm run build succeeded." },
+    "G4_matrix_route_exists": { "pass": true, "notes": "src/app/matrix exists." },
+    "G5_project_files_exist": { "pass": true, "count": 11, "notes": "11 markdown project files found." },
+    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "recharts found in dependencies." },
+    "G7_normalization_logic_exists": { "pass": true, "notes": "Logic found in scripts/governance/index.mjs" },
+    "G8_quadrant_logic_exists": { "pass": true, "notes": "Logic found in scripts/governance/index.mjs" },
+    "G9_chart_renders_data": { "pass": true, "notes": "StrategyMatrixChart.tsx renders a Scatter chart with mapped project data." },
+    "G10_tooltips_implemented": { "pass": true, "notes": "Custom Tooltip component found in StrategyMatrixChart.tsx." },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": { "score": 4, "evidence": "_content/projects/ contains 11 realistic markdown files.", "notes": "Excellent dataset size and quality." },
+        "A2_score_normalization": { "score": 4, "evidence": "scripts/governance/index.mjs:19 (normalizeScore1To10To0To100 function)", "notes": "Mathematically correct and part of a robust build pipeline." },
+        "A3_quadrant_assignment": { "score": 4, "evidence": "scripts/governance/index.mjs:24 (getQuadrantLabel function)", "notes": "Well-structured, separated from UI, and handles boundaries correctly." },
+        "A4_scatter_plot_rendering": { "score": 3, "evidence": "src/components/StrategyMatrixChart.tsx", "notes": "Correct axes and domain. Quadrants are indicated with dashed lines, though not explicitly labeled in the chart background (labeled in legend/tooltip)." },
+        "A5_tooltip_implementation": { "score": 4, "evidence": "src/components/StrategyMatrixChart.tsx:103", "notes": "Rich information including Title, Quadrant, ROI, and a direct link to the project." },
+        "A6_logic_ui_separation": { "score": 4, "evidence": "Logic in scripts/governance/ vs UI in src/components/StrategyMatrixChart.tsx", "notes": "Excellent separation using a build-time data generation strategy." }
+      },
+      "category_score": 95.83,
+      "category_commentary": "The Strategy Matrix implementation is near perfect. The candidate chose to build a dedicated 'Governance Engine' script that pre-processes the data, which is a highly scalable and professional approach."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": { "score": 4, "evidence": "package.json, tsconfig.json, tailwind.config.ts", "notes": "Professional Next.js setup with linting and clear scripts." },
+        "B2_routing_navigation": { "score": 4, "evidence": "src/app/ routes and src/components/Sidebar.tsx", "notes": "Complete route structure matching PRD with consistent navigation." },
+        "B3_type_safety": { "score": 4, "evidence": "src/lib/types.ts and scripts/governance/schemas.mjs", "notes": "Strong typing with Zod schemas for runtime validation." },
+        "B4_data_layer": { "score": 4, "evidence": "scripts/governance/index.mjs and src/context/DataContext.tsx", "notes": "Production-quality data layer using a master_data.json artifact." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Solid technical choices. Using Zod for build-time validation of content files demonstrates deep understanding of robust software engineering."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": { "score": 4, "evidence": "src/components/Sidebar.tsx, src/components/TopBar.tsx", "notes": "Polished, cohesive design with great attention to spacing and hierarchy." },
+        "C2_responsive_design": { "score": 3, "evidence": "StrategyMatrixChart.tsx uses ResponsiveContainer", "notes": "Functional responsiveness throughout. Charts reflow well." },
+        "C3_interactivity": { "score": 4, "evidence": "src/components/SearchModal.tsx (Cmd+K support)", "notes": "High interactivity with keyboard shortcuts and smooth transitions." },
+        "C4_empty_error_loading_states": { "score": 4, "evidence": "src/components/Skeleton.tsx used in multiple pages", "notes": "Skeleton loaders for dashboard widgets and matrix chart are excellently implemented." },
+        "C5_design_token_usage": { "score": 3, "evidence": "src/lib/config.ts", "notes": "Branding from config.json is integrated, though some colors are still hardcoded in components." }
+      },
+      "category_score": 90.0,
+      "category_commentary": "The UI feels like a real product. Inclusion of Cmd+K search and skeleton loaders significantly elevates the UX."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": { "score": 4, "evidence": "scripts/governance/schemas.mjs", "notes": "Zod schemas match PRD 3.2 exactly." },
+        "D2_quadrant_logic_accuracy": { "score": 3, "evidence": "scripts/governance/index.mjs", "notes": "Correct labels and boundaries. Lacks background labels on the chart itself (score 4 requirement)." },
+        "D3_route_structure": { "score": 4, "evidence": "src/app/ page structure", "notes": "All PRD-specified routes are implemented and functional." },
+        "D4_specification_details": { "score": 4, "evidence": "StrategyMatrixChart.tsx axes configuration", "notes": "X-Axis is Effort, Y-Axis is Impact as specified." }
+      },
+      "category_score": 93.75,
+      "category_commentary": "Excellent adherence to the product requirements. The candidate clearly spent time reading and understanding the PRD."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": { "score": 4, "evidence": "Distinct scripts/, context/, lib/, components/ and app/ directories.", "notes": "Very clean architecture. Components are purely presentational." },
+        "E2_readability_naming": { "score": 4, "evidence": "src/components/SearchModal.tsx", "notes": "Clean, self-documenting code with precise naming." },
+        "E3_error_handling": { "score": 4, "evidence": "scripts/governance/index.mjs validation logic", "notes": "Strong validation with meaningful error messages during build." },
+        "E4_dependency_choices": { "score": 4, "evidence": "package.json", "notes": "Expert-level choices: Recharts, Fuse.js, Zod." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Production-grade code. The separation of the 'Governance Engine' from the frontend is a standout architectural decision."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": { "score": 4, "evidence": "src/app/page.tsx", "notes": "Comprehensive dashboard with multiple calculated widgets (metrics, velocity, activity)." },
+        "F2_additional_pages": { "score": 4, "evidence": "Roadmap, Updates, and Project Library pages implemented.", "notes": "Near-complete page coverage." },
+        "F3_search_filtering": { "score": 4, "evidence": "src/components/SearchModal.tsx", "notes": "Full search experience with Cmd+K and Fuse.js weighting." },
+        "F4_creative_additions": { "score": 4, "evidence": "scripts/ingestion/ (AI pipeline) and scripts/governance/ temporal logic", "notes": "The inclusion of a complete AI-driven ingestion pipeline (normalization -> LLM extraction -> staging -> promotion) is exceptional and exceeds all expectations." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "The candidate went far beyond the requirements, building a production-ready AI pipeline for project ingestion and sophisticated temporal governance logic."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": { "score": 4, "evidence": "Full implementation of all core and most bonus requirements.", "notes": "Strategically spent time on high-impact items like the data pipeline and search." },
+        "G2_pr_description": { "score": 2, "evidence": "Candidate provided custom run instructions and ingestion workflow commands in their submission message.", "notes": "While the README is largely boilerplate, the candidate provided clear, specific instructions on how to run and test the advanced ingestion pipeline, satisfying the 'submission summary' requirement." }
+      },
+      "category_score": 75.0,
+      "category_commentary": "Excellent prioritization. They built a cohesive product rather than isolated features. Adjusted PR description score to 2 to reflect that instructions were provided outside of the README/PR."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": { "points": 2, "evidence": "9 logical commits", "notes": "Shows incremental progress." },
+    "H2_message_quality": { "points": 1, "evidence": "Messages like 'Enhanced UI'", "notes": "Descriptive but could be more precise." },
+    "H3_logical_progression": { "points": 1, "evidence": "Git log shows foundation -> feature -> polish", "notes": "Logical build-up." },
+    "bonus_total": 4
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 95.83,
+      "B_technical_foundation": 100.0,
+      "C_ui_ux_quality": 90.0,
+      "D_prd_compliance": 93.75,
+      "E_code_quality": 100.0,
+      "F_bonus_features": 100.0,
+      "G_decision_making": 75.0
+    },
+    "weighted_score": 95.38,
+    "git_bonus": 4,
+    "final_score": 99.38,
+    "score_band": "Exceptional",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Robust data pipeline (Governance Engine) and a sophisticated AI Ingestion Pipeline (scripts/ingestion).",
+      "Excellent use of Zod for content validation and runtime safety.",
+      "Highly polished UI/UX with professional touches like Cmd+K search and skeleton loaders.",
+      "Inclusion of temporal logic that automatically updates project status based on dates."
+    ],
+    "top_weaknesses": [
+      "Minor omission: Quadrant background labels not directly rendered on the scatter plot.",
+      "Git commit messages could be more formal (e.g., conventional commits)."
+    ],
+    "standout_moments": [
+      "The AI Ingestion Engine is a complete, well-reasoned feature that demonstrates advanced technical skill.",
+      "The use of a master_data.json build artifact is a very scalable architectural pattern."
+    ],
+    "hiring_signal": "This is a top-tier candidate with strong architectural thinking and a high degree of product awareness. They demonstrate mastery of the React/Next.js stack and a commitment to code quality and robust data handling.",
+    "recommendation": "Strong Hire"
+  }
+}

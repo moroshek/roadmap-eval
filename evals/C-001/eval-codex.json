@@ -1,0 +1,280 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-001",
+    "repo_url": "https://github.com/moroshek/roadmap-coltigent",
+    "evaluated_at": "2026-02-13T21:30:00Z",
+    "evaluator": "codex-gpt-5",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "Found /package.json." },
+    "G2_install_succeeds": { "pass": true, "notes": "`npm ci` completed successfully (588 packages)." },
+    "G3_build_succeeds": { "pass": true, "notes": "`npm run build` completed successfully with static page generation." },
+    "G4_matrix_route_exists": { "pass": true, "notes": "Route exists at `src/app/matrix/page.tsx`." },
+    "G5_project_files_exist": { "pass": true, "count": 11, "notes": "11 markdown project files found in `_content/projects/`." },
+    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "`recharts` present in dependencies and used in matrix chart." },
+    "G7_normalization_logic_exists": { "pass": true, "notes": "0-10 to 0-100 normalization implemented in `scripts/governance/index.mjs:22`." },
+    "G8_quadrant_logic_exists": { "pass": true, "notes": "Quadrant assignment logic implemented in `scripts/governance/index.mjs:27`." },
+    "G9_chart_renders_data": { "pass": true, "notes": "`StrategyMatrixChart` maps projects to scatter points via x/y fields and renders `<Scatter data={data}>`." },
+    "G10_tooltips_implemented": { "pass": true, "notes": "Tooltip configured via `<Tooltip content={...}>` in `src/components/StrategyMatrixChart.tsx:75`." },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": {
+          "score": 4,
+          "evidence": "11 project files exist under `_content/projects` and are loaded in governance (`scripts/governance/index.mjs:42-99`).",
+          "notes": "Rich and coherent project dataset beyond minimum requirement."
+        },
+        "A2_score_normalization": {
+          "score": 4,
+          "evidence": "Normalization utility clamps then scales scores in `scripts/governance/index.mjs:22-25` and is applied in `scripts/governance/index.mjs:117-121`.",
+          "notes": "Correct transformation and separation from UI."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "Dedicated `getQuadrantLabel` function in `scripts/governance/index.mjs:27-34`.",
+          "notes": "Clean function and boundary handling; not externally configurable/tested."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 3,
+          "evidence": "Scatter chart uses fixed 0-100 axes and mapped data in `src/components/StrategyMatrixChart.tsx:54-74` and `src/components/StrategyMatrixChart.tsx:99-103`.",
+          "notes": "Solid implementation with responsive container and labels."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "Tooltip renders title, quadrant, ROI, and project link in `src/components/StrategyMatrixChart.tsx:75-97`.",
+          "notes": "Useful and clear tooltip content."
+        },
+        "A6_logic_ui_separation": {
+          "score": 4,
+          "evidence": "Parsing, validation, normalization, and quadrant enrichment happen in governance scripts; chart consumes prepared matrix data (`scripts/governance/index.mjs:117-131`, `src/components/StrategyMatrixChart.tsx:31-41`).",
+          "notes": "Strong architectural separation between transform and rendering layers."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Core matrix requirement is correctly implemented with strong data-pipeline separation and a clear chart implementation."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 3,
+          "evidence": "Project builds successfully with Next.js/TypeScript/Tailwind; scripts present in `package.json` and build verified via `npm run build`.",
+          "notes": "Solid setup, though script coverage for lint/test is limited."
+        },
+        "B2_routing_navigation": {
+          "score": 4,
+          "evidence": "App routes include dashboard, matrix, roadmap, projects, updates and project detail (`src/app/...`). Sidebar nav and breadcrumbs implemented in `src/components/Sidebar.tsx` and `src/components/TopBar.tsx`.",
+          "notes": "Comprehensive routing and shared layout navigation."
+        },
+        "B3_type_safety": {
+          "score": 3,
+          "evidence": "Typed domain models in `src/lib/types.ts`; runtime validation with Zod in `scripts/governance/schemas.mjs`.",
+          "notes": "Good type discipline, though ingestion scripts are largely untyped JS."
+        },
+        "B4_data_layer": {
+          "score": 4,
+          "evidence": "Governance builds `public/master_data.json` from content (`scripts/governance/index.mjs:155-189`), then UI loads it through context (`src/context/DataContext.tsx`).",
+          "notes": "Clear and production-friendly content pipeline."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Technical foundation is robust with clear content processing and route architecture."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 3,
+          "evidence": "Consistent card styles, gradients, typography, and iconography across pages (`src/app/*.tsx`, `src/components/*.tsx`).",
+          "notes": "Polished and coherent visual direction."
+        },
+        "C2_responsive_design": {
+          "score": 3,
+          "evidence": "Mobile sidebar + overlay in `src/components/LayoutClient.tsx`, responsive containers/grids across pages.",
+          "notes": "Responsive behavior is generally solid."
+        },
+        "C3_interactivity": {
+          "score": 3,
+          "evidence": "Interactive filters, searchable modal, and hover states implemented (`src/app/projects/page.tsx`, `src/components/SearchModal.tsx`).",
+          "notes": "Good level of interactivity with keyboard search support."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 3,
+          "evidence": "Skeletons and fallback states implemented across dashboard, matrix, roadmap, and projects pages.",
+          "notes": "Good coverage of non-happy paths, though fetch-level error detail is minimal."
+        },
+        "C5_design_token_usage": {
+          "score": 2,
+          "evidence": "Config loading exists (`src/lib/config.ts`) and token injector exists, but many component colors are still hardcoded (`src/components/Sidebar.tsx`, `src/components/TopBar.tsx`).",
+          "notes": "Token integration is partial rather than pervasive."
+        }
+      },
+      "category_score": 70,
+      "category_commentary": "UX quality is good overall, with strong interaction patterns, but design token usage is only partial."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 3,
+          "evidence": "Structured schema validation in `scripts/governance/schemas.mjs` and content validation in `scripts/governance/index.mjs:68-73`.",
+          "notes": "Strong adherence with runtime checks in place."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "Quadrants map correctly using impact>=50 and effort>=50 thresholds in `scripts/governance/index.mjs:27-34`.",
+          "notes": "Matches required logic and axis orientation."
+        },
+        "D3_route_structure": {
+          "score": 4,
+          "evidence": "Route structure includes required matrix path and expected supporting pages (`src/app/matrix/page.tsx`, `src/app/projects/page.tsx`, etc.).",
+          "notes": "Route coverage aligns with expected product structure."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "Runbook scripts exist and function (`npm run governance`, `npm run ingestion`, `npm run staging:promote`), but candidate-provided instruction `npm run staging: promote` is syntactically incorrect and fails with missing script.",
+          "notes": "Core feature implementation aligns well, but operational instruction quality has a notable mismatch."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "PRD implementation is largely compliant; main gap is command/runbook precision outside the core matrix."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 4,
+          "evidence": "Clear split between ingestion/governance scripts, typed app models, context loading, and presentational components.",
+          "notes": "Architecture is well factored."
+        },
+        "E2_readability_naming": {
+          "score": 3,
+          "evidence": "Consistent naming and clear component/function organization across `src` and `scripts`.",
+          "notes": "Readable and maintainable overall."
+        },
+        "E3_error_handling": {
+          "score": 2,
+          "evidence": "`DataContext` does not validate HTTP status before JSON parse (`src/context/DataContext.tsx:16-24`); update sort comparator never returns 0 for equal dates (`scripts/governance/index.mjs:151`).",
+          "notes": "Basic error paths exist, but edge-case handling is inconsistent."
+        },
+        "E4_dependency_choices": {
+          "score": 3,
+          "evidence": "Dependencies are appropriate for scope (`recharts`, `gray-matter`, `zod`, `fuse.js`, `openai`), and build works with them.",
+          "notes": "Good choices, though dependency versions include known deprecations/vulnerability notices during install."
+        }
+      },
+      "category_score": 75,
+      "category_commentary": "Codebase quality is good, but there are correctness and robustness gaps in error handling and some implementation details."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 4,
+          "evidence": "Dashboard metrics, phase indicator, velocity chart, and recent activity implemented (`src/app/page.tsx` + related components).",
+          "notes": "Strong dashboard coverage."
+        },
+        "F2_additional_pages": {
+          "score": 4,
+          "evidence": "Roadmap, updates, projects listing, and project details are all implemented.",
+          "notes": "Broad feature completion beyond must-have matrix."
+        },
+        "F3_search_filtering": {
+          "score": 4,
+          "evidence": "Fuse-based search modal with keyboard selection (`src/components/SearchModal.tsx`) and multi-filter project library (`src/app/projects/page.tsx`).",
+          "notes": "Well executed bonus functionality."
+        },
+        "F4_creative_additions": {
+          "score": 3,
+          "evidence": "Temporal status logic and ingestion pipeline are additional capabilities (`scripts/governance/index.mjs:101-114`, `scripts/ingestion/*`).",
+          "notes": "Useful creative extensions with clear product value."
+        }
+      },
+      "category_score": 93.75,
+      "category_commentary": "Candidate delivered substantial bonus functionality with meaningful product additions."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 3,
+          "evidence": "Core matrix completed with multiple bonus features (search, roadmap, ingestion/governance pipeline).",
+          "notes": "Good prioritization toward high-value deliverables."
+        },
+        "G2_pr_description": {
+          "score": 0,
+          "evidence": "No PR description or explicit submission summary artifact was found in the repository; README content is assignment/project documentation, not a candidate delivery summary.",
+          "notes": "By rubric definition, this is a 0 when no PR/submission summary is present."
+        }
+      },
+      "category_score": 37.5,
+      "category_commentary": "Feature prioritization was solid, but formal delivery communication is missing per rubric."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 2,
+      "evidence": "9 commits with incremental progression from base functionality to UI and workflow updates.",
+      "notes": "Reasonable cadence for a timed assessment."
+    },
+    "H2_message_quality": {
+      "points": 1,
+      "evidence": "Some messages are descriptive, but several are generic (`UI Working`, `All Working`).",
+      "notes": "Mixed commit message quality."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Commits show a coherent progression: setup/features/polish/workflow fixes.",
+      "notes": "Progression is understandable."
+    },
+    "bonus_total": 4
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 87.5,
+      "B_technical_foundation": 87.5,
+      "C_ui_ux_quality": 70,
+      "D_prd_compliance": 87.5,
+      "E_code_quality": 75,
+      "F_bonus_features": 93.75,
+      "G_decision_making": 37.5
+    },
+    "weighted_score": 80.19,
+    "git_bonus": 4,
+    "final_score": 84.19,
+    "score_band": "Strong",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Implemented a strong governance pipeline that validates content and enriches matrix fields before UI render.",
+      "Completed all automated gate requirements, including matrix rendering and tooltip support.",
+      "Shipped meaningful bonus functionality: dashboard, searchable project library, roadmap views, and ingestion/promote scripts.",
+      "Maintained clean architectural separation between data logic and presentation components."
+    ],
+    "top_weaknesses": [
+      "Operational instructions quality issue: candidate-provided command `npm run staging: promote` fails; correct command is `npm run staging:promote`.",
+      "`TopBar` breadcrumb navigation uses raw `<a href>` links (`src/components/TopBar.tsx:83-85`) instead of Next.js `Link`, causing full page reload navigation for breadcrumb clicks.",
+      "Error-path robustness is uneven (`src/context/DataContext.tsx:16-24` and update sorting comparator in `scripts/governance/index.mjs:151`).",
+      "Keyboard shortcut handling is Mac-only (`metaKey` only) in `src/components/TopBar.tsx:49`, reducing cross-platform UX."
+      ,
+      "No PR description or explicit submission summary was provided, which scores 0 on rubric criterion G2."
+    ],
+    "standout_moments": [
+      "Governance preprocessing (validation + normalization + quadrant assignment) is a strong engineering choice for reliability and maintainability.",
+      "Ingestion pipeline is fully wired with normalization and staged promotion flow, not just stubbed."
+    ],
+    "hiring_signal": "This candidate demonstrates strong product delivery ability and good architectural instincts, especially around precomputed data pipelines and UI breadth. The main risks are in edge-case correctness and operational precision, which showed up in runbook command accuracy and a few implementation bugs. Overall this is a solid engineering performance with moderate execution-quality gaps.",
+    "recommendation": "Lean Hire"
+  }
+}

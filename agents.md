@@ -325,7 +325,10 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
 - **Don't double-count.** A3 and D2 are different criteria (implementation quality vs correctness). A6 and E1 are different scopes (matrix pipeline vs whole codebase). Cite distinct evidence for each.
 - **Don't penalize missing git history.** It's bonus-only.
 - **Don't penalize tooltip interpretation.** README and PRD differ slightly. Accept either.
+- **G2 has a PR cap rule.** If no Pull Request was created, G2_pr_description is capped at 1 regardless of other documentation. A PR is an explicit assessment deliverable. See `evaluation-framework.md` Category G for the full rubric.
 - **Don't forget metadata fields.** `repo_url`, `evaluated_at`, `evaluator`, and `framework_version` are all required. So is `category_commentary` on every category.
 - **Don't forget `gate_summary`.** After the 10 gate checks, include the summary object with `total_passed`, `total_failed`, `automatic_failure_triggered`, and `failure_reasons`.
 - **Don't forget special gate fields.** G5 needs `count`, G6 needs `library` — in addition to `pass` and `notes`.
 - **Ensure `category_score` is computed, not estimated.** Use the formula: `(sum / (count × 4)) × 100`. Verify your arithmetic.
+- **Keep `scoring_summary` in sync.** Category scores appear in TWO places: under each `rubric_scores.X.category_score` AND in `scoring_summary.category_scores`. If you revise any criterion score, recalculate and update BOTH locations, plus `weighted_score`, `final_score`, and `score_band`.
+- **Only score what's in the repo.** Evaluate based on the candidate's repository contents. Do not factor in out-of-band information (messages, emails, verbal instructions) unless explicitly directed by the orchestrator. If a candidate provides instructions outside the repo, note it but score the repo as-is.

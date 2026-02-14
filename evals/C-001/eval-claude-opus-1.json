@@ -1,0 +1,310 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-001",
+    "repo_url": "https://github.com/moroshek/roadmap-coltigent",
+    "evaluated_at": "2026-02-13T22:00:00Z",
+    "evaluator": "claude-opus-1",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "package.json exists at repo root with name 'roadmap-engine', correct scripts (governance, prebuild, build, dev, start, cron jobs, ingestion, staging:promote)."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "npm install succeeds. 589 packages audited. 4 vulnerabilities noted (3 high, 1 critical) but install completes without error."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "npm run build succeeds. prebuild runs governance engine first (generating master_data.json), then next build produces static export with 19 static pages including /matrix. Output: export mode with trailingSlash."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "src/app/matrix/page.tsx exists. Build output confirms /matrix route renders (6.65 kB, 197 kB first load). Sidebar navigation includes /matrix/ link."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 11,
+      "notes": "11 markdown files in _content/projects/: PRJ-001 through PRJ-011. The 4 seed projects (PRJ-001 to PRJ-004) match reference data exactly. PRJ-005 through PRJ-011 were generated via the AI ingestion pipeline from interview transcripts."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "recharts ^2.13.3 listed in package.json dependencies. Used in StrategyMatrixChart.tsx (ScatterChart, Scatter, XAxis, YAxis, Tooltip, etc.) and VelocityChart.tsx (BarChart)."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "scripts/governance/index.mjs:22-25 — normalizeScore1To10To0To100 clamps value to [0,10] then computes Math.round((v / 10) * 100). Applied at lines 119-120 in applyMatrixAndNormalize. Verified: 8.6 → 86, 9.1 → 91, 3.9 → 39, 4.1 → 41."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "scripts/governance/index.mjs:27-33 — getQuadrantLabel uses impact100 >= 50 and effort100 >= 50 thresholds. Maps to 'Quick Wins', 'Big Bets', 'Fillers', 'Time Sinks'. Matches PRD §2.1 quadrant definitions exactly."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "src/components/StrategyMatrixChart.tsx:99-103 — Scatter component with data mapped from projects. Each project rendered as a Cell with quadrant-based fill color. Data transformed at lines 32-41 (x=effort_normalized, y=impact_normalized)."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "src/components/StrategyMatrixChart.tsx:76-97 — Custom Tooltip content renderer shows: project title (line 82), quadrant label (line 84), ROI formatted as currency (line 87), and a 'View project →' link (lines 89-94). Satisfies both README (title + quadrant) and PRD (title + ROI) specs."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": {
+          "score": 4,
+          "evidence": "_content/projects/ contains 11 MD files (PRJ-001 through PRJ-011). The 4 seed projects match reference data byte-for-byte: PRJ-001.md (candidate) is identical to reference/PRJ-001.md. All files validated by Zod schema (scripts/governance/schemas.mjs:25-41). Additional 7 projects (PRJ-005–PRJ-011) generated via AI ingestion pipeline from 12 interview transcripts.",
+          "notes": "Exceeds expectations. Not only preserved the 4 seed files but built and ran an AI pipeline to generate 7 additional projects from interviews, all conforming to the PRD schema. Every project has valid frontmatter, body content, and correct field types."
+        },
+        "A2_score_normalization": {
+          "score": 4,
+          "evidence": "scripts/governance/index.mjs:22-25 — normalizeScore1To10To0To100 clamps to [0,10] then (v/10)*100. Applied at lines 119-120. Verified in public/master_data.json: PRJ-001 strategic_value=8.6 → impact_normalized=86, complexity=3.2 → effort_normalized=32. PRJ-002: 9.1→91, 8.2→82. PRJ-003: 3.9→39, 2.8→28. PRJ-004: 4.1→41, 8.7→87.",
+          "notes": "Excellent. Clean normalization with edge-case clamping. All 4 reference projects produce exactly correct normalized values. Formula is correct and testable."
+        },
+        "A3_quadrant_assignment": {
+          "score": 4,
+          "evidence": "scripts/governance/index.mjs:27-33 — getQuadrantLabel with >= 50 thresholds. src/lib/types.ts:77 — typed as union 'Quick Wins' | 'Big Bets' | 'Fillers' | 'Time Sinks'. src/components/StrategyMatrixChart.tsx:18-23 — QUADRANT_COLORS maps all 4 quadrants to distinct colors. Logic is in governance layer, consumed by UI as pre-computed value.",
+          "notes": "Excellent implementation quality. Quadrant logic is a pure function in the governance engine, type-safe via union type, color-coded in UI. Clean, reusable, and well-separated from rendering."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 3,
+          "evidence": "src/components/StrategyMatrixChart.tsx:53-105 — Recharts ScatterChart with: XAxis dataKey='x' (effort), domain [0,100], label 'Effort (Complexity)'; YAxis dataKey='y' (impact), domain [0,100], label 'Impact (Strategic Value)'. ReferenceLine at x=50 and y=50 for quadrant dividers (lines 56-57). Color-coded Cells per quadrant (lines 99-103). ResponsiveContainer for responsive sizing. Legend below chart (lines 106-119).",
+          "notes": "Solid implementation. Correct axis orientation (X=Effort, Y=Impact). Quadrant dividers shown as dashed reference lines. Color-coded data points with legend. Missing quadrant label text directly on the chart area (e.g., 'Quick Wins' text in top-left quadrant zone) and brush-to-zoom. Borderline 3/4 — chose 3."
+        },
+        "A5_tooltip_implementation": {
+          "score": 4,
+          "evidence": "src/components/StrategyMatrixChart.tsx:76-97 — Custom Tooltip content function. Shows: project title (p.title, line 82), quadrant label (p.matrix?.quadrant, line 84), ROI formatted via formatROI helper (line 87), navigable link to project detail (lines 89-94). Styled with rounded corners, border, shadow.",
+          "notes": "Excellent. Satisfies both README spec (title + quadrant) and PRD spec (title + ROI) simultaneously. Goes beyond by including a clickable navigation link to the project detail page. Well-styled tooltip matches the design system."
+        },
+        "A6_logic_ui_separation": {
+          "score": 4,
+          "evidence": "Matrix pipeline: scripts/governance/index.mjs handles all logic — normalization (lines 22-25), quadrant assignment (lines 27-33), data building (lines 117-131), output to public/master_data.json (line 176). UI: src/components/StrategyMatrixChart.tsx only reads pre-computed p.matrix.effort_normalized, p.matrix.impact_normalized, p.matrix.quadrant (lines 36-38). No logic computation in the chart component.",
+          "notes": "Excellent separation. The governance engine is entirely responsible for score normalization and quadrant assignment. The UI component is a pure renderer consuming pre-computed data via DataContext. Data flows: governance script → master_data.json → DataContext → chart component."
+        }
+      },
+      "category_score": 95.83,
+      "category_commentary": "The Strategy Matrix implementation is excellent. All core requirements are met with correct data, normalization, quadrant logic, and rendering. The scatter plot is well-implemented with proper axes, colors, and tooltips. Logic-UI separation is exemplary. The only area not reaching maximum is the scatter plot itself, which lacks in-chart quadrant labels and brush-to-zoom."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 2,
+          "evidence": "package.json has well-organized scripts: governance prebuild hook, dev, build, cron jobs, ingestion, staging:promote. next.config.mjs uses output:'export' with trailingSlash. tsconfig.json exists with path alias @/. tailwind.config.ts properly configured. However, .gitignore only contains 'node_modules' — missing .next/, out/, .env, *.local. The .next/ directory was committed (200MB+ of webpack cache), requiring manual cleanup. The out/ directory (static export) is also committed.",
+          "notes": "Functional but with significant project hygiene issues. The build tooling is correctly configured (prebuild hook is smart), but committing .next/ (200MB build cache) and out/ (static export) to version control is a serious oversight. A professional .gitignore should exclude build artifacts and environment files."
+        },
+        "B2_routing_navigation": {
+          "score": 4,
+          "evidence": "Next.js App Router: src/app/page.tsx (/), src/app/matrix/page.tsx (/matrix), src/app/roadmap/page.tsx (/roadmap), src/app/projects/page.tsx (/projects), src/app/projects/[slug]/page.tsx (/projects/[slug]), src/app/updates/page.tsx (/updates). Sidebar.tsx:8-54 defines nav items with icons. Config-driven visibility: lines 92-98 check modules.enable_matrix/enable_gantt/enable_blog. Dynamic routes: generateStaticParams in projects/[slug]/page.tsx:5-13 reads master_data.json. TopBar.tsx:9-26 breadcrumbs.",
+          "notes": "Excellent. All PRD routes implemented plus updates. Navigation is config-driven (disabled modules hide nav items). Dynamic project routes generate static params from master_data.json. Breadcrumbs, active state highlighting, and mobile-responsive sidebar toggle."
+        },
+        "B3_type_safety": {
+          "score": 3,
+          "evidence": "src/lib/types.ts:1-97 — Comprehensive TypeScript interfaces: Config (with nested DesignTokens), Project (with ProjectDates, ProjectScores, ProjectFinancials, matrix union type), StatusUpdate, MasterData. Used throughout: StrategyMatrixChart.tsx:31 types props, DataContext.tsx:4 types context. Zod schemas in schemas.mjs provide runtime validation at build time.",
+          "notes": "Solid TypeScript usage. Well-structured interfaces matching PRD schema. Union type for quadrant labels. Zod provides runtime validation. Scripts are .mjs (not TypeScript) but all src/ code is fully typed. No explicit any usage found in source files."
+        },
+        "B4_data_layer": {
+          "score": 4,
+          "evidence": "Two-layer data architecture: (1) Build-time: scripts/governance/index.mjs parses markdown with gray-matter, validates with Zod, applies temporal/capacity logic, computes matrix, outputs public/master_data.json. (2) Runtime: src/context/DataContext.tsx:15-23 fetches master_data.json client-side. Server-side: src/lib/config.ts reads _content/config.json for layout metadata. Build pipeline: npm run governance (prebuild) → next build.",
+          "notes": "Excellent. Clean separation between build-time data processing and runtime data consumption. Governance engine handles validation, normalization, and enrichment. Client-side context provides typed data access. Server-side config used for metadata only. Well-thought-out pipeline."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Strong technical foundation with excellent routing, data layer, and reasonable type safety. The main gap is project setup hygiene — a professional .gitignore should have been in place from the start to prevent committing build artifacts (.next/, out/). The build pipeline with prebuild governance hook is well-designed."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 3,
+          "evidence": "src/app/globals.css:1-33 defines comprehensive CSS custom properties (colors, typography, radii, shadows). Dashboard cards with gradient accent bars (lines 86-110). Tailwind config extends with design tokens (tailwind.config.ts:11-31). Sidebar uses gradient background (Sidebar.tsx:66-68). Consistent rounded-2xl corners, shadow-card, font-heading/font-body throughout.",
+          "notes": "Solid visual design. Comprehensive design token system with CSS variables and Tailwind integration. Dashboard metric cards have colored gradient accent bars. Consistent spacing, typography, and shadow usage. Not 4 because there's no dark mode and some elements follow standard Tailwind patterns without distinctive branding."
+        },
+        "C2_responsive_design": {
+          "score": 3,
+          "evidence": "LayoutClient.tsx:34-40 uses flex layout with sidebar collapsing. Sidebar.tsx:64 uses -translate-x-full on mobile with lg:translate-x-0. TopBar.tsx:68-78 mobile hamburger button with lg:hidden. Grid breakpoints: sm:grid-cols-2, lg:grid-cols-4 in DashboardMetrics. Search button text hidden on mobile (sm:inline). Mobile overlay (LayoutClient.tsx:44-51).",
+          "notes": "Solid responsive implementation. Mobile sidebar with overlay toggle, responsive grids across pages. The Gantt chart uses absolute positioning which may not adapt well to very small screens, but the scatter chart uses ResponsiveContainer for proper sizing."
+        },
+        "C3_interactivity": {
+          "score": 3,
+          "evidence": "Matrix: department/phase checkbox filtering (src/app/matrix/page.tsx:11-42). Projects: grid/table view toggle (projects/page.tsx:25, 91-109), multi-filter for owner/status/department (lines 26-68), cost range inputs (lines 148-164). Search: Cmd+K modal (TopBar.tsx:47-56) with arrow key navigation and fuzzy matching (SearchModal.tsx:17-28). Gantt: group-by dropdown (roadmap/page.tsx:10).",
+          "notes": "Solid interactivity across the application. Multiple filter types, keyboard-navigable search, view toggle. Missing brush-to-zoom on scatter chart (PRD §4.3 mentions it). No chart animations or transitions."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 4,
+          "evidence": "Loading: Skeleton components — MetricCardSkeleton (Skeleton.tsx:12-18), matrix page (matrix/page.tsx:44-52), projects (projects/page.tsx:70-81), project detail (ProjectDetailClient.tsx:50-62), roadmap (roadmap/page.tsx:14-22), updates (updates/page.tsx:17-27). Error: DataContext catch (line 22), missing project state (ProjectDetailClient.tsx:65-73). Empty: 'No projects match' in chart (StrategyMatrixChart.tsx:44-48), projects (projects/page.tsx:167-170), updates (updates/page.tsx:38-41), search (SearchModal.tsx:108-111). Module disabled states (matrix/page.tsx:55-61, roadmap/page.tsx:25-30).",
+          "notes": "Excellent coverage. Every page has skeleton loading states (no spinners, as PRD specifies). Empty states with helpful context-appropriate messages matching PRD §4.7 text. Error fallbacks for missing data. Module toggle disabled states. Comprehensive and consistent."
+        },
+        "C5_design_token_usage": {
+          "score": 3,
+          "evidence": "src/components/DesignTokensInjector.tsx:6-26 reads config.design_tokens and sets CSS variables at runtime on document.documentElement. globals.css:6-32 defines fallback values. tailwind.config.ts:16-23 maps CSS variables to Tailwind utility classes (primary, secondary, accent, background). Layout.tsx:9-10 loads Inter and Roboto from Google Fonts matching config typography.",
+          "notes": "Solid token implementation. Colors and fonts are fully dynamic via config.json → CSS variables → Tailwind utilities. The DesignTokensInjector runs client-side which could cause a brief flash of default colors before config loads, but the CSS fallback values mitigate this."
+        }
+      },
+      "category_score": 80.0,
+      "category_commentary": "Strong UI/UX quality across the board. Excellent empty/error/loading state handling stands out. Visual design is cohesive with a comprehensive token system. Responsive layout works well. Interactivity is solid with multiple filter types and search. The main gap is the scatter chart lacking in-chart annotations and advanced interactions."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 4,
+          "evidence": "scripts/governance/schemas.mjs:25-41 — Zod projectFrontmatterSchema validates: id (string), title, slug, owner, department, phase, status (enum: Backlog/Queued/Active/Paused/Complete), dates (regex YYYY-MM-DD), scores (strategic_value 0-10, complexity 0-10, confidence 0-1), financials (estimated_cost, projected_roi, currency 3-char), tags, related_projects. Date validation refinement (line 38-41: planned_end >= planned_start). configSchema (lines 52-85) validates §3.1. ID uniqueness enforced (governance/index.mjs:75). Referential integrity for related_projects (lines 90-96).",
+          "notes": "Excellent. Strict Zod validation covers all PRD §3.2 fields. Status enum exactly matches PRD. Build fails on invalid frontmatter. Includes PRD §3.4 validation rules: ID uniqueness, date validity, referential integrity, taxonomy checks."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "Verified in public/master_data.json against reference truth: PRJ-001 → impact_normalized:86, effort_normalized:32, quadrant:'Quick Wins' (expected: Impact 86, Effort 32, Quick Wins ✓). PRJ-002 → 91, 82, 'Big Bets' ✓. PRJ-003 → 39, 28, 'Fillers' ✓. PRJ-004 → 41, 87, 'Time Sinks' ✓. Axis orientation: XAxis dataKey='x' (effort_normalized), YAxis dataKey='y' (impact_normalized) in StrategyMatrixChart.tsx:58-72. Quick Wins correctly in top-left (high impact, low effort).",
+          "notes": "Perfect accuracy. All 4 reference projects correctly normalized and placed in correct quadrants. Axis orientation is correct (X=Effort, Y=Impact). No inversions or misplacements."
+        },
+        "D3_route_structure": {
+          "score": 4,
+          "evidence": "Routes implemented: / (Dashboard, PRD §4.2), /matrix (Strategy Matrix, §4.3), /roadmap (Gantt, §4.4), /projects (Library, §4.5), /projects/[slug] (Detail, §4.6), /updates (status feed). Build output confirms all routes: static pages generated for /, /matrix, /projects, /projects/[slug] (11 paths), /roadmap, /updates. Sidebar navigation (Sidebar.tsx:8-54) matches PRD §4.1 primary links.",
+          "notes": "Excellent. All PRD-specified routes present. Plus /updates which extends beyond core requirements. Routes follow Next.js App Router conventions with proper directory structure."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "PRD §4.1 sidebar: Logo area (Sidebar.tsx:72-88), primary links with icons (lines 8-54), footer with version (lines 118-122). TopBar: breadcrumbs (TopBar.tsx:79-91), search input with Cmd+K (lines 97-108), fiscal week display (lines 94-96). §4.2 dashboard: metric cards (DashboardMetrics.tsx), phase indicator, velocity chart, recent activity. §4.3 matrix: scatter plot, filtering sidebar, tooltips. §4.5 project library: card grid/table toggle (projects/page.tsx:91-109), multi-filter. §4.6 detail: two-column layout (ProjectDetailClient.tsx:92), overview+plan tabs, sidebar with 'The Numbers'/Team/Dependencies, print button. §4.7: empty states text matches PRD, skeleton loaders (no spinners), print styles (globals.css:121-150).",
+          "notes": "Solid PRD compliance. Most specification details implemented: sidebar structure, topbar elements, dashboard widgets, matrix interactions, project library views, detail page layout, print styles. Minor gaps: Plan tab duplicates Overview content (ProjectDetailClient.tsx lines 101-106 render same body), fiscal week not tied to config.fiscal_year_start."
+        }
+      },
+      "category_score": 93.75,
+      "category_commentary": "Very strong PRD compliance. Schema validation is strict and comprehensive. Quadrant logic is perfectly accurate. All routes are present. Most specification details are implemented correctly. The only gap is minor: the Plan tab duplicates the Overview content rather than showing distinct deliverables/milestones."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 3,
+          "evidence": "Overall architecture: scripts/ for build-time logic (governance, ingestion, cron), src/lib/ for shared types and server utilities, src/context/ for client-side data management, src/components/ for reusable UI (12 components), src/app/ for page routing (6 routes). Data flows unidirectionally: governance → master_data.json → DataContext → pages → components. Each component has a focused responsibility.",
+          "notes": "Solid separation. Three-layer architecture (scripts → public data → UI). Components are reasonably sized (largest is SearchModal at 138 lines). Minor concern: formatCurrency utility is duplicated in 3 files (StrategyMatrixChart.tsx:25-29, projects/page.tsx:9-13, ProjectDetailClient.tsx:11-15) rather than being extracted to a shared lib/utils. Some coupling in LayoutClient (manages state and renders layout)."
+        },
+        "E2_readability_naming": {
+          "score": 3,
+          "evidence": "Function names: normalizeScore1To10To0To100, getQuadrantLabel, applyTemporalLogic, applyMatrixAndNormalize (governance/index.mjs). Component names: StrategyMatrixChart, DashboardMetrics, SearchModal, PhaseIndicator, RoadmapGantt. Type names: MasterData, ProjectScores, StatusUpdate. JSDoc comments on ingestion scripts (extract.mjs:24-29, normalize.mjs:52-55).",
+          "notes": "Solid readability. Descriptive function and component names. JSDoc on script files. Code structure is easy to follow. Long inline Tailwind class strings reduce readability in some places but is standard for Tailwind projects."
+        },
+        "E3_error_handling": {
+          "score": 3,
+          "evidence": "Build pipeline: governance/index.mjs throws on schema validation failure (line 70-71), duplicate IDs (75), invalid references (93), taxonomy mismatches (80-85). Runtime: DataContext.tsx:22 catches fetch errors. config.ts:18-24 try-catch on file read. Ingestion: handles missing API key (extract.mjs:33), empty results (index.mjs:162), JSON parse failures (extract.mjs:74-77). Update validation continues on error (governance/index.mjs:144-148).",
+          "notes": "Solid error handling. Build pipeline fails fast on invalid data. Runtime handles missing data gracefully. Ingestion has comprehensive error paths. Missing: no React Error Boundary component, no retry on data fetch, no structured error logging."
+        },
+        "E4_dependency_choices": {
+          "score": 4,
+          "evidence": "package.json dependencies: recharts (PRD §4.3 suggests Recharts/D3), fuse.js (PRD §7.1 specifies Fuse.js), gray-matter (standard for markdown frontmatter), zod (PRD mentions schema validation), react-markdown (standard), next.js 14.2.18 (specified framework), tailwindcss (specified styling). openai, mammoth, pdf-parse for ingestion pipeline. No bloated or redundant packages.",
+          "notes": "Excellent choices. Every dependency aligns with PRD recommendations or industry standards. Recharts and Fuse.js are explicitly mentioned in the PRD. Zod for validation, gray-matter for frontmatter, react-markdown for rendering — all are the right tools. Ingestion dependencies (openai, mammoth, pdf-parse) serve clear purposes."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Solid code quality throughout. Good separation of concerns with a clear three-layer architecture. Readable naming and reasonable error handling. Excellent dependency choices aligned with PRD recommendations. Main improvement area: extracting duplicated utilities (formatCurrency) and adding a React Error Boundary."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 3,
+          "evidence": "src/app/page.tsx renders Executive Dashboard. DashboardMetrics.tsx:58-91 shows: Total Investment (sum of estimated_cost), ROI Multiplier (totalROI/totalInvestment), Active Projects Count, Total Projects. PhaseIndicator.tsx shows strategic phase progress bars. VelocityChart.tsx shows started/completed projects by month (Recharts BarChart). RecentActivity.tsx shows 3 most recent status updates with sentiment badges.",
+          "notes": "Solid dashboard. All PRD §4.2 widgets implemented: metric cards, phase indicator, velocity chart, recent activity. Metrics are computed correctly from master_data. Phase indicator shows project distribution across phases. Velocity chart tracks started/completed over time."
+        },
+        "F2_additional_pages": {
+          "score": 3,
+          "evidence": "Roadmap/Gantt: src/components/RoadmapGantt.tsx — custom horizontal timeline with: grouping by department or status (line 27-34), 'today' red vertical line (lines 98-104), status-colored bars (lines 7-14), milestone diamond icons (lines 135-140), horizontal scrolling. Updates: src/app/updates/page.tsx — full update list with sentiment badges, author, markdown body. Project Detail: src/app/projects/[slug]/ProjectDetailClient.tsx — two-column layout with overview, metadata sidebar (financials, dates, quadrant, team, dependencies), print button.",
+          "notes": "Solid additional pages. The Gantt chart is custom-built rather than using a library, which shows implementation skill. Project detail page is comprehensive with related projects navigation. Updates page renders full markdown content."
+        },
+        "F3_search_filtering": {
+          "score": 3,
+          "evidence": "SearchModal.tsx:17-28 — Fuse.js with PRD §7.1 exact configuration: keys title(1.0), id(0.8), tags(0.6), owner(0.4), body(0.2), threshold 0.3. Keyboard: Cmd+K trigger (TopBar.tsx:47-56), ArrowDown/Up navigation, Enter to select, Esc to close (SearchModal.tsx:55-73). Project Library: multi-select owner/status/department filters (projects/page.tsx:26-68), cost range inputs (148-164), grid/table toggle (91-109). Matrix: department/phase checkbox filters (matrix/page.tsx:11-42).",
+          "notes": "Solid search and filtering. Fuse.js configured exactly per PRD spec. Keyboard navigation is accessible. Project library has comprehensive multi-faceted filtering exceeding basic requirements. Matrix page has sidebar filter controls."
+        },
+        "F4_creative_additions": {
+          "score": 3,
+          "evidence": "AI Ingestion Pipeline: scripts/ingestion/ — complete ETL system with: normalize.mjs (PDF/DOCX/TXT extraction), extract.mjs (OpenAI LLM entity extraction with system prompt per PRD §2.1), index.mjs (pipeline orchestration), promote.mjs (staging → projects). GitHub Actions: .github/workflows/ingestion-on-interviews.yml (auto-runs on interview upload), staging-promote-to-main.yml (promotes staging to main). Cron scripts: midnight.mjs (daily status updates per PRD §5.1), smart-queue.mjs. Accessibility: skip-to-content link (LayoutClient.tsx:28-33), ARIA labels throughout, reduced motion support (globals.css:65-73). Print styles: globals.css:121-150.",
+          "notes": "Solid creative additions. The AI ingestion pipeline is the standout — a complete LLM-powered ETL matching PRD §2.1. CI/CD automation with GitHub Actions for ingestion and promotion. Accessibility features (skip link, ARIA, reduced motion) show professional awareness. Print styles for document output."
+        }
+      },
+      "category_score": 75.0,
+      "category_commentary": "Strong bonus feature implementation. The candidate went well beyond the core matrix requirement: full dashboard, Gantt chart, project library, fuzzy search, AI ingestion pipeline, and CI/CD automation. The AI pipeline is particularly impressive for a 3-hour assessment. All bonus features are functional and well-integrated."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 3,
+          "evidence": "Git history shows progression: 2c5d483 'UI Working' (20:49) → 665bb49 'All Working' (21:26) → eef7cd1 'Added github workflow' (21:41) → 4b70987/fa51ee8 interviews (21:46-21:51) → 95fb547 'Frontend from config.json' (22:16) → 1a69f06 'Enhanced UI' (22:35). Core matrix was built first, then CI/CD, then AI content generation, then config-driven UI, then polish.",
+          "notes": "Solid prioritization. Built the must-have (Strategy Matrix) first, got to 'All Working' within 37 minutes, then layered on bonus features systematically. The AI ingestion pipeline was an ambitious choice that paid off — generated 7 additional projects demonstrating the full PRD vision."
+        },
+        "G2_pr_description": {
+          "score": 1,
+          "evidence": "No pull request found on the repository (gh pr list --state all returns empty, GitHub API confirms []). However, the candidate provided external run instructions including: npm run dev, npm run ingestion, npm run staging:promote, and an OpenAI API key for the ingestion pipeline. The assessment deliverables (README Section 4) specify: '1. Code: Submit a Pull Request (PR) to this repo. 2. Summary: A brief comment on your PR explaining what you chose to focus on for the bonus objectives.'",
+          "notes": "Inadequate. The candidate pushed directly to main without creating the required PR. However, they did provide functional submission instructions externally (run commands for dev, ingestion, and staging promotion). This partially addresses the communication intent but completely misses the delivery mechanism (PR with summary). Score 1 rather than 0 because some documentation was provided, but the explicit deliverable was not created."
+        }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Mixed decision making. Prioritization was solid — the candidate built the core requirement first and systematically added bonus features. The candidate provided functional run instructions externally but failed to create the required Pull Request, which was an explicit deliverable in the assessment brief."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 1,
+      "evidence": "8 candidate commits over ~1h46m (20:49 to 22:35 IST). Roughly one commit every 12-15 minutes. Commits: 2c5d483, 665bb49, eef7cd1, 4b70987, 8e523b7, fa51ee8, 95fb547, 1a69f06. The 9th commit (298da17 'Delete .next directory') was a post-assessment cleanup.",
+      "notes": "Reasonable cadence for a timed assessment. Not a single giant commit — work is distributed across 8 commits. Frequency is regular but not highly granular (some commits likely bundle multiple changes)."
+    },
+    "H2_message_quality": {
+      "points": 1,
+      "evidence": "Messages: 'UI Working', 'All Working', 'Added github workflow', 'Added test interview', 'Fixed Github Workflow', 'Added test interview 2', 'Frontend from config.json', 'Enhanced UI'.",
+      "notes": "Messages are brief and somewhat descriptive but lack specificity. 'UI Working' and 'All Working' are vague milestones rather than descriptions of what changed. 'Fixed Github Workflow' doesn't explain the fix. Better messages would describe specific changes (e.g., 'Add scatter plot component with quadrant rendering')."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Progression: UI foundation (2c5d483) → full working app (665bb49) → CI/CD workflows (eef7cd1, 8e523b7) → content generation (4b70987, fa51ee8) → config-driven frontend (95fb547) → UI polish (1a69f06).",
+      "notes": "Clear logical build-up. Started with core UI, achieved working state, added infrastructure (CI/CD), added content (interviews/ingestion), then refined the frontend. Shows systematic approach."
+    },
+    "bonus_total": 3
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 95.83,
+      "B_technical_foundation": 81.25,
+      "C_ui_ux_quality": 80.0,
+      "D_prd_compliance": 93.75,
+      "E_code_quality": 81.25,
+      "F_bonus_features": 75.0,
+      "G_decision_making": 50.0
+    },
+    "weighted_score": 84.81,
+    "git_bonus": 3,
+    "final_score": 87.81,
+    "score_band": "Strong",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Correct quadrant logic with all 4 seed projects verified against reference truth — normalization, thresholds, and axis orientation are all accurate (governance/index.mjs:22-33, master_data.json).",
+      "Complete AI ingestion pipeline implementing PRD §2.1 — text normalization (PDF/DOCX/TXT), LLM entity extraction via OpenAI, staged promotion workflow, with GitHub Actions CI/CD automation (scripts/ingestion/, .github/workflows/).",
+      "Strong architecture: governance engine as build-time pipeline with Zod validation, config-driven design tokens, clean data flow from markdown → master_data.json → DataContext → components.",
+      "Comprehensive UI implementation beyond core requirements: Executive Dashboard with 4 metric cards, custom Gantt chart, Project Library with multi-faceted filtering, Fuse.js fuzzy search with Cmd+K and keyboard navigation.",
+      "Excellent empty/loading/error state coverage with skeleton loaders on every page and context-appropriate empty state messages matching PRD spec text."
+    ],
+    "top_weaknesses": [
+      "No Pull Request submitted — assessment deliverables explicitly required a PR with a summary comment explaining bonus objective choices. Code was pushed directly to main.",
+      "Poor .gitignore — only 'node_modules' listed. The .next/ directory (200MB+ of webpack cache) and out/ directory (static export output) were both committed to the repository, requiring manual cleanup.",
+      "Duplicated formatCurrency utility function appears in 3 separate files (StrategyMatrixChart.tsx, projects/page.tsx, ProjectDetailClient.tsx) instead of being extracted to a shared lib/utils module."
+    ],
+    "standout_moments": [
+      "The full AI ingestion pipeline is remarkable for a 3-hour assessment — the candidate built a working LLM-powered ETL system with OpenAI integration, text normalization for multiple formats, and a staged promotion workflow with CI/CD. This demonstrates understanding of the full PRD architecture beyond just the UI layer.",
+      "Generated 7 additional projects (PRJ-005 through PRJ-011) from 12 interview transcripts using the AI pipeline, demonstrating end-to-end functionality of the ingestion system."
+    ],
+    "hiring_signal": "This developer demonstrates strong full-stack capabilities with a bias toward building complete systems rather than polished prototypes. They understand backend pipeline architecture (governance engine, CI/CD, LLM integration) and can deliver functional UIs with solid design systems. The main risks are attention to delivery process (no PR submitted) and project hygiene (committed build artifacts), suggesting they may prioritize building over operational discipline.",
+    "recommendation": "Hire"
+  }
+}

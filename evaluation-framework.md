@@ -172,9 +172,9 @@ This is the must-have. A missing or broken matrix is an automatic failure per as
 |-------|-----------|
 | 0 | No package.json or project structure |
 | 1 | Project exists but doesn't build or has critical configuration errors |
-| 2 | Standard Next.js setup, builds successfully, minimal configuration |
-| 3 | Well-configured project: TypeScript, Tailwind CSS, sensible tsconfig, linting configured |
-| 4 | Professional setup: TypeScript strict mode, path aliases, proper .gitignore, environment-appropriate configs, clear scripts in package.json |
+| 2 | Standard Next.js setup, builds successfully, minimal configuration. Note: a missing or inadequate `.gitignore` (e.g., committed `.next/` or `out/` directories) caps B1 at 2 |
+| 3 | Well-configured project: TypeScript, Tailwind CSS, sensible tsconfig, linting configured, `.gitignore` excludes build artifacts |
+| 4 | Professional setup: TypeScript strict mode, path aliases, comprehensive `.gitignore`, environment-appropriate configs, clear scripts in package.json |
 
 #### B2: Routing & Navigation (0–4)
 *Does the app have proper routing matching the PRD structure?*
@@ -438,13 +438,15 @@ Check against these PRD-specified details:
 #### G2: PR Description & Documentation (0–4)
 *How well did the candidate communicate their work?*
 
+> **Clarification:** The assessment brief asks candidates to submit a Pull Request with a summary comment. This criterion evaluates the quality of that PR description. If no PR was created, the maximum score is **1** regardless of other documentation (README, external messages). A PR is an explicit deliverable — its absence caps this criterion. If a PR exists, score the description quality using the definitions below.
+
 | Score | Definition |
 |-------|-----------|
-| 0 | No PR description or submission summary |
-| 1 | One-line PR description with no substance |
-| 2 | Brief PR description explaining what was built |
-| 3 | Structured PR description: what was built, what was skipped and why, known limitations, how to test |
-| 4 | Exceptional communication: clear summary, architectural decisions explained, trade-offs documented, screenshots or GIFs included, demonstrates self-awareness about their work |
+| 0 | No PR created AND no submission summary of any kind (README is boilerplate/unchanged) |
+| 1 | No PR created, but candidate provided some form of documentation (e.g., updated README with run instructions, external submission notes). OR: PR exists but description is a single line with no substance |
+| 2 | PR exists with a brief description explaining what was built |
+| 3 | PR exists with a structured description: what was built, what was skipped and why, known limitations, how to test |
+| 4 | PR exists with exceptional communication: clear summary, architectural decisions explained, trade-offs documented, screenshots or GIFs included, demonstrates self-awareness about their work |
 
 ---
 
@@ -766,10 +768,10 @@ Additionally, if a specific criterion shows **weak agreement across 2+ candidate
 ### 9.4 Running the Aggregation
 
 ```bash
-# From the evaluation/ directory:
-node aggregate.js ../evals/ --output ../evals/output/
+# From the repo root:
+node evaluation/aggregate.js evals/
 
-# Outputs:
+# Outputs (written to evals/output/):
 #   evals/output/consensus-C-001.json   — per-candidate aggregated scores
 #   evals/output/consensus-C-002.json
 #   evals/output/comparison.json         — cross-candidate ranking
