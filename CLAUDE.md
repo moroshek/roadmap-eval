@@ -30,6 +30,15 @@ Your output goes to `evals/C-XXX/eval-{your-identifier}.json`.
 | `reference/` | What the candidate received (assessment brief, PRD, seed data). |
 | `evals/` | Output directory for all evaluator JSON files. |
 
+## Between Candidates
+
+Only after the orchestrator confirms a candidate's evaluation is **fully complete** (all divergences resolved, aggregation finalized, results committed):
+
+1. **Clean up scratch work.** Delete any temporary directories in `evals/` (e.g., `_consensus-check*`, `_consensus-latest*`) left by other agents. The canonical outputs live in `evals/C-XXX/` and `evals/output/`.
+2. **Delete the previous candidate's cloned repo** from the sibling directory (e.g., `rm -rf ../roadmap-coltigent`). You'll clone the next candidate fresh.
+
+Do NOT clean up prematurely — you may need the cloned repo for divergence review or score revision.
+
 ## After Evaluation
 
 Once all evaluators have submitted, the human orchestrator will:
