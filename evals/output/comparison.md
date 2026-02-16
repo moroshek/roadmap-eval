@@ -1,15 +1,16 @@
 # Candidate Comparison Report
 
-Generated: 2026-02-16T05:49:49.449Z
-Candidates evaluated: 3
+Generated: 2026-02-16T15:12:33.905Z
+Candidates evaluated: 4
 
 ## Rankings
 
-| Rank | Candidate | Score | Band | Matrix | Tech | UI/UX | PRD | Code | Bonus | Decision | Rec | Agreement |
-|------|-----------|-------|------|--------|------|-------|-----|------|-------|----------|-----|-----------|
-| 1 | C-001 | 89.75 | Strong | 95.83 | 81.25 | 80 | 93.75 | 81.25 | 93.75 | 50 | Hire | strong |
-| 2 | C-002 | 74.19 | Competent | 75 | 62.5 | 75 | 81.25 | 68.75 | 68.75 | 75 | Lean Hire | moderate |
-| 3 | C-003 | 74.19 | Competent | 75 | 75 | 65 | 87.5 | 81.25 | 56.25 | 37.5 | Hire | moderate |
+| Rank | Candidate | Score | Band | Matrix | Tech | UI/UX | PRD | Code | Bonus | Decision | Agreement |
+|------|-----------|-------|------|--------|------|-------|-----|------|-------|----------|-----------|
+| 1 | C-001 | 89.75 | Strong | 95.83 | 81.25 | 80 | 93.75 | 81.25 | 93.75 | 50 | strong |
+| 2 | C-002 | 74.19 | Competent | 75 | 62.5 | 75 | 81.25 | 68.75 | 68.75 | 75 | moderate |
+| 3 | C-003 | 74.19 | Competent | 75 | 75 | 65 | 87.5 | 81.25 | 56.25 | 37.5 | moderate |
+| 4 | C-004 | 66.12 | Competent | 70.83 | 50 | 50 | 81.25 | 68.75 | 50 | 50 | moderate |
 
 ## Category Weights
 

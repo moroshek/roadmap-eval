@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-02-16T05:49:49.449Z",
-  "candidate_count": 3,
+  "generated_at": "2026-02-16T15:12:33.905Z",
+  "candidate_count": 4,
   "ranking": [
     {
       "rank": 1,
@@ -62,6 +62,27 @@
         "G_decision_making": 37.5
       },
       "consensus_recommendation": "Hire",
+      "evaluator_count": 3,
+      "evaluator_agreement": "moderate"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "C-004",
+      "final_score": 66.12,
+      "score_band": "Competent",
+      "weighted_score": 63.12,
+      "git_bonus": 3,
+      "automatic_failure": false,
+      "category_scores": {
+        "A_strategy_matrix": 70.83,
+        "B_technical_foundation": 50,
+        "C_ui_ux_quality": 50,
+        "D_prd_compliance": 81.25,
+        "E_code_quality": 68.75,
+        "F_bonus_features": 50,
+        "G_decision_making": 50
+      },
+      "consensus_recommendation": "Lean Hire",
       "evaluator_count": 3,
       "evaluator_agreement": "moderate"
     }

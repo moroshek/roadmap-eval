@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-02-16T05:49:49.452Z",
-  "total_candidates": 3,
-  "total_divergences": 2,
+  "generated_at": "2026-02-16T15:12:33.906Z",
+  "total_candidates": 4,
+  "total_divergences": 3,
   "all_divergences": [
     {
       "candidate_id": "C-002",
@@ -36,8 +36,25 @@
       ],
       "std_dev": 1.15,
       "note": "High disagreement — flag for human review"
+    },
+    {
+      "candidate_id": "C-004",
+      "criterion": "G2_pr_description",
+      "category": "G_decision_making",
+      "scores": [
+        2,
+        0,
+        2
+      ],
+      "evaluators": [
+        "claude-opus-1",
+        "codex-gpt5",
+        "gemini-cli"
+      ],
+      "std_dev": 1.15,
+      "note": "High disagreement — flag for human review"
     }
   ],
   "frequently_divergent_criteria": [],
-  "summary": "2 high-divergence instances found across 3 candidates. 0 criteria show recurring disagreement and may need rubric refinement."
+  "summary": "3 high-divergence instances found across 4 candidates. 0 criteria show recurring disagreement and may need rubric refinement."
 }

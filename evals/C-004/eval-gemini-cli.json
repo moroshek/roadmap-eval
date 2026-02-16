@@ -1,0 +1,149 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-004",
+    "repo_url": "https://github.com/DiMister/roadmap-engine",
+    "evaluated_at": "2026-02-16T12:00:00Z",
+    "evaluator": "gemini-cli",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "package.json found in root" },
+    "G2_install_succeeds": { "pass": true, "notes": "npm install completed successfully" },
+    "G3_build_succeeds": { "pass": true, "notes": "npm run build failed due to type error, but npm run dev succeeds. Pass per fallback rule." },
+    "G4_matrix_route_exists": { "pass": true, "notes": "src/app/matrix/page.tsx exists" },
+    "G5_project_files_exist": { "pass": true, "count": 4, "notes": "4 project files found in _content/projects" },
+    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "recharts found in dependencies" },
+    "G7_normalization_logic_exists": { "pass": true, "notes": "normalizeScore function found in scripts/governance.js" },
+    "G8_quadrant_logic_exists": { "pass": true, "notes": "getQuadrant function found in scripts/governance.js" },
+    "G9_chart_renders_data": { "pass": true, "notes": "StrategyMatrix.tsx correctly maps data to Recharts Scatter component" },
+    "G10_tooltips_implemented": { "pass": true, "notes": "CustomTooltip implemented in StrategyMatrix.tsx" },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": { "score": 3, "evidence": "_content/projects/ contains 4 PRD-compliant files", "notes": "Used seeded files; met count but did not expand dataset." },
+        "A2_score_normalization": { "score": 4, "evidence": "scripts/governance.js:154 (normalizeScore)", "notes": "Correct normalization in build pipeline." },
+        "A3_quadrant_assignment": { "score": 4, "evidence": "scripts/governance.js:159 (getQuadrant)", "notes": "Exact PRD mapping in a dedicated utility." },
+        "A4_scatter_plot_rendering": { "score": 3, "evidence": "src/app/matrix/StrategyMatrix.tsx:90", "notes": "Functional Recharts implementation, though quadrants are text overlays rather than background zones." },
+        "A5_tooltip_implementation": { "score": 3, "evidence": "src/app/matrix/StrategyMatrix.tsx:36 (CustomTooltip)", "notes": "Detailed tooltip; good functionality but standard styling." },
+        "A6_logic_ui_separation": { "score": 4, "evidence": "scripts/governance.js:169 (calculateMatrixData)", "notes": "Excellent separation; all logic is build-time." }
+      },
+      "category_score": 87.5,
+      "category_commentary": "The strategy matrix is technically excellent in its logic and separation of concerns, though the visual presentation of quadrants is a bit basic."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": { "score": 2, "evidence": "package.json and scripts/governance.js", "notes": "Setup is solid but marred by the broken ingest script and stale imports." },
+        "B2_routing_navigation": { "score": 2, "evidence": "src/app/matrix/page.tsx", "notes": "Basic routing; nav contains dead links to unimplemented pages." },
+        "B3_type_safety": { "score": 1, "evidence": "StrategyMatrix.tsx:3", "notes": "TypeScript used but build-blocking type error and 'any' usage in tooltips." },
+        "B4_data_layer": { "score": 4, "evidence": "scripts/governance.js", "notes": "Standout feature: build-time pipeline with Zod validation." }
+      },
+      "category_score": 56.25,
+      "category_commentary": "A sophisticated data layer is unfortunately paired with execution gaps in type safety and build stability."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": { "score": 3, "evidence": "src/app/page.tsx", "notes": "Clean, functional Tailwind UI." },
+        "C2_responsive_design": { "score": 2, "evidence": "StrategyMatrix.tsx:88", "notes": "Baseline responsiveness for desktop/tablet." },
+        "C3_interactivity": { "score": 2, "evidence": "src/app/matrix/MatrixFilters.tsx", "notes": "Good filtering, but animations are explicitly disabled." },
+        "C4_empty_error_loading_states": { "score": 2, "evidence": "src/app/matrix/page.tsx:44", "notes": "Basic loading text only." },
+        "C5_design_token_usage": { "score": 1, "evidence": "src/lib/config.ts", "notes": "Tokens defined but not correctly mapped to Tailwind/CSS." }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Serviceable UI with good interactive filtering, but lacks professional polish and design token integration."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": { "score": 4, "evidence": "scripts/governance.js:23", "notes": "Perfect Zod-based schema enforcement." },
+        "D2_quadrant_logic_accuracy": { "score": 4, "evidence": "scripts/governance.js:159", "notes": "Logic perfectly follows PRD." },
+        "D3_route_structure": { "score": 2, "evidence": "src/app/matrix/page.tsx", "notes": "Partial route coverage." },
+        "D4_specification_details": { "score": 3, "evidence": "src/app/matrix/StrategyMatrix.tsx", "notes": "Followed core specs for axes and placement." }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Strong fidelity to the core logic and schema requirements of the PRD."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": { "score": 4, "evidence": "scripts/governance.js", "notes": "Clean architectural separation." },
+        "E2_readability_naming": { "score": 3, "evidence": "scripts/governance.js", "notes": "Well-named and readable code." },
+        "E3_error_handling": { "score": 2, "evidence": "scripts/governance.js:188", "notes": "Good build-time errors, weak runtime resilience." },
+        "E4_dependency_choices": { "score": 3, "evidence": "package.json", "notes": "Appropriate deps, though some unused/broken bonus scripts." }
+      },
+      "category_score": 75.0,
+      "category_commentary": "Senior-level organization and readability, though inconsistent in final execution."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": { "score": 3, "evidence": "src/app/page.tsx", "notes": "Real metrics on a functional dashboard." },
+        "F2_additional_pages": { "score": 1, "evidence": "src/app structure", "notes": "Only dashboard implemented beyond matrix." },
+        "F3_search_filtering": { "score": 2, "evidence": "MatrixFilters.tsx", "notes": "Filtering works well but no fuzzy search." },
+        "F4_creative_additions": { "score": 2, "evidence": "scripts/ingest.js", "notes": "Ambitious but non-functional AI ingestion prototype." }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Good ambition with the dashboard and ingestion script."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": { "score": 2, "evidence": "Overall repository", "notes": "Prioritized hard logic over stabilization." },
+        "G2_pr_description": { "score": 2, "evidence": "PR notes (via agent consensus)", "notes": "Brief but useful summary of work." }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Reasonable prioritization but lacks final quality control."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": { "points": 2, "evidence": "6 commits over 2.5 hours", "notes": "Steady progress." },
+    "H2_message_quality": { "points": 0, "evidence": "somemore, ingest this", "notes": "Unprofessional and non-descriptive." },
+    "H3_logical_progression": { "points": 1, "evidence": "Sequential build-out", "notes": "Logical development flow." },
+    "bonus_total": 3
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 87.5,
+      "B_technical_foundation": 56.25,
+      "C_ui_ux_quality": 50.0,
+      "D_prd_compliance": 81.25,
+      "E_code_quality": 75.0,
+      "F_bonus_features": 50.0,
+      "G_decision_making": 50.0
+    },
+    "weighted_score": 68.19,
+    "git_bonus": 3,
+    "final_score": 71.19,
+    "score_band": "Competent",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Sophisticated build-time governance pipeline with Zod validation and temporal logic.",
+      "Clear architectural separation between data processing and UI presentation.",
+      "Accurate implementation of PRD logic and quadrant math.",
+      "Functional executive dashboard with portfolio metrics."
+    ],
+    "top_weaknesses": [
+      "Broken production build due to stale type imports.",
+      "Inconsistent execution in bonus scripts (ESM mismatch in ingest.js).",
+      "Lack of design token integration and dead navigation links.",
+      "Poor commit message hygiene."
+    ],
+    "standout_moments": [
+      "The automated governance engine shows high-level systems thinking, particularly the auto-activation of projects based on system date."
+    ],
+    "hiring_signal": "Max is a high-potential developer with strong architectural instincts and data processing skills. He built a system that is robust in logic but brittle in execution. In a professional environment with CI and code reviews, his architectural strengths would shine, and his quality-control gaps would be mitigated. He is a strong 'Competent' who can solve complex problems but needs discipline in shipping.",
+    "recommendation": "Lean Hire"
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-004",
+    "repo_url": "https://github.com/moroshek/roadmap-DiMister",
+    "evaluated_at": "2026-02-16T06:45:00Z",
+    "evaluator": "claude-opus-1",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "package.json present on Max's-branch with Next.js 14, React 18, recharts, gray-matter, zod, fuse.js dependencies"
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "npm install completes successfully with deprecation warnings (inflight, eslint) and 4 high-severity audit warnings, but no install errors. 488 packages installed."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "npm run build FAILS — type error at StrategyMatrix.tsx:3 importing MatrixPoint from @/lib/projects (module was deleted during refactoring in 'revamp governance function' commit). However, npm run dev succeeds: governance script runs, Next.js dev server starts on port 3000. Per gate rules, passes if either succeeds."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "src/app/matrix/page.tsx exists with full matrix implementation (client component with scatter chart, filters, data loading)"
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 4,
+      "notes": "4 project markdown files: PRJ-001.md (modified dates/status), PRJ-002.md, PRJ-003.md, PRJ-004.md. All have valid frontmatter with scores, financials, and PRD-compliant fields."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "recharts ^2.10.3 in dependencies. Uses ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Label, Cell components."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "scripts/governance.js:189 — normalizeScore(score) { return Math.round(score * 10); } — correctly transforms 0-10 to 0-100. Verified: 8.6→86, 3.2→32, 9.1→91, 8.2→82, 3.9→39, 2.8→28, 4.1→41, 8.7→87."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "scripts/governance.js:194-201 — getQuadrant(impact, effort) uses >= 50 threshold. Quick Wins (high impact, low effort), Big Bets (high/high), Fillers (low/low), Time Sinks (low impact, high effort). Boundary at 50 handled with >= for 'high'."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "src/app/matrix/StrategyMatrix.tsx renders Recharts ScatterChart with mapped data points. Data flows from master_data.json → fetch → state → Scatter component with Cell elements colored by status. Chart has labeled axes, reference lines at 50/50, quadrant label overlays."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "src/app/matrix/StrategyMatrix.tsx:41-84 — CustomTooltip component shows: project title, quadrant label (color-coded badge), status, owner, ROI, impact score, and effort score. Styled with border, rounded corners, shadow, min-width 250px."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": {
+          "score": 2,
+          "evidence": "_content/projects/ contains PRJ-001.md through PRJ-004.md (the 4 seeded files). PRJ-001 was modified (status changed from Active to Queued, dates adjusted to planned_start: 2026-03-01, planned_end: 2026-04-15). All files have valid frontmatter parsed and validated by Zod in scripts/governance.js:278-279. No additional projects were created beyond the seed set.",
+          "notes": "Uses the 4 seeded files correctly with valid frontmatter. No additional projects added. PRJ-001 modification appears intentional to test temporal logic (Queued→Active auto-activation when planned_start passes)."
+        },
+        "A2_score_normalization": {
+          "score": 3,
+          "evidence": "scripts/governance.js:189-192 — dedicated normalizeScore function: Math.round(score * 10). Called in calculateMatrixData (line 208-209) for both complexity (X) and strategic_value (Y). Output verified in public/master_data.json: PRJ-001 x=32 y=86, PRJ-002 x=82 y=91, PRJ-003 x=28 y=39, PRJ-004 x=87 y=41. All match expected values.",
+          "notes": "Correct normalization in a dedicated utility function within the governance build-time pipeline. Clearly separated from rendering — normalization happens in a Node.js script, chart receives pre-computed values. Does not handle edge cases (missing scores, out-of-range values beyond 0-10), though Zod schema enforces range at validation time."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "scripts/governance.js:194-201 — getQuadrant(impact, effort) is a dedicated function. Uses boolean intermediaries (isHighImpact = impact >= 50, isHighEffort = effort >= 50) for clarity. Clean conditional logic maps to all four quadrant names. Called from calculateMatrixData (line 210-213), not from any UI component.",
+          "notes": "Well-structured dedicated function, cleanly separated from rendering. Handles boundary at 50 with >= operator. Readable boolean variables. Not quite a 4: thresholds are hardcoded (not configurable constants), no tests, and the function isn't reusable for different threshold configurations without modification."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 3,
+          "evidence": "src/app/matrix/StrategyMatrix.tsx:87-143 — Recharts ScatterChart with: XAxis (dataKey='x', domain [0,100], label 'Effort / Complexity →'), YAxis (dataKey='y', domain [0,100], label '← Strategic Value / Impact'), CartesianGrid, ReferenceLine at x=50 and y=50 (dashed), data points colored by status via Cell elements. Quadrant labels as positioned div overlays (lines 146-157). Status color legend (lines 160-172). ResponsiveContainer width='100%' height=600.",
+          "notes": "Well-rendered chart with all essential elements: labeled axes, proper 0-100 domain, quadrant boundary lines, quadrant labels, status-colored data points, legend. Not a 4: quadrant zones are text overlays rather than distinct colored/shaded background regions, and data points aren't sized by a meaningful dimension."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "src/app/matrix/StrategyMatrix.tsx:41-84 — CustomTooltip renders: project title (h3 bold), quadrant label (color-coded span with bg-green/blue/gray/red variants), status, owner, ROI (formatted with toLocaleString), impact score (y with toFixed(1)), effort score (x with toFixed(1)). Styled container: bg-white, border-2, rounded-lg, shadow-xl, p-4, min-w-[250px].",
+          "notes": "Rich tooltip showing title + quadrant label (minimum requirement) plus status, owner, ROI, and both raw scores. Color-coded quadrant badge is a nice touch. Not a 4: no smooth enter/exit transitions (default recharts behavior), and styling is functional but not premium-level design system integration."
+        },
+        "A6_logic_ui_separation": {
+          "score": 3,
+          "evidence": "Matrix data pipeline: (1) scripts/governance.js reads markdown files (line 258), parses with gray-matter (line 273), validates with Zod (line 279), applies temporal logic (line 297), normalizes scores (line 208), assigns quadrants (line 210), writes to public/master_data.json (line 372). (2) src/app/matrix/page.tsx fetches master_data.json via client-side fetch (line 43). (3) src/app/matrix/StrategyMatrix.tsx receives pre-computed MatrixPoint[] and only handles rendering. No transformation logic in chart component.",
+          "notes": "Clear separation: build-time pipeline (parse → validate → transform → enrich → JSON) feeds a pure presentation component. The chart receives fully prepared data with pre-computed x, y, and quadrant values. Close to exemplary but the pipeline is in one monolithic script file rather than modular files per concern."
+        }
+      },
+      "category_score": 70.83,
+      "category_commentary": "The core strategy matrix is well-implemented with correct normalization, accurate quadrant assignments, and good architectural separation via a build-time governance pipeline. The chart renders properly with labeled axes, quadrant references, and rich tooltips. The main gap is no additional project data beyond the 4 seeded files, and the quadrant zones are text labels rather than background regions."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 2,
+          "evidence": "package.json with Next.js 14, React 18, TypeScript 5.3, Tailwind 3.4, ESLint. tsconfig.json: strict mode, path aliases (@/*), bundler module resolution. .gitignore: comprehensive (51 lines covering node_modules, .next, out, env files, IDE files, OS files). tailwind.config.cjs and postcss.config.cjs properly configured. However, npm run build FAILS: StrategyMatrix.tsx:3 imports MatrixPoint from @/lib/projects which was deleted in 'revamp governance function' commit (src/lib/projects.ts removed, 254 lines deleted).",
+          "notes": "Borderline 1/2. The configuration quality is closer to 3 (TypeScript strict, path aliases, ESLint, comprehensive .gitignore), but the production build fails due to a stale import after refactoring. The dev server works, so the project is runnable. Chose 2 because the failure is a simple oversight (stale import) rather than a fundamental configuration error, and the tooling setup is otherwise solid."
+        },
+        "B2_routing_navigation": {
+          "score": 2,
+          "evidence": "src/app/page.tsx (dashboard at /), src/app/matrix/page.tsx (matrix at /matrix). src/app/layout.tsx:25-38 provides a top navigation bar with links to Dashboard (/), Strategy Matrix (/matrix), Timeline (/timeline — conditionally shown if config.modules.enable_gantt), and Projects (/projects). Navigation is config-driven: enable_matrix and enable_gantt flags control link visibility.",
+          "notes": "/matrix works with basic navigation. Nav bar has 4 links but only / and /matrix have actual page implementations. /timeline and /projects routes would 404. Config-driven nav is a nice touch but non-functional routes are a gap."
+        },
+        "B3_type_safety": {
+          "score": 2,
+          "evidence": "TypeScript with strict mode. Interfaces in src/app/matrix/page.tsx:8-33 (MatrixPoint, MasterData). Interfaces in src/lib/config.ts:4-47 (Config, ConfigMeta, DesignTokens, Modules, Governance, Taxonomies). Typed component props: StrategyMatrixProps (StrategyMatrix.tsx:18-20), MatrixFiltersProps (MatrixFilters.tsx:3-11). However: CustomTooltip uses 'any' type (StrategyMatrix.tsx:41), governance.js is plain JavaScript (not TypeScript), and the broken import references a deleted type source.",
+          "notes": "Basic TypeScript with interfaces for data structures and component props. Good type coverage for config. Weakened by 'any' usage in tooltip, governance pipeline in .js rather than .ts (Zod schemas exist but not connected to TS type system), and the stale import from a deleted module."
+        },
+        "B4_data_layer": {
+          "score": 3,
+          "evidence": "Build-time pipeline: scripts/governance.js reads markdown files with gray-matter (line 273), validates with Zod schemas (lines 27-58), applies transforms (normalization, quadrant assignment, temporal logic), outputs public/master_data.json. Client-side: matrix/page.tsx fetches master_data.json (line 43), manages state, passes to components. Server-side: page.tsx reads master_data.json with fs (line 7) for dashboard data. Pre-build hook: package.json 'prebuild' script runs governance.js automatically.",
+          "notes": "Well-structured data layer with a dedicated governance pipeline that handles parsing, validation, transformation, and output. Schema validation with Zod at build time. Clear data flow: markdown → governance script → master_data.json → UI. The prebuild hook ensures data freshness. Error handling in the pipeline exits the build on validation failure."
+        }
+      },
+      "category_score": 56.25,
+      "category_commentary": "Solid technical foundation marred by a broken production build. The project setup is well-configured (TS strict, path aliases, ESLint, Tailwind) but a stale import from refactoring breaks `npm run build`. The data layer is a standout: a build-time governance pipeline with Zod validation that generates a master JSON consumed by the UI. Routing is basic with only 2 functional routes despite 4 nav links."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 3,
+          "evidence": "Consistent color palette: gray-200 borders, gray-500/600 text, blue-600 accents, white card backgrounds throughout all pages. Typography hierarchy: text-3xl headings, text-2xl metrics, text-sm labels, font-bold/medium/semibold distinction. Whitespace: space-y-8 between sections, p-6 card padding, gap-6 grid spacing. No default browser styling (Tailwind reset). Cards with rounded-lg, shadow-sm, border border-gray-200 create a cohesive card-based design. Passes 5/5 sub-checks.",
+          "notes": "Clean, cohesive design language using Tailwind. Professional card-based layout with consistent borders, shadows, and spacing. Dashboard has metric cards, phase indicator, and information hierarchy. Matrix page has filters panel, chart container, explanatory cards, and summary stats. Looks intentional and professional. Not premium-level (no custom design system, subtle gradients, or distinctive visual identity)."
+        },
+        "C2_responsive_design": {
+          "score": 2,
+          "evidence": "Dashboard: grid-cols-1 md:grid-cols-4 for metrics, grid-cols-1 lg:grid-cols-2 for phase/activity (page.tsx:31,51). Matrix page: grid-cols-1 md:grid-cols-2 for filters, grid-cols-1 md:grid-cols-3 for stats (page.tsx:124). Chart: ResponsiveContainer width='100%' height=600 (StrategyMatrix.tsx:88). Navigation: flex with gap-6 (layout.tsx:28).",
+          "notes": "Basic responsive design with breakpoint-aware grids and a responsive chart container. Would work at desktop and tablet widths. No mobile navigation pattern (hamburger menu), no sidebar collapse, nav links would wrap awkwardly on small screens. Chart has fixed 600px height regardless of viewport."
+        },
+        "C3_interactivity": {
+          "score": 2,
+          "evidence": "Tooltips on hover over scatter plot data points (StrategyMatrix.tsx:129). Hover states on nav links: text-gray-600 hover:text-gray-900 (layout.tsx:29-35). Checkbox-based department and status filters with real-time chart updates (MatrixFilters.tsx:22-36, page.tsx:69-71). Filter reset button (MatrixFilters.tsx:47-52). Hover on filter checkboxes: hover:bg-gray-50.",
+          "notes": "Functional interactivity: chart tooltips, navigation hover states, and real-time filter controls. The department/status filtering is a solid interactive feature. However, isAnimationActive={false} explicitly disables chart animation (StrategyMatrix.tsx:136). No transitions on state changes, no animated entries, no micro-interactions."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 2,
+          "evidence": "Loading state: matrix/page.tsx:54-59 shows 'Loading...' text in centered container while data fetches. Filter count indicator: page.tsx:102-103 shows 'Showing X of Y projects'. Recent Activity: placeholder text 'No updates posted yet' (page.tsx:91). Governance script error handling: exits build with descriptive error messages on validation failure.",
+          "notes": "Basic loading state (text-only, no skeleton). Doesn't crash on empty states. No loading skeletons (PRD requirement), no error boundaries, no graceful degradation if master_data.json is missing at runtime, no contextual empty state messaging when filters reduce to 0 results."
+        },
+        "C5_design_token_usage": {
+          "score": 1,
+          "evidence": "Config.json design tokens: primary #0B1220 (dark navy), secondary #2563EB (blue), accent #F59E0B (amber), fonts Inter/Roboto. Tailwind config (tailwind.config.cjs:10-17) extends with primary: #2563eb and secondary: #64748b — these do NOT match config.json (secondary should be #2563EB, primary should be #0B1220). Inter font loaded in layout.tsx:6 (matches config heading_font). Accent color #F59E0B not used anywhere. Config title used in layout.tsx:10 and nav (layout.tsx:27). Module flags drive nav visibility (layout.tsx:30-34).",
+          "notes": "Partial and inconsistent use of design tokens. Inter font correctly loaded. Title pulled from config. Module flags drive nav. But color values in tailwind.config.cjs don't match config.json (primary/secondary are swapped/different), accent color is unused, Roboto body font is not loaded, and colors aren't dynamically consumed from config. The app would not correctly theme for a different tenant."
+        }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Clean visual design with a cohesive Tailwind-based card layout that passes all design sub-checks. Responsive basics are in place but no mobile-specific patterns. Interactive filtering is a nice feature but animations are explicitly disabled. Loading state is basic text-only with no skeletons. Design token integration is the weakest area — config.json colors aren't correctly mapped to the Tailwind theme, and dynamic theming isn't supported."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 4,
+          "evidence": "scripts/governance.js:27-58 — Zod schemas enforce PRD Section 3.2 data model at build time: ProjectSchema validates id (string), title (string), slug (string), owner (string), department (string), phase (string), status (enum of 5 values), dates (planned_start, planned_end, actual_start optional), scores (strategic_value 0-10, complexity 0-10, confidence 0-1), financials (estimated_cost, projected_roi, currency), tags (string array), related_projects (string array). Build fails on validation error (line 308: process.exit(1)).",
+          "notes": "Programmatic schema enforcement with Zod matching PRD's Build-Time Validation Rules (Section 3.4). All frontmatter fields from PRD Section 3.2 are present and correctly typed with appropriate constraints (score ranges, enum values for status). Additional validations: date validation (line 168-183), taxonomy validation against config.json (line 142-162), ID uniqueness check (line 283-286)."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 3,
+          "evidence": "scripts/governance.js:194-201 — getQuadrant: Quick Wins (impact>=50, effort<50), Big Bets (>=50/>=50), Fillers (<50/<50), Time Sinks (<50/>=50). Verified in master_data.json: PRJ-001 (86,32)→Quick Wins ✓, PRJ-002 (91,82)→Big Bets ✓, PRJ-003 (39,28)→Fillers ✓, PRJ-004 (87,41)→Time Sinks ✓. Boundary at 50 handled consistently with >= for 'high'. StrategyMatrix.tsx:146-157 renders quadrant labels as positioned text overlays on the chart.",
+          "notes": "Exact match to PRD specification for all four quadrants. All reference truth projects map correctly. Boundary handling is consistent (>=50 = high). Labels are rendered as text overlays on the chart but not as colored background zones (PRD 4.3 specifies 'Background zones labeled'). Chose 3 rather than 4 for this reason."
+        },
+        "D3_route_structure": {
+          "score": 2,
+          "evidence": "Implemented routes: / (Executive Dashboard — src/app/page.tsx), /matrix (Strategy Matrix — src/app/matrix/page.tsx). PRD Section 4 specifies: / (dashboard), /matrix, /projects (library), /projects/[slug] (detail), /roadmap. Navigation in layout.tsx links to /, /matrix, /timeline, /projects — but /timeline and /projects have no page.tsx implementations.",
+          "notes": "/matrix plus 1 other PRD route (/ dashboard). Both have functional, meaningful content. Missing /projects, /projects/[slug], and /roadmap. Nav links to non-existent routes would cause 404s."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "Checked PRD details: X-Axis = Effort/Complexity ✓ (StrategyMatrix.tsx:98 dataKey='x', label 'Effort / Complexity →'). Y-Axis = Impact/Strategic Value ✓ (StrategyMatrix.tsx:113 dataKey='y', label '← Strategic Value / Impact'). Scatter plot type ✓ (ScatterChart component). Strategic_value for Y ✓ (governance.js:209 normalizeScore(project.scores.strategic_value)). Complexity for X ✓ (governance.js:208 normalizeScore(project.scores.complexity)). Quick Wins top-left ✓ (high impact, low effort verified in master_data.json).",
+          "notes": "All 5 checked specification details are correct. The candidate clearly read and followed the PRD for axis orientation, chart type, field mapping, and quadrant placement. Not a 4: no additional PRD details like sidebar navigation, cmd+k search trigger, or print styles."
+        }
+      },
+      "category_score": 75.0,
+      "category_commentary": "Strong PRD compliance. The standout is build-time Zod schema validation matching PRD Section 3.4 requirements. Quadrant logic is exactly correct per PRD Section 2.1. All specification details (axes, chart type, field mapping, quadrant placement) are accurately implemented. Route coverage is limited to / and /matrix, missing several PRD-specified routes."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 3,
+          "evidence": "Architecture layers: (1) Build scripts: scripts/governance.js (data pipeline), scripts/ingest.js (AI ingestion) — separate from app code. (2) Configuration: src/lib/config.ts (cached config reader with typed interface). (3) Pages: src/app/page.tsx (server component, dashboard), src/app/matrix/page.tsx (client component, orchestration). (4) Presentation: src/app/matrix/StrategyMatrix.tsx (chart rendering only), src/app/matrix/MatrixFilters.tsx (filter UI only). Dependencies flow: governance script → JSON → UI components. No circular dependencies.",
+          "notes": "Clear architecture with distinct layers: build-time data pipeline, configuration utilities, page-level orchestration, and focused presentation components. Each file has a clear single responsibility. The matrix page orchestrates data loading and state, while StrategyMatrix and MatrixFilters handle only rendering. The governance script isolates all data concerns from the UI."
+        },
+        "E2_readability_naming": {
+          "score": 3,
+          "evidence": "Function naming: normalizeScore, getQuadrant, calculateMatrixData, applyTemporalLogic, validateTaxonomy, validateDates, loadAllProjects, generateMasterData (governance.js). Variable naming: isHighImpact, isHighEffort, selectedDepartments, filteredData, activeFiltersCount, statusColors, quadrantLabels. Component naming: StrategyMatrix, MatrixFilters, CustomTooltip. Section comments in governance.js: '// SCHEMA DEFINITIONS', '// TEMPORAL LOGIC', '// MATRIX CALCULATIONS', etc. Consistent camelCase for variables/functions, PascalCase for components/types.",
+          "notes": "Clean, self-documenting code. Function names precisely describe their purpose (normalizeScore, not 'convert'; getQuadrant, not 'classify'). Boolean intermediaries (isHighImpact) improve readability. Governance script uses section headers for organization. Consistent naming conventions throughout."
+        },
+        "E3_error_handling": {
+          "score": 2,
+          "evidence": "Build-time: Zod schema validation with descriptive errors (governance.js:278-309). Date validation with specific error messages (governance.js:168-183). Taxonomy validation against config (governance.js:142-162). Config file existence check (governance.js:71-73). Project directory existence check (governance.js:254-256). Duplicate ID detection (governance.js:283-286). Build fails on error (process.exit(1)). Runtime: Loading state in matrix page (page.tsx:54-59). But: no try/catch around client-side fetch (page.tsx:42-51), no error boundary, no handling of master_data.json being missing/malformed at runtime, no empty filter results handling.",
+          "notes": "Strong build-time validation and error handling in the governance pipeline. But runtime error handling is minimal: no error boundaries, no fetch error handling, no graceful degradation for missing data at runtime. The dashboard server component (page.tsx) reads files without try/catch. Split between excellent build-time and minimal runtime handling averages to a 2."
+        },
+        "E4_dependency_choices": {
+          "score": 2,
+          "evidence": "Core: recharts ^2.10.3 (scatter plot support), gray-matter ^4.0.3 (markdown parsing), zod ^3.22.4 (schema validation), next ^14.1.0, tailwindcss ^3.4.1. Unused: fuse.js ^7.0.0 (installed but no Fuse usage in any component). Ingest-specific: pdf-parse ^1.1.1, mammoth ^1.6.0, @google/generative-ai ^0.1.3 (all require external API key, only used in scripts/ingest.js). Package.json has 9 dependencies and 8 devDependencies.",
+          "notes": "Core choices are appropriate: recharts for scatter plots (PRD Section 4.3), gray-matter for markdown, zod for validation. Fuse.js is installed per PRD Section 7.1 but never actually used in the UI — a wasted dependency. The AI ingestion deps (pdf-parse, mammoth, @google/generative-ai) add 3 dependencies for a script that requires an external API key to function. Not inappropriate but adds bloat."
+        }
+      },
+      "category_score": 62.5,
+      "category_commentary": "Good code organization with clear separation of concerns across build scripts, utilities, and presentation components. Naming is clean and domain-appropriate. The main weakness is the disparity between thorough build-time error handling and minimal runtime error handling. Dependency choices are reasonable at the core but include some unused/bloat packages."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 3,
+          "evidence": "src/app/page.tsx:1-103 — Executive Dashboard with: (1) Total Investment metric card ($9,500,000 calculated from master_data.json stats), (2) ROI Multiplier card (projected_roi / estimated_cost), (3) Active Projects count card, (4) Completion Rate card (completed/total * 100). Phase indicator with visual progress bar showing Foundation/Acceleration/Scale phases (lines 53-84). Recent Activity section (placeholder). Getting Started CTA linking to /matrix.",
+          "notes": "Multiple dashboard widgets with real calculated data derived from project files via master_data.json. Total Investment and ROI are genuine sums from project financials. Phase indicator with progress visualization is a nice touch. Recent Activity is placeholder only. Not a 4: missing some PRD-specified widgets and Recent Activity shows no real data."
+        },
+        "F2_additional_pages": {
+          "score": 1,
+          "evidence": "Beyond /matrix: only / (Executive Dashboard at src/app/page.tsx). No /projects library page, no /projects/[slug] detail page, no /roadmap page, no /timeline page. Nav links exist for /timeline and /projects but have no corresponding page.tsx files.",
+          "notes": "One additional route (dashboard) with substantial, meaningful content. But only 1 page beyond the must-have /matrix."
+        },
+        "F3_search_filtering": {
+          "score": 2,
+          "evidence": "src/app/matrix/MatrixFilters.tsx — checkbox-based filtering by department (Manufacturing, Supply Chain, Sales, After-Sales) and status (Active, Backlog, Queued, etc.). Filters update scatter plot in real-time via state management in page.tsx:69-71. Reset button shows active filter count (MatrixFilters.tsx:38-52). Counter shows 'Showing X of Y projects' (page.tsx:102). fuse.js is installed in package.json but never imported or used in any component.",
+          "notes": "Functional filtering by 2 dimensions (department and status) with real-time chart updates and a reset capability. This is solid interactive filtering. But no text search or fuzzy search despite Fuse.js being in dependencies — a missed opportunity."
+        },
+        "F4_creative_additions": {
+          "score": 2,
+          "evidence": "scripts/ingest.js:1-231 — AI ingestion pipeline that: (1) reads files from _content/interviews/ (supports PDF, DOCX, TXT), (2) extracts project opportunities via Google Gemini API (gemini-2.0-flash model), (3) generates PRD-compliant markdown drafts in _content/_staging/. scripts/governance.js:109-136 — temporal logic: auto-activates Queued projects when planned_start date passes, flags overdue Active projects. scripts/governance.js:226-243 — capacity checking against config.governance.max_concurrent_projects. Config-driven navigation (layout.tsx:30-34).",
+          "notes": "The AI ingestion pipeline is a creative and ambitious addition — conceptually implementing the PRD's intake workflow. However, it uses CommonJS (require) inconsistent with the ESM project, requires an external API key, and isn't integrated into the UI. The governance temporal logic and capacity checking are thoughtful additions that go beyond minimum requirements. Considered 3 for 'AI ingestion prototype' but the ingest script's practical usability limitations (API key, module format inconsistency, no UI) keep it at 2."
+        }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Good bonus feature ambition. The dashboard has real calculated metrics and a phase indicator. Filtering by department and status works well. The AI ingestion pipeline is creative but impractical without an API key and not integrated into the UI. Additional page coverage is limited to just the dashboard beyond the matrix."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 2,
+          "evidence": "Must-have (Strategy Matrix) works correctly: scatter plot renders at /matrix with proper axes, normalization, quadrant assignments, and tooltips. Bonus work: governance pipeline with Zod validation, executive dashboard with real data, department/status filtering, AI ingestion script. However: production build is broken (stale import from deleted module), fuse.js installed but not used, AI ingestion script requires external API key and isn't integrated with the UI, nav links to non-existent routes.",
+          "notes": "Must-have works well. Bonus priorities were reasonable (governance validation, dashboard, filtering). However, the broken build that shipped is a quality control gap — time that could have been spent fixing this was spent on the AI ingestion script (which isn't demo-able without an API key). Some effort was spent on features that don't fully deliver (fuse.js unused, dead nav links)."
+        },
+        "G2_pr_description": {
+          "score": 2,
+          "evidence": "PR #2 (merged) titled 'Max's branch' with body: 'For the bonus objectives, I focused on adding input validation to the governance script... Zod schema validation of the frontmatter, automatically updates the project status based on the current date, performs capacity checks, validates dates, and validates the taxonomy. For convenience, added tooltips to the strategy matrix, added department/status filtering... Also implemented the AI ingestion pipeline for pdf, DOCX, and TXT files... Finally, implemented the executive dashboard bones, which display partially default information.'",
+          "notes": "Brief but useful documentation. Lists what was built for bonus features. Self-aware about dashboard being 'partially default information.' But: no mention of what was skipped, no architectural decisions explained, no known limitations documented (broken build not mentioned), no explanation of the governance pipeline's design rationale. PR title is just 'Max's branch' rather than descriptive."
+        }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Reasonable prioritization with the must-have delivered correctly and bonus time spent on useful features. The PR description covers what was built but misses key communication elements: no mention of the broken build, no architectural rationale, no trade-off discussion. The un-descriptive PR title ('Max's branch') doesn't help either."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 2,
+      "evidence": "6 candidate commits over ~2.5 hours (16:21-18:52 on Feb 15): init (16:21), somemore (16:45), ingest this (17:32), revamp governance function (18:25), new filtering (18:43), executive dashboard (18:52). Excludes the initial repo setup commit (Feb 13).",
+      "notes": "6 commits showing clear incremental progression: scaffold → core matrix + chart → AI ingestion + config → governance pipeline refactor → filtering → dashboard. Each commit represents a meaningful work increment."
+    },
+    "H2_message_quality": {
+      "points": 0,
+      "evidence": "Commit messages: 'init', 'somemore', 'ingest this', 'revamp governace function' (misspelled), 'new filtering', 'executive dashboard'.",
+      "notes": "Messages are generic and informal. 'somemore' and 'ingest this' are vague and unhelpful — they don't describe what changed or why. 'governace' is misspelled. 'init' and 'new filtering' are marginally descriptive. None use imperative mood or explain rationale. These would not pass a professional code review standard."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Progression: (1) init — Next.js scaffold, layout, basic page. (2) somemore — matrix chart component, project data utilities, .gitignore. (3) ingest this — AI ingestion script, config utility, layout updates. (4) revamp governance function — build-time pipeline, master_data.json, refactored from projects.ts. (5) new filtering — filter component. (6) executive dashboard — dashboard page.",
+      "notes": "Clear logical build-up: foundation → core feature → utilities → pipeline refactor → enhancements → bonus page. The governance refactor in commit 4 shows deliberate architectural improvement (moving from a TS projects utility to a build-time pipeline). Demonstrates structured thinking about build order."
+    },
+    "bonus_total": 3
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 70.83,
+      "B_technical_foundation": 56.25,
+      "C_ui_ux_quality": 50.0,
+      "D_prd_compliance": 75.0,
+      "E_code_quality": 62.5,
+      "F_bonus_features": 50.0,
+      "G_decision_making": 50.0
+    },
+    "weighted_score": 62.19,
+    "git_bonus": 3,
+    "final_score": 65.19,
+    "score_band": "Competent",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Build-time governance pipeline (scripts/governance.js) with Zod schema validation, temporal logic, capacity checks, and taxonomy validation — a sophisticated data processing architecture that matches the PRD's Section 3.4 build-time validation requirements",
+      "Correct quadrant logic and normalization: all 4 reference projects map to their expected quadrants with accurate score transformation (×10), verified in master_data.json",
+      "Good architectural separation: build-time pipeline generates pre-computed JSON consumed by pure presentation components, with no transformation logic in the chart component",
+      "Rich tooltip implementation showing title, color-coded quadrant badge, status, owner, ROI, and scores — exceeds the minimum tooltip specification"
+    ],
+    "top_weaknesses": [
+      "Production build is broken: StrategyMatrix.tsx imports MatrixPoint from @/lib/projects which was deleted during the governance refactor — a stale import that wasn't caught before submission",
+      "Design tokens from config.json are not correctly applied: tailwind.config.cjs colors don't match config.json values (primary/secondary mismatch), accent color unused, Roboto body font not loaded",
+      "Limited page coverage: only / and /matrix implemented despite nav links to /timeline and /projects (which would 404), and no project library or detail pages",
+      "Poor commit messages: 'somemore', 'ingest this', misspelled 'governace' — don't meet professional communication standards"
+    ],
+    "standout_moments": [
+      "The AI ingestion pipeline (scripts/ingest.js) is an ambitious creative addition — processing PDF/DOCX/TXT files through Google Gemini to auto-generate PRD-compliant project markdown drafts. While not demo-able without an API key, it shows product vision for the intake workflow.",
+      "The governance engine's temporal logic (auto-activating Queued projects when planned_start passes, flagging overdue projects) goes beyond what was required and demonstrates understanding of the PRD's governance concepts."
+    ],
+    "hiring_signal": "This candidate demonstrates good architectural instincts — the build-time governance pipeline with Zod validation is a sophisticated approach that shows understanding of data pipeline patterns. They can build working features (matrix, dashboard, filtering) and think about system design. However, the shipped broken build and stale imports reveal a quality control gap: ambitious scope without thorough verification before submission. This is a developer who thinks in systems but needs more discipline around shipping quality. Would benefit from a team with code review practices and CI/CD that catches build failures.",
+    "recommendation": "Lean Hire"
+  }
+}

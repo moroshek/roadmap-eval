@@ -95,6 +95,7 @@ Score each criterion in `evaluation-framework.md` (Section 5, Categories A throu
 - When in doubt between two scores, lean conservative but document the uncertainty in notes (e.g., "Borderline 2/3 — chose 2").
 - **A3 scores implementation quality** (code structure, reusability), NOT correctness. Correctness is D2.
 - **A6 evidence** must cite matrix pipeline files only. **E1 evidence** must cite overall codebase architecture (non-overlapping).
+- **Build failure isolation:** When `npm run build` fails but `npm run dev` succeeds, penalize the build failure in B1 and G1. Score all other criteria from source inspection and dev-mode observation. Do not infer that a feature is broken from a build failure if the code is correct and the dev server serves it.
 
 ### Step 4: Git History Bonus
 

@@ -1,0 +1,307 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-004",
+    "repo_url": "local:///home/moroshek/roadmap-DiMister (branch: Max's-branch @ 714c9e4)",
+    "evaluated_at": "2026-02-16T06:37:12Z",
+    "evaluator": "codex-gpt5",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "Found package manifest at package.json."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "`npm install` completed successfully (up to date)."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "`npm run build` fails on TypeScript import resolution in `src/app/matrix/StrategyMatrix.tsx:3`, but fallback `npm run dev` starts successfully and serves the app shell."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "Matrix route exists at `src/app/matrix/page.tsx:35`."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 4,
+      "notes": "Found 4 markdown project files in `_content/projects` (PRJ-001..PRJ-004)."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "Recharts dependency declared in `package.json:20`."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "Normalization function multiplies 0-10 scores by 10 in `scripts/governance.js:189-192`."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "Quadrant conditional logic implemented in `scripts/governance.js:194-202`."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "Scatter component maps project points from `data` prop in `src/app/matrix/StrategyMatrix.tsx:132-141`."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "Custom tooltip wired into chart via `<Tooltip content={<CustomTooltip />}>` in `src/app/matrix/StrategyMatrix.tsx:128-130`."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.3,
+      "criteria": {
+        "A1_data_population": {
+          "score": 2,
+          "evidence": "Uses the 4 seeded files in `_content/projects/PRJ-001.md:1`, `_content/projects/PRJ-002.md:1`, `_content/projects/PRJ-003.md:1`, `_content/projects/PRJ-004.md:1` and processes them in `scripts/governance.js:249-313`.",
+          "notes": "Meets baseline seeded dataset usage without additional project coverage."
+        },
+        "A2_score_normalization": {
+          "score": 3,
+          "evidence": "Dedicated normalization helper in `scripts/governance.js:189-192`; consumed by matrix transform in `scripts/governance.js:208-213`.",
+          "notes": "Correct normalization and clearly separated from chart rendering."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "Quadrant assignment isolated in `getQuadrant` utility (`scripts/governance.js:194-202`) with explicit 50-threshold logic.",
+          "notes": "Implementation quality is solid and separated from JSX."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 3,
+          "evidence": "Chart implementation exists in `src/app/matrix/StrategyMatrix.tsx:88-143` with proper axes, but build-time type failure (`src/app/matrix/StrategyMatrix.tsx:3`) prevents a stable production render.",
+          "notes": "Chart is implemented with correct axes/labels and observable in dev mode; build failure is scored in technical foundation instead of cascading here."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "Tooltip content includes title and quadrant (`src/app/matrix/StrategyMatrix.tsx:46-63`), status/owner/ROI (`:64-72`), but matrix module fails type-check in build (`:3`).",
+          "notes": "Tooltip content and formatting are implemented and verifiable in dev mode; build stability penalty is isolated elsewhere."
+        },
+        "A6_logic_ui_separation": {
+          "score": 3,
+          "evidence": "Pipeline is separated into governance transform script (`scripts/governance.js:315-343`), generated data artifact (`public/master_data.json:140-189`), route-level fetch/filter (`src/app/matrix/page.tsx:41-71`), and rendering component (`src/app/matrix/StrategyMatrix.tsx:86-174`).",
+          "notes": "Good matrix pipeline separation despite type-contract mismatch between components."
+        }
+      },
+      "category_score": 70.83,
+      "category_commentary": "The candidate implemented the matrix pipeline and UI with correct logic, but a TypeScript module mismatch materially degrades deliverability."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 1,
+          "evidence": "Project has Next.js/TypeScript scripts (`package.json:6-12`) and strict mode (`tsconfig.json:7`), but production build fails with unresolved import in `src/app/matrix/StrategyMatrix.tsx:3`.",
+          "notes": "Configuration is present but not build-clean."
+        },
+        "B2_routing_navigation": {
+          "score": 2,
+          "evidence": "Routes implemented at `/` and `/matrix` (`src/app/page.tsx:4`, `src/app/matrix/page.tsx:35`), while nav links to unimplemented `/projects` and optional `/timeline` (`src/app/layout.tsx:33-37`).",
+          "notes": "Basic navigation between implemented routes exists (/ and /matrix), though nav also includes unimplemented targets."
+        },
+        "B3_type_safety": {
+          "score": 1,
+          "evidence": "TypeScript is used, but there is unresolved import `@/lib/projects` (`src/app/matrix/StrategyMatrix.tsx:3`) and explicit `any` usage in tooltip props (`src/app/matrix/StrategyMatrix.tsx:41`).",
+          "notes": "Type system is present but not consistently enforced."
+        },
+        "B4_data_layer": {
+          "score": 3,
+          "evidence": "Structured data pipeline reads markdown with gray-matter (`scripts/governance.js:16`, `:273`), validates with Zod (`:45-58`, `:277-295`), and emits consolidated `master_data.json` (`:315-343`).",
+          "notes": "Strong data-layer design centered on build-time governance processing."
+        }
+      },
+      "category_score": 43.75,
+      "category_commentary": "Data-layer engineering is solid, but routing and type/build stability are notably weak."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 2,
+          "evidence": "Dashboard and matrix use cohesive Tailwind card/layout patterns (`src/app/page.tsx:31-101`, `src/app/matrix/page.tsx:79-142`) and custom tooltip styling (`src/app/matrix/StrategyMatrix.tsx:45-80`).",
+          "notes": "Clean and functional but not highly differentiated/premium."
+        },
+        "C2_responsive_design": {
+          "score": 2,
+          "evidence": "Responsive grid classes used in dashboard (`src/app/page.tsx:31`, `:51`) and filters (`src/app/matrix/MatrixFilters.tsx:56`), plus responsive chart container (`src/app/matrix/StrategyMatrix.tsx:88`).",
+          "notes": "Meets baseline desktop/tablet responsiveness."
+        },
+        "C3_interactivity": {
+          "score": 2,
+          "evidence": "Interactive filtering and tooltip behavior are implemented (`src/app/matrix/page.tsx:68-76`, `src/app/matrix/MatrixFilters.tsx:22-36`, `src/app/matrix/StrategyMatrix.tsx:128-130`), but matrix module compile error (`src/app/matrix/StrategyMatrix.tsx:3`) undermines reliability.",
+          "notes": "Filtering and tooltip interactions are functional in dev mode; polish depth is moderate."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 2,
+          "evidence": "Basic loading state shown before data fetch completes (`src/app/matrix/page.tsx:54-60`); no explicit error-state handling for failed fetch/invalid JSON.",
+          "notes": "Minimum loading coverage exists; error handling is limited."
+        },
+        "C5_design_token_usage": {
+          "score": 0,
+          "evidence": "Design tokens exist in `_content/config.json`, but visual styling uses hardcoded palette/classes in `src/app/page.tsx:26-47`, `src/app/matrix/StrategyMatrix.tsx:24-38`, and `src/app/globals.css:5-19` without config-driven color/typography application.",
+          "notes": "No effective tenant token integration in the rendered UI layer."
+        }
+      },
+      "category_score": 40,
+      "category_commentary": "UI is serviceable with some interaction and responsive patterns, but polish and token-based theming are limited."
+    },
+    "D_prd_compliance": {
+      "weight": 0.1,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 4,
+          "evidence": "PRD-shaped frontmatter present in project files (e.g., `_content/projects/PRJ-001.md:2-22`) and enforced with Zod validation (`scripts/governance.js:45-58`, `:277-295`).",
+          "notes": "Strong schema compliance with programmatic enforcement."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "Threshold logic exactly matches PRD in `scripts/governance.js:194-202`, producing canonical placements in `public/master_data.json:140-189` (Quick Wins/Big Bets/Fillers/Time Sinks). Quadrant labels are rendered in `src/app/matrix/StrategyMatrix.tsx:146-157`.",
+          "notes": "Quadrant logic and labeling are accurate and explicit."
+        },
+        "D3_route_structure": {
+          "score": 2,
+          "evidence": "Implements `/` and `/matrix` routes (`src/app/page.tsx:4`, `src/app/matrix/page.tsx:35`), but `/roadmap`, `/projects`, and `/projects/[slug]` are not implemented.",
+          "notes": "Partial PRD route coverage."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "Scatter chart used (`src/app/matrix/StrategyMatrix.tsx:89`), X-axis mapped to effort/complexity (`:99-107`), Y-axis mapped to strategic value/impact (`:114-122`), and Quick Wins label placed in top-left quadrant overlay (`:146-148`).",
+          "notes": "Core matrix specification details are implemented correctly."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "PRD logic fidelity for matrix math and schema is strong, with only partial route-coverage gaps."
+    },
+    "E_code_quality": {
+      "weight": 0.2,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 3,
+          "evidence": "Overall architecture separates concerns: layout/navigation (`src/app/layout.tsx:25-42`), dashboard view (`src/app/page.tsx:23-101`), matrix page orchestration (`src/app/matrix/page.tsx:35-143`), chart rendering (`src/app/matrix/StrategyMatrix.tsx:86-174`), and governance/data pipeline (`scripts/governance.js:249-343`).",
+          "notes": "Modular organization is clear at project level."
+        },
+        "E2_readability_naming": {
+          "score": 3,
+          "evidence": "Readable function names and variable semantics in governance and matrix modules (e.g., `normalizeScore`, `getQuadrant`, `calculateMatrixData` in `scripts/governance.js:189-220`; `selectedDepartments`/`filteredData` in `src/app/matrix/page.tsx:37-71`).",
+          "notes": "Code is generally easy to follow."
+        },
+        "E3_error_handling": {
+          "score": 2,
+          "evidence": "Governance pipeline fails fast with explicit validation errors (`scripts/governance.js:157-161`, `:172-183`, `:305-309`), but client fetch in matrix page has no catch/fallback (`src/app/matrix/page.tsx:41-51`).",
+          "notes": "Good build-time validation, limited runtime resilience in UI."
+        },
+        "E4_dependency_choices": {
+          "score": 3,
+          "evidence": "Appropriate core dependencies for requirements: `recharts`, `gray-matter`, `zod` (`package.json:17-20`), plus optional ingestion stack in `scripts/ingest.js:6-8`.",
+          "notes": "Dependency set is relevant and mostly justified for implemented scope."
+        }
+      },
+      "category_score": 68.75,
+      "category_commentary": "Code organization and readability are solid, but runtime robustness and type-contract consistency need work."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 3,
+          "evidence": "Dashboard includes multiple computed widgets (Total Investment, ROI Multiplier, Active Projects, Completion Rate) in `src/app/page.tsx:31-47` and phase/activity sections in `:51-95`, derived from `master_data.json` (`:15-21`).",
+          "notes": "Meaningful bonus dashboard beyond matrix minimum."
+        },
+        "F2_additional_pages": {
+          "score": 1,
+          "evidence": "Only one additional implemented route beyond `/matrix`: dashboard `/` (`src/app/page.tsx:4`).",
+          "notes": "Additional-page scope is limited."
+        },
+        "F3_search_filtering": {
+          "score": 2,
+          "evidence": "Functional multi-dimension filtering on matrix by department and status (`src/app/matrix/page.tsx:68-71`, `src/app/matrix/MatrixFilters.tsx:22-36`).",
+          "notes": "Good filtering controls, but no delivered fuzzy-search experience despite Fuse dependency."
+        },
+        "F4_creative_additions": {
+          "score": 3,
+          "evidence": "Added AI ingestion prototype script for transcript-to-project draft generation (`scripts/ingest.js:56-111`, `:165-225`).",
+          "notes": "AI ingestion prototype is a meaningful creative addition beyond baseline requirements."
+        }
+      },
+      "category_score": 56.25,
+      "category_commentary": "Dashboard and ingestion prototype provide useful bonus scope, but breadth across app pages/features is moderate."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 2,
+          "evidence": "Candidate prioritized core matrix and dashboard work (`src/app/matrix/page.tsx:35-143`, `src/app/page.tsx:23-101`), but left a blocking matrix build/type issue unresolved (`src/app/matrix/StrategyMatrix.tsx:3`).",
+          "notes": "Must-have matrix and dashboard were prioritized and function in dev mode, but production build quality control was incomplete."
+        },
+        "G2_pr_description": {
+          "score": 0,
+          "evidence": "No submission-specific implementation summary found; `README.md:1-73` remains the assessment prompt text.",
+          "notes": "Documentation of choices/tradeoffs is absent."
+        }
+      },
+      "category_score": 25,
+      "category_commentary": "Some prioritization signal exists from implemented scope, but communication and final stabilization are weak."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 2,
+      "evidence": "History shows 7 commits with incremental progression: `init`, `somemore`, `ingest this`, `revamp governace function`, `new filtering`, `executive dashboard`.",
+      "notes": "Good commit cadence for a time-boxed assessment."
+    },
+    "H2_message_quality": {
+      "points": 0,
+      "evidence": "Most commit messages are vague or non-descriptive (`somemore`, `init`, `ingest this`).",
+      "notes": "Message quality is below professional standard."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Commit sequence indicates staged development from setup to governance/filtering/dashboard features.",
+      "notes": "Logical progression is visible despite weak message quality."
+    },
+    "bonus_total": 3
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 70.83,
+      "B_technical_foundation": 43.75,
+      "C_ui_ux_quality": 40,
+      "D_prd_compliance": 81.25,
+      "E_code_quality": 68.75,
+      "F_bonus_features": 56.25,
+      "G_decision_making": 25
+    },
+    "weighted_score": 59.75,
+    "git_bonus": 3,
+    "final_score": 62.75,
+    "score_band": "Competent",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Governance/data pipeline is substantial: markdown ingestion, Zod validation, taxonomy/date checks, normalization, quadrant assignment, and generated aggregate artifact (`scripts/governance.js:27-343`).",
+      "Matrix math and quadrant placement are correct and align with seeded truth, including normalized values in `public/master_data.json:140-189` and 50-threshold logic in `scripts/governance.js:194-202`.",
+      "Candidate delivered a meaningful executive dashboard with computed portfolio metrics (`src/app/page.tsx:15-47`) and phase indicator content (`src/app/page.tsx:51-84`)."
+    ],
+    "top_weaknesses": [
+      "Production build is broken by unresolved type import (`src/app/matrix/StrategyMatrix.tsx:3`), which is a major quality/stability gap.",
+      "Route coverage is partial and navigation contains dead links (`src/app/layout.tsx:33-37`) for unimplemented pages.",
+      "Submission communication is missing; no implementation summary or rationale was added (`README.md:1-73`)."
+    ],
+    "standout_moments": [
+      "AI ingestion prototype (`scripts/ingest.js`) goes beyond baseline requirements and shows product-thinking ambition, even though it is not integrated into app routes."
+    ],
+    "hiring_signal": "This candidate demonstrates good data/governance engineering and correct matrix business logic, with functional matrix interactions in dev mode. The key delivery risk is production readiness discipline: unresolved build/type issues and partial route completion. They look promising for execution with stronger QA/CI guardrails.",
+    "recommendation": "Lean Hire"
+  }
+}

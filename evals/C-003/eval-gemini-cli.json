@@ -1,0 +1,148 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-003",
+    "repo_url": "https://github.com/nirajang20/roadmap-engine",
+    "evaluated_at": "2026-02-15T22:45:00Z",
+    "evaluator": "gemini-cli",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "Found in root directory." },
+    "G2_install_succeeds": { "pass": true, "notes": "node_modules present and build successful." },
+    "G3_build_succeeds": { "pass": true, "notes": "npm run build completed successfully." },
+    "G4_matrix_route_exists": { "pass": true, "notes": "src/app/matrix/page.tsx exists." },
+    "G5_project_files_exist": { "pass": true, "count": 5, "notes": "PRJ-001 to PRJ-005 found in _content/projects/." },
+    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "recharts present in package.json." },
+    "G7_normalization_logic_exists": { "pass": true, "notes": "normalizeScoreToAxis function multiplies by 10 in src/lib/matrix.ts." },
+    "G8_quadrant_logic_exists": { "pass": true, "notes": "getQuadrantLabel function handles all 4 quadrants in src/lib/matrix.ts." },
+    "G9_chart_renders_data": { "pass": true, "notes": "ScatterChart component renders filteredPoints in src/components/matrix-view.tsx." },
+    "G10_tooltips_implemented": { "pass": true, "notes": "MatrixTooltip component used in ScatterChart." },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": { "score": 3, "evidence": "PRJ-001 to PRJ-005 in _content/projects/.", "notes": "Added a 5th project (PRJ-005) with realistic after-sales data." },
+        "A2_score_normalization": { "score": 3, "evidence": "src/lib/matrix.ts:4", "notes": "Correct normalizeScoreToAxis function exists as a dedicated utility." },
+        "A3_quadrant_assignment": { "score": 3, "evidence": "src/lib/matrix.ts:9", "notes": "Dedicated getQuadrantLabel function with clean conditional logic." },
+        "A4_scatter_plot_rendering": { "score": 3, "evidence": "src/components/matrix-view.tsx:188", "notes": "Renders with background zones, ReferenceLines at 50, and 0-100 axes." },
+        "A5_tooltip_implementation": { "score": 3, "evidence": "src/components/matrix-view.tsx:39", "notes": "Shows Title, Quadrant, ROI, and raw scores." },
+        "A6_logic_ui_separation": { "score": 3, "evidence": "src/lib/matrix.ts (logic) vs src/components/matrix-view.tsx (UI)", "notes": "Clear separation between data transformation and rendering." }
+      },
+      "category_score": 75.0,
+      "category_commentary": "Core requirement met with high quality. Interactivity like brush-to-zoom is a nice addition."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": { "score": 3, "evidence": "package.json, tsconfig.json, .gitignore", "notes": "Standard Next.js setup with TypeScript and path aliases." },
+        "B2_routing_navigation": { "score": 3, "evidence": "src/app/matrix, src/app/projects routes", "notes": "Sidebar navigation implemented with Dashboard, Matrix, and Library links." },
+        "B3_type_safety": { "score": 3, "evidence": "src/lib/schemas.ts, src/lib/types.ts", "notes": "Strong TypeScript usage with Zod schema validation for frontmatter." },
+        "B4_data_layer": { "score": 3, "evidence": "src/lib/content.ts", "notes": "Structured data loading with parsing, validation, and governance application." }
+      },
+      "category_score": 75.0,
+      "category_commentary": "Solid technical foundation. Zod schemas provide good runtime safety for content."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": { "score": 3, "evidence": "src/app/globals.css", "notes": "Clean, modern SaaS-like design with custom gradients and cohesive styling." },
+        "C2_responsive_design": { "score": 3, "evidence": "metric-grid (auto-fit), library-controls (grid)", "notes": "Layout uses grid and flexbox patterns for basic responsiveness." },
+        "C3_interactivity": { "score": 3, "evidence": "src/components/matrix-view.tsx:75 (brush-to-zoom)", "notes": "Includes brush-to-zoom on the matrix and real-time filtering." },
+        "C4_empty_error_loading_states": { "score": 3, "evidence": "src/components/matrix-view.tsx:232 (empty state)", "notes": "Includes empty state messaging when filters yield no results." },
+        "C5_design_token_usage": { "score": 3, "evidence": "src/app/layout.tsx:23 (themeVariables)", "notes": "CSS variables derived from config.json design tokens and applied to body." }
+      },
+      "category_score": 75.0,
+      "category_commentary": "High-quality UI with attention to detail. Dynamic theming is well-implemented."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": { "score": 4, "evidence": "src/lib/schemas.ts:33", "notes": "Zod schema exactly matches PRD 3.2 specification." },
+        "D2_quadrant_logic_accuracy": { "score": 3, "evidence": "src/lib/matrix.ts:11", "notes": "Correct boundaries (>= 50) and labels per PRD 2.1." },
+        "D3_route_structure": { "score": 3, "evidence": "/, /matrix, /projects", "notes": "Three primary routes implemented." },
+        "D4_specification_details": { "score": 3, "evidence": "X=Effort, Y=Impact, Quick Wins=Top-Left", "notes": "Followed specific visualization details from the PRD accurately." }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Excellent compliance with data model and visualization specs."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": { "score": 3, "evidence": "src/lib/governance.ts, src/lib/content.ts", "notes": "Clean separation between data fetching, governance logic, and UI." },
+        "E2_readability_naming": { "score": 4, "evidence": "deriveTemporalStatus, buildMatrixDataset", "notes": "Precise, domain-appropriate naming throughout the codebase." },
+        "E3_error_handling": { "score": 3, "evidence": "src/lib/content.ts:15 (formatZodError)", "notes": "Schema validation errors are formatted and handled during data load." },
+        "E4_dependency_choices": { "score": 4, "evidence": "recharts, zod, gray-matter", "notes": "Expert choices that perfectly align with PRD needs and recommendations." }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Very clean, professional codebase. Naming and structure demonstrate seniority."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": { "score": 3, "evidence": "src/app/page.tsx", "notes": "Metric cards (Investment, ROI, Capacity) with real calculated data." },
+        "F2_additional_pages": { "score": 2, "evidence": "src/app/projects/page.tsx", "notes": "Project library page implemented." },
+        "F3_search_filtering": { "score": 3, "evidence": "src/components/project-library.tsx:55", "notes": "Fuzzy-ish text search and multi-faceted filtering (status, dept, phase)." },
+        "F4_creative_additions": { "score": 3, "evidence": "src/lib/governance.ts (Capacity Bottleneck logic)", "notes": "Implemented capacity bottleneck logic and temporal status normalization." }
+      },
+      "category_score": 68.75,
+      "category_commentary": "Good amount of bonus work, particularly in the logic layer (governance)."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": { "score": 4, "evidence": "Focus on governance logic + matrix interactions", "notes": "Prioritized core logic and data integrity over superficial polish." },
+        "G2_pr_description": { "score": 1, "evidence": "README.md is boilerplate", "notes": "Minimal documentation regarding specific decisions or features built." }
+      },
+      "category_score": 62.5,
+      "category_commentary": "Great engineering prioritization, but lacked in communication/documentation."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": { "points": 0, "evidence": "2 commits total", "notes": "Incremental progress not visible in history." },
+    "H2_message_quality": { "points": 1, "evidence": "'Initial commit', 'Project builded'", "notes": "Messages are descriptive but very simple." },
+    "H3_logical_progression": { "points": 0, "evidence": "Scaffold -> Final state", "notes": "No logical progression visible." },
+    "bonus_total": 1
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 75.0,
+      "B_technical_foundation": 75.0,
+      "C_ui_ux_quality": 75.0,
+      "D_prd_compliance": 81.25,
+      "E_code_quality": 87.5,
+      "F_bonus_features": 68.75,
+      "G_decision_making": 62.5
+    },
+    "weighted_score": 77.1875,
+    "git_bonus": 1,
+    "final_score": 78.1875,
+    "score_band": "Strong",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Robust data layer with Zod schema enforcement (src/lib/schemas.ts).",
+      "Sophisticated governance logic including temporal status and capacity bottleneck detection (src/lib/governance.ts).",
+      "Excellent naming conventions and separation of concerns (src/lib/matrix.ts)."
+    ],
+    "top_weaknesses": [
+      "Extremely poor git history (2 commits total).",
+      "Missing PRD-required project detail page (/projects/[slug]).",
+      "Lacked submission summary or implementation documentation."
+    ],
+    "standout_moments": [
+      "The 'brush-to-zoom' feature on the matrix demonstrates high-quality UI thinking for data-heavy applications.",
+      "Programmatic bottleneck detection in the governance engine is a professional touch beyond the basic requirements."
+    ],
+    "hiring_signal": "This developer is a strong engineer with a solid grasp of data integrity and architecture. They write very clean, readable code and think about edge cases like capacity limits. While their git habits and documentation were minimal in this test, their technical output is high quality.",
+    "recommendation": "Hire"
+  }
+}
