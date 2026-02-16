@@ -1,7 +1,7 @@
 # Candidate Comparison Report
 
-Generated: 2026-02-14T23:18:32.183Z
-Candidates evaluated: 2
+Generated: 2026-02-16T05:49:49.449Z
+Candidates evaluated: 3
 
 ## Rankings
 
@@ -9,6 +9,7 @@ Candidates evaluated: 2
 |------|-----------|-------|------|--------|------|-------|-----|------|-------|----------|-----|-----------|
 | 1 | C-001 | 89.75 | Strong | 95.83 | 81.25 | 80 | 93.75 | 81.25 | 93.75 | 50 | Hire | strong |
 | 2 | C-002 | 74.19 | Competent | 75 | 62.5 | 75 | 81.25 | 68.75 | 68.75 | 75 | Lean Hire | moderate |
+| 3 | C-003 | 74.19 | Competent | 75 | 75 | 65 | 87.5 | 81.25 | 56.25 | 37.5 | Hire | moderate |
 
 ## Category Weights
 
