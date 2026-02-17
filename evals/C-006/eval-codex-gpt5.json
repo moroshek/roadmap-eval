@@ -1,0 +1,308 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-006",
+    "repo_url": "https://github.com/moroshek/roadmap-Ajayd7",
+    "evaluated_at": "2026-02-17T05:47:27Z",
+    "evaluator": "codex-gpt5",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "`package.json` exists at repo root with Next.js scripts and dependencies (`package.json:1-49`)."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "`npm install` succeeded with no vulnerabilities (up to date, audited 566 packages)."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "`npm run build` succeeded and generated static routes including `/matrix`, `/projects`, `/projects/[slug]`, and `/roadmap` (Next.js 16.1.6 build output)."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "Matrix route exists at `src/app/matrix/page.tsx:6-37` and is listed in build output."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 38,
+      "notes": "Found 38 markdown files under `_content/projects/` (including seeded `PRJ-001.md` to `PRJ-004.md`)."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "`recharts` is declared in `package.json:35` and imported in `src/components/StrategyMatrix.tsx:4-16`."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "Normalization is implemented as score scaling in `src/lib/projects.ts:68-72` (`strategic_value * 10`, `complexity * 10`)."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "Quadrant assignment logic is implemented with threshold conditionals in `src/lib/projects.ts:74-92`."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "Scatter plot renders mapped project points using `<Scatter data={filteredData}>` and `<Cell>` per point in `src/components/StrategyMatrix.tsx:235-245`."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "Tooltip is wired in chart via `<Tooltip content={<MatrixTooltip />}>` in `src/components/StrategyMatrix.tsx:233` and implemented in `src/components/matrix/MatrixTooltip.tsx:25-82`."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.3,
+      "criteria": {
+        "A1_data_population": {
+          "score": 4,
+          "evidence": "Repository has 38 project markdown files in `_content/projects/`; seeded files are valid and extensive additional data exists (e.g., `_content/projects/PRJ-001.md:1-23`, `_content/projects/PRJ-004.md:1-23`).",
+          "notes": "Rich and diverse dataset well beyond minimum requirement."
+        },
+        "A2_score_normalization": {
+          "score": 3,
+          "evidence": "Normalization is correctly implemented in data layer (`impact = strategic_value * 10`, `effort = complexity * 10`) at `src/lib/projects.ts:68-72`; seeded mapping validates (`_content/projects/PRJ-001.md:14-15` yields 86 and 32).",
+          "notes": "Correct and separated from UI, but no explicit clamping or out-of-range handling."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "Quadrant mapping is implemented in `src/lib/projects.ts:74-92` with dedicated conditional logic and typed quadrant union (`src/lib/projects.ts:40`).",
+          "notes": "Clean and separate from rendering; thresholds are hardcoded and not extracted as configurable constants."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 4,
+          "evidence": "Matrix chart includes quadrant background zones, center lines, labeled axes, and 0-100 domains in `src/components/StrategyMatrix.tsx:183-231`; points are color-coded by quadrant (`src/components/StrategyMatrix.tsx:237-241`).",
+          "notes": "High-quality matrix rendering with strong visual clarity."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "Tooltip shows title, quadrant label, ID, impact, effort, owner, and ROI in `src/components/matrix/MatrixTooltip.tsx:34-74`; chart integration at `src/components/StrategyMatrix.tsx:233`.",
+          "notes": "Exceeds minimum required fields; lacks explicit transition/edge handling polish for top score."
+        },
+        "A6_logic_ui_separation": {
+          "score": 3,
+          "evidence": "Data loading/parsing/validation/transforms are centralized in `src/lib/projects.ts:43-106`; matrix page passes prepared data to presentation component in `src/app/matrix/page.tsx:7-33`; rendering is in `src/components/StrategyMatrix.tsx:176-248`.",
+          "notes": "Good separation, but parse/validate/transform stages are combined in one loader function rather than a clearer pipeline split."
+        }
+      },
+      "category_score": 83.33,
+      "category_commentary": "Core matrix implementation is strong and visually polished with correct transformation logic; top-end points are mainly limited by non-parameterized thresholds and monolithic loader composition."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 3,
+          "evidence": "Project builds and installs successfully; scripts and dependencies are configured in `package.json:9-49`; strict TypeScript and path alias configured in `tsconfig.json:10,24-27`; build artifacts excluded in `.gitignore:10-14`.",
+          "notes": "Well-configured baseline; configuration is solid but not deeply production-hardened."
+        },
+        "B2_routing_navigation": {
+          "score": 4,
+          "evidence": "Implemented routes include `/`, `/matrix`, `/projects`, `/projects/[slug]`, and `/roadmap` (`src/app/...` files); sidebar navigation with active state is implemented in `src/components/Sidebar.tsx:11-43`.",
+          "notes": "Comprehensive route coverage with consistent shared layout/navigation."
+        },
+        "B3_type_safety": {
+          "score": 3,
+          "evidence": "Zod schema validation and inferred type are used in `src/lib/projects.ts:8-41`; strict mode enabled in `tsconfig.json:10`; however `any` appears in sort comparator and tag rendering (`src/components/ProjectTable.tsx:43-44`, `src/app/projects/[slug]/page.tsx:183`).",
+          "notes": "Strong overall typing with minor `any` escapes."
+        },
+        "B4_data_layer": {
+          "score": 3,
+          "evidence": "Centralized markdown ingestion with `gray-matter`, Zod validation, normalization, and enrichment exists in `src/lib/projects.ts:43-106`.",
+          "notes": "Functional and clean for assessment scope; limited error surfacing and no separate transform modules/caching layer."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Technical foundation is strong across setup, typing, and routing, with minor type and architecture polish gaps."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 4,
+          "evidence": "Consistent visual system across pages with gradients, hierarchy, spacing, and chart styling in `src/app/page.tsx:23-153`, `src/components/StrategyMatrix.tsx:72-248`, and `src/app/layout.tsx:26-43`.",
+          "notes": "UI feels product-grade and intentional."
+        },
+        "C2_responsive_design": {
+          "score": 3,
+          "evidence": "Responsive breakpoints and adaptive layouts are used throughout (`src/app/layout.tsx:26`, `src/app/page.tsx:43,98`, `src/components/ProjectTable.tsx:142-156`, `src/components/GlobalSearch.tsx:69,96`).",
+          "notes": "Good responsive behavior; mobile navigation interactions are basic."
+        },
+        "C3_interactivity": {
+          "score": 3,
+          "evidence": "Interactive filters, sorting, infinite scrolling, matrix controls, and keyboard search are implemented in `src/components/StrategyMatrix.tsx:75-171`, `src/components/ProjectTable.tsx:120-126,281-317`, and `src/components/GlobalSearch.tsx:41-57`.",
+          "notes": "Strong practical interaction model with real-time feedback."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 2,
+          "evidence": "Component-level empty/loading states are present in `src/components/ProjectTable.tsx:283-317`; 404 handling exists via `notFound()` in `src/app/projects/[slug]/page.tsx:21-23`; no dedicated `src/app/loading.tsx` or `src/app/error.tsx` routes were found.",
+          "notes": "Some useful state handling exists, but coverage is not comprehensive at app level."
+        },
+        "C5_design_token_usage": {
+          "score": 2,
+          "evidence": "Tenant tokens are declared in `_content/config.json:8-18`, but UI colors are primarily hardcoded Tailwind classes and local constants (`src/lib/constants.ts:15-47`, `src/app/page.tsx:45-93`, `src/components/StrategyMatrix.tsx:183-194`).",
+          "notes": "Visual consistency is good, but config-driven theming is minimal."
+        }
+      },
+      "category_score": 70,
+      "category_commentary": "UI is visually strong and interactive, with the main gaps in app-level state handling completeness and token-to-runtime integration."
+    },
+    "D_prd_compliance": {
+      "weight": 0.1,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 4,
+          "evidence": "Project data is validated through a structured Zod schema at load time in `src/lib/projects.ts:8-32,57-63` and applied to all markdown project files.",
+          "notes": "Schema enforcement is explicit and consistently applied."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "Quadrant boundary logic matches PRD thresholds in `src/lib/projects.ts:75-92`; seed examples align (`PRJ-001` 8.6/3.2 -> Quick Wins, `PRJ-004` 4.1/8.7 -> Time Sinks via `src/lib/projects.ts:71-72,80-90`).",
+          "notes": "Core quadrant math and assignments are correct."
+        },
+        "D3_route_structure": {
+          "score": 4,
+          "evidence": "Route set covers required views: `src/app/page.tsx`, `src/app/matrix/page.tsx`, `src/app/projects/page.tsx`, `src/app/projects/[slug]/page.tsx`, and `src/app/roadmap/page.tsx`.",
+          "notes": "Route structure matches and extends core PRD needs."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "Matrix uses X=Effort and Y=Impact with 0-100 axes (`src/components/StrategyMatrix.tsx:201-226`), scatter plot rendering (`src/components/StrategyMatrix.tsx:235-245`), and top-left Quick Wins area (`src/components/StrategyMatrix.tsx:183-185`).",
+          "notes": "Major details are correct; some secondary PRD polish details are partial."
+        }
+      },
+      "category_score": 93.75,
+      "category_commentary": "PRD compliance is excellent for required matrix logic, routing, and axis/quadrant behavior."
+    },
+    "E_code_quality": {
+      "weight": 0.2,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 3,
+          "evidence": "Layering is clear across app routes (`src/app/*`), components (`src/components/*`), and data utilities (`src/lib/projects.ts`), with matrix loading separated from rendering (`src/app/matrix/page.tsx:7-33`, `src/components/StrategyMatrix.tsx:26-250`).",
+          "notes": "Good boundaries overall, with some state/filter logic still embedded in large components."
+        },
+        "E2_readability_naming": {
+          "score": 3,
+          "evidence": "Function and variable naming is generally clear (`getProjects`, `filteredData`, `toggleQuadrant`, `processedProjects`) across `src/lib/projects.ts` and `src/components/StrategyMatrix.tsx`/`src/components/ProjectTable.tsx`.",
+          "notes": "Readable codebase with minor rough edges in comments and a few ad hoc casts."
+        },
+        "E3_error_handling": {
+          "score": 3,
+          "evidence": "Loader validates each file and filters invalid entries with error logging (`src/lib/projects.ts:58-63,105-106`); project details handle missing slugs via `notFound()` (`src/app/projects/[slug]/page.tsx:21-23`).",
+          "notes": "Reasonable defensive handling, though user-facing recovery/reporting is limited."
+        },
+        "E4_dependency_choices": {
+          "score": 4,
+          "evidence": "Dependency set is focused and PRD-aligned (`recharts`, `gray-matter`, `zod`, `fuse.js`) in `package.json:27-37`, with direct usage in matrix/search/data loader files.",
+          "notes": "Good library choices with minimal bloat."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Code quality is solid and maintainable with effective module boundaries and sensible dependency choices."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 3,
+          "evidence": "Dashboard computes and renders portfolio metrics (investment, ROI, active count, initiative count) in `src/app/page.tsx:7-12,43-94` with additional sections (`src/app/page.tsx:97-150`).",
+          "notes": "Strong implementation; one section remains hardcoded (65% phase bar)."
+        },
+        "F2_additional_pages": {
+          "score": 4,
+          "evidence": "Beyond `/matrix`, candidate implemented `/`, `/projects`, `/projects/[slug]`, and `/roadmap` with substantial content (`src/app/...`).",
+          "notes": "Comprehensive additional page coverage with meaningful functionality."
+        },
+        "F3_search_filtering": {
+          "score": 4,
+          "evidence": "Global Fuse.js search with key weighting and Cmd/Ctrl+K is in `src/components/GlobalSearch.tsx:9-22,41-49`; matrix and table filtering/sorting are in `src/components/StrategyMatrix.tsx:37-67` and `src/components/ProjectTable.tsx:32-67,120-126`.",
+          "notes": "Robust filtering and search experience across major views."
+        },
+        "F4_creative_additions": {
+          "score": 3,
+          "evidence": "Custom roadmap/Gantt visualization and infinite scrolling table are implemented in `src/components/GanttChart.tsx:10-135` and `src/components/ProjectTable.tsx:74-118`.",
+          "notes": "Creative and useful additions beyond baseline requirements."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Bonus implementation is ambitious and cohesive, especially search/filtering and timeline visualization."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 4,
+          "evidence": "Must-have matrix requirements are fully delivered (transform + quadrant + chart + tooltip in `src/lib/projects.ts`, `src/components/StrategyMatrix.tsx`, `src/components/matrix/MatrixTooltip.tsx`) before broad bonus expansion into dashboard/search/table/roadmap routes.",
+          "notes": "Strong prioritization and product-thinking in feature sequencing."
+        },
+        "G2_pr_description": {
+          "score": 3,
+          "evidence": "Merge commit references a scoped assessment PR with summary (`git show b6e9e4f`) and supporting descriptive commit message/body in `git show 3963d24`.",
+          "notes": "Communication is clearly descriptive, though available in-repo evidence is less exhaustive than top-tier PR documentation."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Execution and prioritization are strong, with good but not exceptional observable submission narrative detail in local git metadata."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 2,
+      "evidence": "`git log` shows 6+ progressive commits across setup, core feature build-out, design iteration, data expansion, and bug fix (`023a42c`, `3963d24`, `e227a9c`, `a94c3e0`, `f3b4d08`, `686cb31`).",
+      "notes": "History indicates iterative delivery rather than a single end-state dump."
+    },
+    "H2_message_quality": {
+      "points": 1,
+      "evidence": "Messages are mostly descriptive (`feat(assessment): Enhance Strategy Matrix and Roadmap UI`, `Fix race condition in infinite scroll...`) with occasional weaker phrasing (`COmbact design applied`).",
+      "notes": "Generally understandable messages, but inconsistent professionalism and rationale depth."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Commit sequence reflects coherent progression: initial scaffold -> major matrix/UI feature work -> design polish -> data/pagination expansion -> bug fix -> snapshot.",
+      "notes": "Clear structured build-up of functionality."
+    },
+    "bonus_total": 4
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 83.33,
+      "B_technical_foundation": 81.25,
+      "C_ui_ux_quality": 70,
+      "D_prd_compliance": 93.75,
+      "E_code_quality": 81.25,
+      "F_bonus_features": 87.5,
+      "G_decision_making": 87.5
+    },
+    "weighted_score": 82.06,
+    "git_bonus": 4,
+    "final_score": 86.06,
+    "score_band": "Strong",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Strong matrix implementation quality: accurate normalization/quadrant logic and polished scatter visualization (`src/lib/projects.ts:68-92`, `src/components/StrategyMatrix.tsx:183-245`).",
+      "Large, realistic dataset (38 project files) demonstrating system behavior at meaningful scale (`_content/projects/`).",
+      "High functional ambition beyond must-haves, including global fuzzy search, interactive project table, and roadmap timeline (`src/components/GlobalSearch.tsx`, `src/components/ProjectTable.tsx`, `src/components/GanttChart.tsx`)."
+    ],
+    "top_weaknesses": [
+      "Config-driven design tokens are declared but not deeply consumed by runtime UI (`_content/config.json:8-18` vs hardcoded styling in `src/lib/constants.ts:15-47`).",
+      "Some type-safety and code hygiene leaks remain (`any` usage in `src/components/ProjectTable.tsx:43-44` and `src/app/projects/[slug]/page.tsx:183`).",
+      "App-level loading/error state architecture is thin (no dedicated `src/app/loading.tsx` or `src/app/error.tsx` files)."
+    ],
+    "standout_moments": [
+      "The matrix chart is implemented at a premium visual level with quadrant background zoning and polished tooltip content.",
+      "The candidate shipped a broad, coherent product surface in a constrained assessment timeframe."
+    ],
+    "hiring_signal": "This submission demonstrates a strong product-oriented full-stack/frontend developer who can deliver the core requirement correctly and then expand scope with useful, coherent features. They show good implementation velocity and practical engineering judgment. Primary risk areas are deeper config-driven architecture discipline and tightening type/runtime rigor at edges.",
+    "recommendation": "Hire"
+  }
+}

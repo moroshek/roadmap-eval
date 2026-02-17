@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-02-16T15:12:33.906Z",
-  "total_candidates": 4,
-  "total_divergences": 3,
+  "generated_at": "2026-02-17T06:04:29.982Z",
+  "total_candidates": 6,
+  "total_divergences": 4,
   "all_divergences": [
     {
       "candidate_id": "C-002",
@@ -53,8 +53,31 @@
       ],
       "std_dev": 1.15,
       "note": "High disagreement — flag for human review"
+    },
+    {
+      "candidate_id": "C-006",
+      "criterion": "G2_pr_description",
+      "category": "G_decision_making",
+      "scores": [
+        4,
+        3,
+        0
+      ],
+      "evaluators": [
+        "claude-opus-1",
+        "codex-gpt5",
+        "gemini-cli"
+      ],
+      "std_dev": 2.08,
+      "note": "High disagreement — flag for human review"
     }
   ],
-  "frequently_divergent_criteria": [],
-  "summary": "3 high-divergence instances found across 4 candidates. 0 criteria show recurring disagreement and may need rubric refinement."
+  "frequently_divergent_criteria": [
+    {
+      "criterion": "G2_pr_description",
+      "divergence_count_across_candidates": 2,
+      "note": "This criterion frequently produces evaluator disagreement. Consider refining its rubric definition."
+    }
+  ],
+  "summary": "4 high-divergence instances found across 6 candidates. 1 criteria show recurring disagreement and may need rubric refinement."
 }

@@ -1,0 +1,313 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-006",
+    "repo_url": "https://github.com/moroshek/roadmap-Ajayd7",
+    "evaluated_at": "2026-02-16T23:30:00Z",
+    "evaluator": "claude-opus-1",
+    "framework_version": "1.0"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "package.json exists at repo root with proper name, scripts (dev, build, start, lint), and dependencies."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "npm install completes with 0 vulnerabilities. All dependencies resolve cleanly."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "npm run build succeeds. Compiled in 3.0s, generates 44 static pages. One non-fatal Recharts warning about chart width/height during SSG (expected for server-rendered responsive charts)."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "Route exists at src/app/matrix/page.tsx. Build output confirms /matrix as a static route."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 38,
+      "notes": "38 project markdown files (PRJ-001 through PRJ-038) in _content/projects/. Original 4 seeded files present plus 34 additional candidate-created files."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "recharts ^3.7.0 in package.json dependencies. Used for ScatterChart, ReferenceArea, ReferenceLine, etc."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "Normalization at src/lib/projects.ts:71-72. impact = data.scores.strategic_value * 10; effort = data.scores.complexity * 10. Correctly scales 0-10 to 0-100."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "Quadrant assignment at src/lib/projects.ts:74-92. Conditional logic maps normalized scores to quadrant labels using >=50/<50 thresholds."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "ScatterChart at src/components/StrategyMatrix.tsx:178-248 renders Scatter with Cell components mapping filteredData. Screenshots confirm data points visible across all four quadrants."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "Custom MatrixTooltip component at src/components/matrix/MatrixTooltip.tsx. Renders title, quadrant label with icon, ID, normalized impact/effort scores, owner, and calculated ROI."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": {
+          "score": 4,
+          "evidence": "38 project markdown files in _content/projects/ (PRJ-001 through PRJ-038). Original 4 seeded files preserved with correct data. 34 additional projects created with realistic data spanning departments (Manufacturing, Supply Chain, Sales, After-Sales, Customer Experience, IT Infrastructure, HR, Product, R&D, Legal, Finance, Marketing, Operations), multiple phases (Foundation, Scale, Acceleration, Pilot, Execution, Planning, Stalled, Innovation), and diverse statuses. Financials, tags, and related_projects included on all files.",
+          "notes": "Exceptional data population. 38 projects is a rich, diverse dataset that demonstrates the system at scale. Projects tell a coherent story for a car manufacturer (AutoNova Motors). Each project has realistic scores spanning all four quadrants."
+        },
+        "A2_score_normalization": {
+          "score": 3,
+          "evidence": "src/lib/projects.ts:68-72 — normalization in getProjects(). Comments document the transformation: 'Normalize scores (0-10 -> 0-100)'. impact = data.scores.strategic_value * 10; effort = data.scores.complexity * 10. Verified: PRJ-001 strategic_value 8.6 -> 86, complexity 3.2 -> 32. Normalization is in a dedicated utility file (lib/projects.ts), separate from rendering components.",
+          "notes": "Correct normalization in a dedicated utility function with clear comments. Falls short of a 4 because it doesn't handle edge cases (out-of-range values, missing scores beyond Zod's basic type check). The normalization is one step in the getProjects pipeline but not a standalone function."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "src/lib/projects.ts:74-92 — conditional logic with clear comments documenting each quadrant's criteria. Quick Wins: impact >= 50 && effort < 50. Big Bets: impact >= 50 && effort >= 50. Fillers: impact < 50 && effort < 50. Time Sinks: impact < 50 && effort >= 50. Typed return type using Project['quadrant'] union type. Separated from rendering in lib/ directory. Additionally, scripts/verify-logic.ts provides a standalone verification script that independently checks quadrant assignments.",
+          "notes": "Well-structured conditional logic in a dedicated utility file. Clean, readable, and typed. The verification script shows thoroughness. Falls short of a 4 because thresholds are hardcoded (50) rather than configurable constants, and the logic is embedded within getProjects() rather than a standalone reusable function."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 4,
+          "evidence": "src/components/StrategyMatrix.tsx:178-248 — Recharts ScatterChart with: (1) CartesianGrid with subtle styling, (2) ReferenceArea for four quadrant backgrounds with distinct colors from QUADRANT_CONFIG (bgHex values), (3) Quadrant labels ('QUICK WINS', 'BIG BETS', 'FILLERS', 'TIME SINKS') as Label components inside ReferenceAreas, (4) ReferenceLine at x=50 and y=50 with dashed styling, (5) XAxis labeled 'Implementation Effort →' with domain [0,100], (6) YAxis labeled 'Strategic Impact →' with domain [0,100], (7) Data points colored by quadrant via Cell components using QUADRANT_CONFIG[entry.quadrant].dot. Screenshots confirm premium visual quality.",
+          "notes": "Premium chart implementation. Quadrant zones with distinct colors/shading, clear axis labels, data points colored by quadrant assignment. The chart is visually impressive and would look professional in a stakeholder presentation."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "src/components/matrix/MatrixTooltip.tsx:25-82 — Custom tooltip component showing: (1) Project title (line 34), (2) Quadrant label with icon in styled badge (lines 35-38), (3) Project ID (lines 42-44), (4) Normalized impact score with /100 indicator (lines 47-53), (5) Normalized effort score with /100 indicator (lines 55-61), (6) Owner/Lead name (lines 65-68), (7) Calculated ROI multiplier (lines 69-74). Styled consistently with design system using QUADRANT_CONFIG colors.",
+          "notes": "Rich, well-styled tooltip showing title, quadrant, ID, impact, effort, owner, and ROI. Exceeds minimum requirement significantly. Falls short of a 4 because there are no explicit enter/exit transitions or animation, and clip-at-edge handling is not addressed."
+        },
+        "A6_logic_ui_separation": {
+          "score": 3,
+          "evidence": "Matrix pipeline: (1) _content/projects/*.md — raw markdown data, (2) src/lib/projects.ts — parsing (gray-matter), validation (Zod), normalization (*10), quadrant assignment — all transformation in one utility, (3) src/components/StrategyMatrix.tsx — receives Project[] and handles only rendering + filtering UI, (4) src/components/matrix/MatrixTooltip.tsx — pure presentation for tooltip. The chart component receives fully prepared data (normalized_scores, quadrant already assigned).",
+          "notes": "Clear separation: data loading → transformation/normalization → quadrant assignment all in lib/projects.ts. Chart component receives prepared data. Falls short of a 4 because filtering logic (department, phase, quadrant filters) is in the StrategyMatrix component rather than extracted to a custom hook, and the getProjects function combines loading + validation + transformation rather than being a true pipeline of separate stages."
+        }
+      },
+      "category_score": 83.33,
+      "category_commentary": "Excellent strategy matrix implementation. The core visualization is premium quality with colored quadrant zones, labeled axes, and rich tooltips. Data pipeline is well-separated from rendering. The 38-project dataset demonstrates the system at scale. Main area for improvement: extracting thresholds as configurable constants and adding edge case handling."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 3,
+          "evidence": "package.json with proper scripts (dev, build, start, lint). TypeScript with strict mode in tsconfig.json:11. Path aliases configured (@/* -> ./src/*) in tsconfig.json:24-26. Tailwind CSS with proper config. .gitignore excludes /node_modules, /.next/, /out/, /build/. postcss.config.mjs properly configured. Build succeeds cleanly.",
+          "notes": "Well-configured project: TypeScript strict, path aliases, Tailwind, proper .gitignore. Falls short of a 4 because next.config.mjs is empty (no custom configuration), no environment configs, and no comprehensive linting setup beyond next lint."
+        },
+        "B2_routing_navigation": {
+          "score": 4,
+          "evidence": "Routes: / (dashboard, src/app/page.tsx), /matrix (src/app/matrix/page.tsx), /projects (src/app/projects/page.tsx), /projects/[slug] (src/app/projects/[slug]/page.tsx with generateStaticParams), /roadmap (src/app/roadmap/page.tsx). Sidebar navigation at src/components/Sidebar.tsx:11-16 with 4 links and active state indicators (line 38: isActive check against pathname, highlighted with bg-indigo-600). Consistent layout via src/app/layout.tsx with Sidebar + TopBar + content area. Back navigation on project detail pages (src/app/projects/[slug]/page.tsx:38-43).",
+          "notes": "Full navigation system matching PRD spec. All primary routes present, sidebar with active states, consistent layout across routes. The breadcrumb-style back navigation on detail pages adds usability."
+        },
+        "B3_type_safety": {
+          "score": 3,
+          "evidence": "Zod schema for project validation at src/lib/projects.ts:9-32 with typed enums for status. Project type derived from Zod inference plus extensions (line 34-41). Typed component interfaces: StrategyMatrixProps (StrategyMatrix.tsx:22-24), MatrixTooltipProps (MatrixTooltip.tsx:20-23), ProjectTableProps (ProjectTable.tsx:17-19), GanttChartProps (GanttChart.tsx:6-8), GlobalSearchProps (GlobalSearch.tsx:24-26). TypeScript strict mode enabled. Two any usages found: ProjectTable.tsx:44 (let aValue: any in sort comparator) and projects/[slug]/page.tsx:183 ((project as any).tags cast).",
+          "notes": "Strong typing throughout with Zod schemas and typed interfaces. The two any usages are minor but prevent a score of 4. The tags cast is particularly notable — the candidate acknowledged this limitation in a code comment (lines 174-181)."
+        },
+        "B4_data_layer": {
+          "score": 3,
+          "evidence": "src/lib/projects.ts — centralized data loader using gray-matter for markdown parsing (line 3), Zod for validation (lines 9-32, 58), and transformation (lines 67-101). Pipeline: readdir → read file → gray-matter parse → Zod safeParse → normalize → assign quadrant → return typed Project[]. Error handling: directory existence check (line 45), validation error logging (line 61), null filtering (line 106).",
+          "notes": "Well-structured data layer with dedicated loader, schema validation, and clear data flow. Falls short of a 4 because there's no master_data.json build output, error handling for malformed files simply logs and filters rather than providing user-facing feedback, and the single getProjects() function serves as the entire data layer without caching."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Strong technical foundation. TypeScript strict mode with Zod validation, comprehensive routing with active states, and a well-structured data pipeline. The project is professionally configured and builds cleanly."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 4,
+          "evidence": "Screenshots show a premium SaaS-quality application. Consistent color palette: slate for backgrounds/text, indigo for primary actions/accents, emerald for success states, orange for warnings. Typography hierarchy: Inter font (layout.tsx:8), bold headings with tracking-tight, smaller uppercase tracking-wider labels. Whitespace: generous padding (p-4, p-6, p-8), gap-3/gap-4 spacing. No default browser styling visible. Professional details: gradient accents (sidebar bg-gradient-to-b from-slate-900, header bg-gradient-to-r), subtle shadows (shadow-sm, shadow-md), rounded corners (rounded-lg, rounded-xl). globals.css defines custom CSS properties and utilities (glassmorphism, hover-lift, gradient-text).",
+          "notes": "Passes all 5 sub-checks easily. The application looks like a real product — cohesive design language, excellent information hierarchy, thoughtful use of color and typography. Would impress a design-conscious stakeholder."
+        },
+        "C2_responsive_design": {
+          "score": 3,
+          "evidence": "layout.tsx:26 — flex h-screen flex-col md:flex-row for sidebar collapse. Dashboard grid: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 (page.tsx:43). Chart uses ResponsiveContainer width='100%' height='100%' (StrategyMatrix.tsx:178). ProjectTable has overflow-x-auto (line 189). Filter bar uses flex-wrap (StrategyMatrix.tsx:73). Sidebar: w-full md:w-[220px] (Sidebar.tsx:19). GlobalSearch: w-full md:w-64 (line 69).",
+          "notes": "Fully responsive at desktop and tablet widths. Sidebar collapses, grids restack, chart reflows. Falls short of a 4 because there's no dedicated mobile navigation pattern (hamburger menu), no explicit touch-friendly adaptations, and no breakpoint-optimized layouts for mobile (<640px)."
+        },
+        "C3_interactivity": {
+          "score": 3,
+          "evidence": "Hover states: table rows (ProjectTable.tsx:219 hover:bg-slate-50/50), buttons (Sidebar.tsx:43 hover:bg-slate-800/50), cards (page.tsx:45 hover:border-indigo-200 hover:shadow-md). Chart tooltips: custom MatrixTooltip renders on hover. Filter controls: department dropdown (StrategyMatrix.tsx:75-108), phase segmented control (lines 112-129), quadrant chip toggles (lines 131-155) — all update chart in real-time via useMemo. Sortable table columns (ProjectTable.tsx:120-126). Infinite scroll with IntersectionObserver (ProjectTable.tsx:75-98). CSS transitions throughout (transition-all, transition-colors, duration-200/300). Custom animations: animate-fade-in, animate-slide-in (globals.css:112-142).",
+          "notes": "Smooth interactions with transitions on state changes, real-time filter updates, sortable columns, and infinite scroll. Falls short of a 4 because there's no Framer Motion or complex animations, no brush-to-zoom on chart, and no skeleton-to-content transitions."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 3,
+          "evidence": "Empty table state: ProjectTable.tsx:302-315 — 'Vacuum Detected' message with icon and 'Reset all filters' button. Infinite scroll loading: ProjectTable.tsx:283-291 — spinner animation with 'Hydrating data...' text. All-loaded state: lines 295-299 — 'All Strategic Assets Discovered'. Missing project: projects/[slug]/page.tsx:21-23 — notFound() redirect. Empty directory: lib/projects.ts:45-47 — returns empty array. No executive summary: ProjectContent.tsx:117-118 — italic placeholder. Updates tab: ProjectContent.tsx:212-219 — 'Syncing Project Timeline' empty state. Skeleton shimmer CSS defined in globals.css:165-184.",
+          "notes": "Thoughtful empty, error, and loading states across multiple components. The skeleton shimmer CSS is defined but not actively applied to widget loading states. Falls short of a 4 because there are no React error boundaries, no skeleton loaders for initial page loads, and no contextual empty state guidance for search."
+        },
+        "C5_design_token_usage": {
+          "score": 2,
+          "evidence": "layout.tsx:8 — Inter font used (matches config.json design_tokens.typography.heading_font 'Inter'). Color palette uses indigo/slate which partially aligns with config.json secondary '#2563EB' (blue). globals.css defines CSS variables (--primary-500: #6366f1) but these don't match config.json primary '#0B1220'. Config.json accent '#F59E0B' (amber) not used in the UI. Colors are applied through Tailwind classes, not read from config.json programmatically.",
+          "notes": "Uses Inter font from config spec. Primary/secondary colors partially align but are not consumed from config.json. No dynamic theming or CSS variable system tied to the tenant config. Borderline 2/3 — chose 2 because colors are not programmatically derived from config."
+        }
+      },
+      "category_score": 75.0,
+      "category_commentary": "Visually impressive application with premium design quality. Responsive layouts, smooth interactions, and thoughtful empty/loading states. The main gap is in design token usage — the UI looks great but doesn't programmatically consume the tenant's branding from config.json."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 4,
+          "evidence": "src/lib/projects.ts:9-32 — Zod schema (ProjectSchema) validates: id (string), title (string), slug (string), owner (string), department (string), phase (string), status (enum of 7 values), dates.planned_start (string), dates.planned_end (string), dates.actual_start (optional string), scores.strategic_value (number), scores.complexity (number), financials.estimated_cost (number), financials.projected_roi (number) (optional object), tags (optional string array), related_projects (optional string array). Schema enforced via safeParse on every file load (line 58). All 38 project files have valid frontmatter matching this schema.",
+          "notes": "Full schema compliance enforced programmatically with Zod. All PRD Section 3.2 fields present and correctly typed. The schema even includes optional fields like tags, related_projects, and actual_start."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "src/lib/projects.ts:74-92 — Exact match to PRD Section 2.1: Quick Wins (impact >= 50, effort < 50), Big Bets (impact >= 50, effort >= 50), Fillers (impact < 50, effort < 50), Time Sinks (impact < 50, effort >= 50). Boundary at 50 handled consistently (>= for 'high'). Verified against reference truth: PRJ-001 (86, 32) = Quick Wins, PRJ-002 (91, 82) = Big Bets, PRJ-003 (39, 28) = Fillers, PRJ-004 (41, 87) = Time Sinks — all correct. Quadrant labels visually rendered as background zones in chart (StrategyMatrix.tsx:183-194). Screenshots confirm correct placement. Additional verification script at scripts/verify-logic.ts independently validates assignments.",
+          "notes": "Perfect compliance with PRD quadrant logic. All four reference projects map correctly. Quadrant labels rendered as background zones on chart per PRD 4.3. The verification script demonstrates extra diligence."
+        },
+        "D3_route_structure": {
+          "score": 4,
+          "evidence": "Build output confirms routes: / (dashboard), /matrix, /projects, /projects/[slug] (38 static paths generated), /roadmap. These match PRD Section 4 specifications: Section 4.1 (root/dashboard), Section 4.3 (matrix), Section 4.4 (projects library), Section 4.5 (project detail with slug), and bonus roadmap/Gantt. Each page has purpose-built content matching its intended function.",
+          "notes": "All primary routes from PRD Section 4 present with content matching specifications. The /projects/[slug] uses generateStaticParams for all 38 projects."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "All PRD detail checks pass: (1) X-Axis is Effort/Complexity (StrategyMatrix.tsx:201 dataKey='x' mapped from effort, label 'Implementation Effort →' at line 210), (2) Y-Axis is Impact/Strategic Value (line 216 dataKey='y' mapped from impact, label 'Strategic Impact →' at line 224), (3) Scatter plot (ScatterChart component), (4) strategic_value used for Y-axis (projects.ts:71), (5) complexity used for X-axis (projects.ts:72), (6) Quick Wins is top-left in chart (ReferenceArea x1=0 x2=50 y1=50 y2=100 at line 183). Cmd+K search trigger implemented (GlobalSearch.tsx:44).",
+          "notes": "All critical specification details correct. Cmd+K search trigger is a notable PRD detail. Falls short of a 4 because no print styles implemented, and sidebar structure doesn't exactly match PRD specification (missing some secondary links)."
+        }
+      },
+      "category_score": 93.75,
+      "category_commentary": "Excellent PRD compliance. Zod schema enforcement, correct quadrant logic with visual rendering, all primary routes present, and careful attention to specification details. One of the strongest categories for this candidate."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 3,
+          "evidence": "File structure: src/app/ for pages (5 routes), src/components/ for UI (7 components), src/lib/ for utilities (3 files). Pages are thin wrappers: matrix/page.tsx calls getProjects() and passes to StrategyMatrix component. Components are focused: StrategyMatrix handles chart rendering, ProjectTable handles tabular view, GlobalSearch handles search, Sidebar handles navigation. Utilities: projects.ts for data loading/transformation, constants.ts for shared config, utils.ts for class merging. Dependencies flow one direction: lib → components → pages.",
+          "notes": "Clear architecture with distinct layers. Each file has a clear responsibility. Falls short of a 4 because some concerns are mixed: StrategyMatrix contains filter state management alongside rendering, page.tsx:14 has inline formatCurrency, and there's no custom hooks layer to separate stateful logic from UI."
+        },
+        "E2_readability_naming": {
+          "score": 3,
+          "evidence": "Descriptive names throughout: getProjects(), QUADRANT_CONFIG, STATUS_CONFIG, normalizedScores, selectedDept, filteredData, toggleQuadrant, clearFilters, processedProjects, loadMore, requestSort. Consistent camelCase for variables/functions, PascalCase for components/types, SCREAMING_CASE for constants. Files clearly named: StrategyMatrix.tsx, MatrixTooltip.tsx, GlobalSearch.tsx, ProjectContent.tsx. Code comments where logic is non-obvious (projects.ts:68-78 quadrant assignment comments).",
+          "notes": "Clean, readable code with descriptive naming. Self-documenting in most places. Falls short of a 4 because some areas could be more precise: 'cn' utility is framework-idiomatic but terse, the ProjectTable sort comparator uses generic 'aValue/bValue', and some comment blocks are overly verbose (projects/[slug]/page.tsx:174-181)."
+        },
+        "E3_error_handling": {
+          "score": 3,
+          "evidence": "Zod safeParse validation with error logging: projects.ts:58-63. Directory existence check: projects.ts:45-47. Null filtering after validation: projects.ts:106. notFound() for missing slugs: projects/[slug]/page.tsx:21-23. Optional chaining for financials throughout: page.tsx:8 (p.financials?.estimated_cost || 0), MatrixTooltip.tsx:72 (data.financials ?). Empty state handling in components: ProjectTable empty results, ProjectContent missing summary. Verification script with try/catch and process.exit: scripts/verify-logic.ts:6-61.",
+          "notes": "Thoughtful error handling at key points. Validation before processing, graceful degradation for optional data, proper 404 handling. Falls short of a 4 because no React error boundaries, no comprehensive input validation for user-facing search, and errors in data loading are only logged to console rather than surfaced to users."
+        },
+        "E4_dependency_choices": {
+          "score": 4,
+          "evidence": "package.json dependencies: recharts ^3.7.0 (PRD-recommended per Section 4.3 for scatter plots), gray-matter ^4.0.3 (standard markdown parser), zod ^4.3.6 (schema validation), fuse.js ^7.1.0 (PRD-recommended per Section 7.1 for fuzzy search), lucide-react ^0.564.0 (lightweight icon library), react-markdown ^10.1.0 (for rendering markdown content), clsx ^2.1.1 + tailwind-merge ^3.4.1 (standard Tailwind utilities). No unnecessary dependencies. All versions are current. Stack aligns with PRD recommendations.",
+          "notes": "Expert-level dependency choices. Every dependency serves a clear purpose and aligns with PRD recommendations where applicable. Minimal footprint with no bloat. Recharts and Fuse.js are specifically called out in the PRD."
+        }
+      },
+      "category_score": 81.25,
+      "category_commentary": "Well-organized codebase with clear separation, readable code, and thoughtful error handling. Dependency choices are expert-level, aligning with PRD recommendations. The code would pass a senior code review with minor comments about extracting filter logic and adding error boundaries."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 3,
+          "evidence": "src/app/page.tsx — Executive Dashboard with: (1) Total Investment card with formatted currency (line 53), (2) ROI Multiplier calculated from aggregated financials (line 66), (3) Active Projects count (line 79), (4) Total Initiatives count (line 92). Strategic Phase section with progress bar (lines 100-117, hardcoded at 65%). Recent Projects list showing first 3 projects with status badges (lines 119-151). All metric data derived from getProjects() (line 6).",
+          "notes": "Multiple dashboard widgets with real calculated data from project files. Falls short of a 4 because the Strategic Phase progress is hardcoded at 65% rather than dynamically calculated, and not all PRD-specified widgets are present (missing activity feed, detailed phase breakdown)."
+        },
+        "F2_additional_pages": {
+          "score": 4,
+          "evidence": "Beyond /matrix: (1) / — Executive Dashboard with metric cards, phase indicator, recent projects. (2) /projects — Project library with searchable, sortable, filterable table with infinite scroll. (3) /projects/[slug] — Detailed project view with tabs (Overview with markdown rendering, Plan & Deliverables with progress tracking, Updates placeholder), sidebar with metrics/financials/team/tags. (4) /roadmap — Gantt chart with 2-year timeline, color-coded status bars, month markers, today indicator. Each page has purpose-built, data-driven content.",
+          "notes": "Near-complete page coverage with substantial, purpose-built content on each page. The project detail page is particularly rich with tab navigation and deliverables tracking."
+        },
+        "F3_search_filtering": {
+          "score": 4,
+          "evidence": "GlobalSearch: src/components/GlobalSearch.tsx — Fuse.js with weighted keys (title:1.0, slug:0.8, id:0.8, tags:0.6, owner:0.4) matching PRD Section 7.1. Cmd+K trigger (line 44), Escape to close (line 50). Results dropdown with project cards linking to detail pages. Matrix filtering: department dropdown, phase segmented control, quadrant chip toggles — all with real-time updates. ProjectTable filtering: search by ID/title, status filter buttons, sortable columns (id, title, impact, effort, roi). Both filter systems show result counts and clear/reset options.",
+          "notes": "Full search experience matching PRD specifications. Fuse.js with key weighting, Cmd+K trigger, cross-page search in top bar. Multi-faceted filtering on matrix and table views. Filters update in real-time."
+        },
+        "F4_creative_additions": {
+          "score": 3,
+          "evidence": "Gantt chart (src/components/GanttChart.tsx) — custom timeline visualization with 2-year span, month markers, color-coded bars by status, sticky project name column, today marker. Infinite scroll (ProjectTable.tsx:75-118) — IntersectionObserver-based pagination with loading states. Verification script (scripts/verify-logic.ts) — automated logic verification. Custom CSS animations (globals.css) — fade-in, slide-in, shimmer skeleton, pulse-subtle. Custom scrollbar styling. Glassmorphism utility classes. WhatsApp screenshots documenting the working application.",
+          "notes": "Impressive additions: the Gantt chart is a significant bonus feature demonstrating both technical skill and product thinking. The verification script shows engineering discipline. Custom animations add polish."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Ambitious bonus feature set. The Gantt chart, comprehensive search/filtering, and near-complete page coverage demonstrate a developer who thinks about building a complete product, not just meeting requirements."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 4,
+          "evidence": "Must-have (strategy matrix) is excellent: premium chart with quadrant zones, rich tooltips, multi-faceted filtering, correct data pipeline. Bonus work is strategically chosen: dashboard + matrix + project library + Gantt = a coherent, usable portfolio management tool. Created 38 projects to demonstrate the system at scale rather than leaving the 4 seed files. Search/filtering adds genuine utility. Each feature builds on the others to create a cohesive product.",
+          "notes": "Exceptional prioritization. The must-have is thoroughly implemented, and bonus features were chosen to make the overall product coherent and functional. The 38-project dataset shows product thinking — demonstrating the tool works at realistic scale."
+        },
+        "G2_pr_description": {
+          "score": 4,
+          "evidence": "PR #1 (merged) — comprehensive documentation structured as: Overview (3-sentence thesis), Key Features (4 sections: High-Density Portfolio Management, Design System & UI Standardization, Advanced Strategy Matrix Visualization, Component Engineering), Technical Implementation Details (tech stack, type safety, optimization), Verification & Proof of Work (performance, automated verification, git branch). Explains the 'why' behind decisions, documents technical choices (IntersectionObserver for pagination, useMemo for optimization, Zod for validation), and demonstrates self-awareness about verification approach.",
+          "notes": "Exceptional PR description. Well-structured, explains decisions and trade-offs, documents what was built and how it was verified. One of the best submission documents seen — reads like a professional pull request."
+        }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Outstanding decision making. Strategic prioritization that builds a coherent product, and an exceptional PR description that demonstrates strong communication skills and engineering discipline."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 1,
+      "evidence": "5 meaningful commits: (1) '023a42c Initial commit', (2) '3963d24 feat(assessment): Enhance Strategy Matrix and Roadmap UI' with detailed body, (3) 'e227a9c COmbact design applied', (4) 'a94c3e0 Adding more projects and pagination', (5) 'f3b4d08 Fix race condition in infinite scroll and restore missing data logic'. Plus merge commit b6e9e4f and snapshot 686cb31.",
+      "notes": "5 meaningful commits showing incremental progress. Meets the 3-5 commit threshold for 1 point but not the 6+ threshold for 2."
+    },
+    "H2_message_quality": {
+      "points": 1,
+      "evidence": "Best messages: 'feat(assessment): Enhance Strategy Matrix and Roadmap UI' (conventional commit format with detailed body listing specific changes), 'Fix race condition in infinite scroll and restore missing data logic' (explains what and why). Weaker messages: 'COmbact design applied' (typo, vague), 'Adding more projects and pagination' (descriptive but not imperative mood), 'Snapshot' (uninformative).",
+      "notes": "Mixed quality. Some messages are professional and descriptive (feat commit with body, race condition fix), but others are generic or have typos. Overall descriptive enough for 1 point but not consistently professional enough for 2."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Commit order shows logical build-up: Initial commit → Core feature enhancement (strategy matrix, charts, UI) → Design polish (compact design) → Data expansion + pagination → Bug fix (race condition). This mirrors a foundation → features → polish → stabilize progression.",
+      "notes": "Clear logical progression from scaffold to features to polish to bug fixes. Demonstrates structured thinking about implementation order."
+    },
+    "bonus_total": 3
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 83.33,
+      "B_technical_foundation": 81.25,
+      "C_ui_ux_quality": 75.0,
+      "D_prd_compliance": 93.75,
+      "E_code_quality": 81.25,
+      "F_bonus_features": 87.5,
+      "G_decision_making": 100.0
+    },
+    "weighted_score": 83.44,
+    "git_bonus": 3,
+    "final_score": 86.44,
+    "score_band": "Strong",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Premium visual design quality — the application looks and feels like a real SaaS product with cohesive color palette, typography hierarchy, and thoughtful micro-interactions (screenshots confirm professional quality across all pages).",
+      "Comprehensive data pipeline — Zod schema validation, correct normalization (×10), and accurate quadrant assignment all in a clean utility file (src/lib/projects.ts). Includes a standalone verification script (scripts/verify-logic.ts) demonstrating engineering discipline.",
+      "Ambitious scope executed well — 38 project files, 5 routes with purpose-built content, Gantt chart, Fuse.js search with Cmd+K trigger, multi-faceted filtering, infinite scroll. All features work together as a coherent product.",
+      "Outstanding submission documentation — PR description is structured, explains decisions and trade-offs, and documents verification approach. Demonstrates strong communication skills.",
+      "Expert dependency choices — recharts, Fuse.js, Zod, gray-matter all align with PRD recommendations. No unnecessary dependencies."
+    ],
+    "top_weaknesses": [
+      "Design tokens not programmatically consumed — config.json defines primary (#0B1220), secondary (#2563EB), and accent (#F59E0B) colors, but the UI uses hardcoded Tailwind colors (indigo, slate) rather than reading from config. No dynamic theming capability.",
+      "Minor type safety gaps — two any usages: ProjectTable.tsx:44 (sort comparator) and projects/[slug]/page.tsx:183 ((project as any).tags). The tags comment (lines 174-181) reveals awareness of the issue but it wasn't resolved.",
+      "No React error boundaries — while individual error handling is decent (Zod validation, notFound(), optional chaining), there are no error boundaries to catch rendering failures. A malformed project could potentially crash the entire application.",
+      "Filter logic mixed with presentation — StrategyMatrix.tsx contains both filter state management (department/phase/quadrant filters) and chart rendering. Extracting to a custom hook would improve separation of concerns."
+    ],
+    "standout_moments": [
+      "Created 38 realistic project files spanning multiple departments, phases, and statuses — far exceeding the 3-5 minimum. This demonstrates product thinking: the system is shown working at realistic scale, not just with toy data.",
+      "Built a Gantt chart timeline (src/components/GanttChart.tsx) as a bonus feature — a non-trivial visualization with 2-year timeline, month markers, color-coded status bars, sticky columns, and a today marker.",
+      "The verification script (scripts/verify-logic.ts) independently validates quadrant logic — a rare display of engineering discipline that most candidates wouldn't think to include.",
+      "PR description is exceptionally well-structured with sections for Overview, Key Features, Technical Details, and Verification — reads like a professional pull request from an experienced engineer."
+    ],
+    "hiring_signal": "This is a high-velocity full-stack developer with strong product sensibility and communication skills. They prioritize well (core requirement first, then strategic bonus features), write clean TypeScript with proper validation, and produce polished UIs that look production-ready. The main risk is a tendency toward breadth over depth — the 38 projects and 5 routes show impressive ambition, but some corners were cut on error handling and design system integration. Best suited for a product-focused engineering role where velocity and user-facing quality matter more than deep systems engineering.",
+    "recommendation": "Hire"
+  }
+}

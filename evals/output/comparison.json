@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-02-16T15:12:33.905Z",
-  "candidate_count": 4,
+  "generated_at": "2026-02-17T06:04:29.981Z",
+  "candidate_count": 6,
   "ranking": [
     {
       "rank": 1,
@@ -25,6 +25,48 @@
     },
     {
       "rank": 2,
+      "candidate_id": "C-005",
+      "final_score": 89.12,
+      "score_band": "Strong",
+      "weighted_score": 84.12,
+      "git_bonus": 5,
+      "automatic_failure": false,
+      "category_scores": {
+        "A_strategy_matrix": 83.33,
+        "B_technical_foundation": 87.5,
+        "C_ui_ux_quality": 65,
+        "D_prd_compliance": 93.75,
+        "E_code_quality": 87.5,
+        "F_bonus_features": 87.5,
+        "G_decision_making": 100
+      },
+      "consensus_recommendation": "Hire",
+      "evaluator_count": 3,
+      "evaluator_agreement": "strong"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "C-006",
+      "final_score": 86.06,
+      "score_band": "Strong",
+      "weighted_score": 82.06,
+      "git_bonus": 4,
+      "automatic_failure": false,
+      "category_scores": {
+        "A_strategy_matrix": 83.33,
+        "B_technical_foundation": 81.25,
+        "C_ui_ux_quality": 70,
+        "D_prd_compliance": 93.75,
+        "E_code_quality": 81.25,
+        "F_bonus_features": 87.5,
+        "G_decision_making": 87.5
+      },
+      "consensus_recommendation": "Hire",
+      "evaluator_count": 3,
+      "evaluator_agreement": "moderate"
+    },
+    {
+      "rank": 4,
       "candidate_id": "C-002",
       "final_score": 74.19,
       "score_band": "Competent",
@@ -45,7 +87,7 @@
       "evaluator_agreement": "moderate"
     },
     {
-      "rank": 3,
+      "rank": 5,
       "candidate_id": "C-003",
       "final_score": 74.19,
       "score_band": "Competent",
@@ -66,7 +108,7 @@
       "evaluator_agreement": "moderate"
     },
     {
-      "rank": 4,
+      "rank": 6,
       "candidate_id": "C-004",
       "final_score": 66.12,
       "score_band": "Competent",
