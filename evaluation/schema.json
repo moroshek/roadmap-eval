@@ -9,6 +9,7 @@
     "automated_gate",
     "rubric_scores",
     "git_history_bonus",
+    "ai_integration_bonus",
     "scoring_summary",
     "qualitative_summary"
   ],
@@ -39,7 +40,7 @@
         },
         "framework_version": {
           "type": "string",
-          "const": "1.0",
+          "const": "1.1",
           "description": "Version of the evaluation framework used"
         }
       }
@@ -376,12 +377,34 @@
       }
     },
 
+    "ai_integration_bonus": {
+      "type": "object",
+      "required": [
+        "I1_ai_vision_planning",
+        "I2_ai_implementation",
+        "I3_ai_integration_quality",
+        "bonus_total"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "I1_ai_vision_planning": { "$ref": "#/$defs/bonus_score_2" },
+        "I2_ai_implementation": { "$ref": "#/$defs/bonus_score_2" },
+        "I3_ai_integration_quality": { "$ref": "#/$defs/bonus_score_1" },
+        "bonus_total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        }
+      }
+    },
+
     "scoring_summary": {
       "type": "object",
       "required": [
         "category_scores",
         "weighted_score",
         "git_bonus",
+        "ai_bonus",
         "final_score",
         "score_band",
         "automatic_failure",
@@ -422,11 +445,16 @@
           "minimum": 0,
           "maximum": 5
         },
+        "ai_bonus": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
         "final_score": {
           "type": "number",
           "minimum": 0,
-          "maximum": 105,
-          "description": "weighted_score + git_bonus"
+          "maximum": 110,
+          "description": "weighted_score + git_bonus + ai_bonus"
         },
         "score_band": {
           "type": "string",

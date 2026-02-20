@@ -106,6 +106,15 @@ Check the candidate's git log. This is **bonus only** — absence of history is 
 - H3: Logical progression (0-1 point)
 - Maximum bonus: 5 points
 
+### Step 4.5: AI Integration Bonus
+
+Check the candidate's repo for AI features **built into the product**. This is **bonus only** — absence of AI features is NOT penalized. Do not confuse the candidate's use of AI tools during development with AI features in the product.
+
+- I1: AI vision & planning (0-2 points)
+- I2: AI implementation (0-2 points)
+- I3: AI integration quality (0-1 point)
+- Maximum bonus: 5 points
+
 ### Step 5: Calculate Scores
 
 **Category score** = (sum of criteria scores / (number of criteria × 4)) × 100
@@ -124,12 +133,12 @@ Criteria counts per category: A=6, B=4, C=5, D=4, E=4, F=4, G=2.
 | F: Bonus Features | 5% |
 | G: Decision Making | 5% |
 
-**Final score** = Weighted score + Git bonus (0-5)
+**Final score** = Weighted score + Git bonus (0-5) + AI bonus (0-5)
 
 **Score bands:**
 | Range | Band |
 |-------|------|
-| 90-105 | Exceptional |
+| 90-110 | Exceptional |
 | 75-89 | Strong |
 | 60-74 | Competent |
 | 45-59 | Below Expectations |
@@ -161,7 +170,7 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
     "repo_url": "https://github.com/...",
     "evaluated_at": "2026-02-13T12:00:00Z",
     "evaluator": "claude-opus-1",
-    "framework_version": "1.0"
+    "framework_version": "1.1"
   },
   "automated_gate": {
     "G1_package_json_exists":       { "pass": true, "notes": "" },
@@ -267,6 +276,12 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
     "H3_logical_progression": { "points": 0, "evidence": "...", "notes": "..." },
     "bonus_total": 0
   },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning":    { "points": 0, "evidence": "...", "notes": "..." },
+    "I2_ai_implementation":     { "points": 0, "evidence": "...", "notes": "..." },
+    "I3_ai_integration_quality": { "points": 0, "evidence": "...", "notes": "..." },
+    "bonus_total": 0
+  },
   "scoring_summary": {
     "category_scores": {
       "A_strategy_matrix": 0.0,
@@ -279,6 +294,7 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
     },
     "weighted_score": 0.0,
     "git_bonus": 0,
+    "ai_bonus": 0,
     "final_score": 0.0,
     "score_band": "Insufficient",
     "automatic_failure": false,
@@ -296,10 +312,11 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
 
 **Schema-enforced constraints** (validation will reject your file if violated):
 - `candidate_id`: must match `C-` + exactly 3 digits (regex: `^C-\d{3}$`)
-- `framework_version`: must be exactly `"1.0"`
+- `framework_version`: must be exactly `"1.1"`
 - `weight` values: must match the table above exactly (const-locked in schema)
 - Rubric scores: integers 0-4
 - Git bonus: H1/H2 are 0-2, H3 is 0-1, `bonus_total` is 0-5
+- AI bonus: I1/I2 are 0-2, I3 is 0-1, `bonus_total` is 0-5
 - `evidence`: non-empty string for ALL scores (including 0)
 - `top_strengths` / `top_weaknesses`: 1-5 items each (cannot be empty)
 - `standout_moments`: can be empty
@@ -308,13 +325,14 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
 - G5 requires `count` field, G6 requires `library` field (see gate table above)
 
 **Computed constraints** (not schema-enforced — you must calculate these correctly):
-- `bonus_total` must equal H1 + H2 + H3
+- Git `bonus_total` must equal H1 + H2 + H3
+- AI `bonus_total` must equal I1 + I2 + I3
 - `category_score` must equal `(sum of criteria / (count × 4)) × 100`
 - `weighted_score` must equal the sum of `(category_score × weight)` across all categories
-- `final_score` must equal `weighted_score + git_bonus`
+- `final_score` must equal `weighted_score + git_bonus + ai_bonus`
 - `score_band` must match the band table for your `final_score`
 
-> **Note:** This JSON skeleton reflects schema v1.0. If `framework_version` changes in the future, re-derive the exact field structure from `evaluation/schema.json`.
+> **Note:** This JSON skeleton reflects schema v1.1. If `framework_version` changes in the future, re-derive the exact field structure from `evaluation/schema.json`.
 
 ---
 
@@ -332,4 +350,7 @@ Your JSON must validate against `evaluation/schema.json`. Here is the required s
 - **Don't forget special gate fields.** G5 needs `count`, G6 needs `library` — in addition to `pass` and `notes`.
 - **Ensure `category_score` is computed, not estimated.** Use the formula: `(sum / (count × 4)) × 100`. Verify your arithmetic.
 - **Keep `scoring_summary` in sync.** Category scores appear in TWO places: under each `rubric_scores.X.category_score` AND in `scoring_summary.category_scores`. If you revise any criterion score, recalculate and update BOTH locations, plus `weighted_score`, `final_score`, and `score_band`.
+- **Don't penalize absence of AI features.** AI integration is bonus-only, like git history. Score 0 and move on.
+- **Don't confuse process AI with product AI.** If a candidate used AI to help them code (Copilot, ChatGPT), that is not AI integration. Score only AI features built into the product for end users.
+- **F4 excludes AI features.** AI-related creative additions are scored under Category I. Do not award F4 credit for AI features to avoid double-counting.
 - **Only score what's in the repo.** Evaluate based on the candidate's repository contents. Do not factor in out-of-band information (messages, emails, verbal instructions) unless explicitly directed by the orchestrator. If a candidate provides instructions outside the repo, note it but score the repo as-is.

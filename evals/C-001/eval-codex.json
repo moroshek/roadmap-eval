@@ -4,7 +4,7 @@
     "repo_url": "https://github.com/moroshek/roadmap-coltigent",
     "evaluated_at": "2026-02-14T23:05:00Z",
     "evaluator": "codex-gpt-5",
-    "framework_version": "1.0"
+    "framework_version": "1.1"
   },
   "automated_gate": {
     "G1_package_json_exists": {
@@ -226,13 +226,13 @@
           "notes": "Well executed bonus functionality."
         },
         "F4_creative_additions": {
-          "score": 3,
-          "evidence": "Temporal status logic and ingestion pipeline are additional capabilities (`scripts/governance/index.mjs:101-114`, `scripts/ingestion/*`).",
-          "notes": "Useful creative extensions with clear product value."
+          "score": 2,
+          "evidence": "Temporal status logic is an additional capability (`scripts/governance/index.mjs:101-114`).",
+          "notes": "Useful creative extension: temporal status logic adds operational value. Note: AI ingestion pipeline scored under Category I."
         }
       },
-      "category_score": 93.75,
-      "category_commentary": "Candidate delivered substantial bonus functionality with meaningful product additions."
+      "category_score": 87.5,
+      "category_commentary": "Candidate delivered substantial bonus functionality. AI ingestion pipeline scored separately under Category I."
     },
     "G_decision_making": {
       "weight": 0.05,
@@ -270,6 +270,24 @@
     },
     "bonus_total": 4
   },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "points": 2,
+      "evidence": "scripts/ingestion/README.md provides comprehensive documentation: 4-step pipeline description (Normalize → LLM Extract → Heuristic Score → Output), environment variable setup (OPENAI_API_KEY, INGESTION_MODEL), usage instructions, input/output descriptions. .github/workflows/README.md documents CI/CD automation and secret configuration. Main README.md describes the Ingestion Engine.",
+      "notes": "Detailed architectural documentation covering data flow, model configuration, setup instructions, and CI/CD integration. Reads as a mini-PRD for the AI feature."
+    },
+    "I2_ai_implementation": {
+      "points": 2,
+      "evidence": "scripts/ingestion/extract.mjs — OpenAI GPT-4o-mini integration with crafted system prompt for entity extraction. scripts/ingestion/normalize.mjs — document normalization (PDF/DOCX/TXT/MD). scripts/ingestion/index.mjs — pipeline orchestration. scripts/ingestion/promote.mjs — staging-to-production promotion. .github/workflows/ingestion-on-interviews.yml — CI/CD triggered on interview uploads, auto-creates PRs. Generated 7 additional projects consumed by the application via master_data.json.",
+      "notes": "Fully functional, integrated AI pipeline. User triggers via git push or npm run ingestion. Processes real input from _content/interviews/, produces schema-compliant project markdown, output is consumed by the governance engine and rendered in the UI. Setup documented with environment variables."
+    },
+    "I3_ai_integration_quality": {
+      "points": 1,
+      "evidence": "extract.mjs handles JSON parsing with code fence stripping, score clamping to valid ranges, default values for missing fields. Configurable model via INGESTION_MODEL env var. Pipeline exits gracefully on missing API key. CI/CD uses GitHub repository secrets for OPENAI_API_KEY. ESM module format consistent with project conventions. Heuristic confidence scoring based on output completeness.",
+      "notes": "Production-quality implementation: error handling, configurable model, score validation, proper secret management, consistent module format."
+    },
+    "bonus_total": 5
+  },
   "scoring_summary": {
     "category_scores": {
       "A_strategy_matrix": 87.5,
@@ -277,12 +295,13 @@
       "C_ui_ux_quality": 70,
       "D_prd_compliance": 87.5,
       "E_code_quality": 75,
-      "F_bonus_features": 93.75,
+      "F_bonus_features": 87.5,
       "G_decision_making": 37.5
     },
-    "weighted_score": 80.19,
+    "weighted_score": 79.88,
     "git_bonus": 4,
-    "final_score": 84.19,
+    "ai_bonus": 5,
+    "final_score": 88.88,
     "score_band": "Strong",
     "automatic_failure": false,
     "automatic_failure_reasons": []

@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-02-17T06:04:29.982Z",
-  "total_candidates": 6,
-  "total_divergences": 4,
+  "generated_at": "2026-02-20T06:36:23.968Z",
+  "total_candidates": 7,
+  "total_divergences": 7,
   "all_divergences": [
     {
       "candidate_id": "C-002",
@@ -70,14 +70,65 @@
       ],
       "std_dev": 2.08,
       "note": "High disagreement — flag for human review"
+    },
+    {
+      "candidate_id": "C-007",
+      "criterion": "B3_type_safety",
+      "category": "B_technical_foundation",
+      "scores": [
+        2,
+        2,
+        4
+      ],
+      "evaluators": [
+        "claude-opus-1",
+        "codex-gpt5",
+        "gemini-cli"
+      ],
+      "std_dev": 1.15,
+      "note": "High disagreement — flag for human review"
+    },
+    {
+      "candidate_id": "C-007",
+      "criterion": "E3_error_handling",
+      "category": "E_code_quality",
+      "scores": [
+        2,
+        2,
+        4
+      ],
+      "evaluators": [
+        "claude-opus-1",
+        "codex-gpt5",
+        "gemini-cli"
+      ],
+      "std_dev": 1.15,
+      "note": "High disagreement — flag for human review"
+    },
+    {
+      "candidate_id": "C-007",
+      "criterion": "G2_pr_description",
+      "category": "G_decision_making",
+      "scores": [
+        2,
+        2,
+        4
+      ],
+      "evaluators": [
+        "claude-opus-1",
+        "codex-gpt5",
+        "gemini-cli"
+      ],
+      "std_dev": 1.15,
+      "note": "High disagreement — flag for human review"
     }
   ],
   "frequently_divergent_criteria": [
     {
       "criterion": "G2_pr_description",
-      "divergence_count_across_candidates": 2,
+      "divergence_count_across_candidates": 3,
       "note": "This criterion frequently produces evaluator disagreement. Consider refining its rubric definition."
     }
   ],
-  "summary": "4 high-divergence instances found across 6 candidates. 1 criteria show recurring disagreement and may need rubric refinement."
+  "summary": "7 high-divergence instances found across 7 candidates. 1 criteria show recurring disagreement and may need rubric refinement."
 }

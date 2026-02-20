@@ -411,12 +411,14 @@ Check against these PRD-specified details:
 #### F4: Creative Additions (0–4)
 *Did the candidate add anything impressive beyond the PRD?*
 
+> **Note:** AI-related features (ingestion pipelines, AI-assisted analysis, etc.) are scored under Category I (AI Integration Bonus), not here. Do not award F4 credit for AI features to avoid double-counting.
+
 | Score | Definition |
 |-------|-----------|
 | 0 | Nothing beyond explicit requirements |
 | 1 | Minor additions (e.g., a footer, about page) |
 | 2 | Useful additions: dark mode toggle, print stylesheet, data export |
-| 3 | Impressive additions: Gantt chart, AI ingestion prototype, animated transitions, PDF generation, WCAG 2.1 AA accessibility compliance |
+| 3 | Impressive additions: Gantt chart, animated transitions, PDF generation, WCAG 2.1 AA accessibility compliance |
 | 4 | Exceptional: features that demonstrate deep product thinking or technical creativity. Something that makes the evaluator say "I didn't expect that" |
 
 ---
@@ -477,6 +479,35 @@ Check against these PRD-specified details:
 
 ---
 
+### Category I: AI Integration (Bonus)
+**Weight: Additive bonus, 0–5 points on top of the base scale**
+
+> **Absolute Rule:** AI integration is **bonus-only**. Absence of AI features is **NEVER** penalized. Many candidates will not attempt AI integration, and that is perfectly fine. This category only ADDS to the final score.
+
+> **Scope Rule:** Score AI features **built into the product** for end users. Do **NOT** score a candidate's use of AI in their development process (e.g., using Copilot, ChatGPT, or other AI tools to help write code). Only AI features that are part of the delivered application count.
+
+#### I1: AI Vision & Planning (0–2 bonus points)
+| Points | Definition |
+|--------|-----------|
+| 0 | No documentation of AI-related goals, architecture, or intent anywhere in the repo |
+| 1 | Written documentation (README, IMPLEMENTATION.md, PR description, or design doc) describes the intended AI integration: what it would do, what model/API it would use, and how it would fit into the application architecture. The plan is specific enough that a developer could begin implementation from it |
+| 2 | Detailed architectural plan: documents the data flow (input format → LLM prompt → output format → app integration point), specifies the model and rationale for choosing it, addresses practical concerns (API key management, error handling, rate limits, cost), and describes the user-facing interaction model. Reads like a mini-PRD for the AI feature |
+
+#### I2: AI Implementation (0–2 bonus points)
+| Points | Definition |
+|--------|-----------|
+| 0 | No AI-related code exists in the repository |
+| 1 | AI-related code exists (script, utility, or component) that demonstrates understanding of the integration pattern — calls an LLM API, processes the response, and attempts to produce structured output. Code may be standalone or partially integrated. Must show domain awareness (e.g., knows it's processing interview transcripts into project entities), not just a boilerplate API call |
+| 2 | AI feature is functional and integrated into the application: the user can trigger it (via UI, CLI with clear instructions, or documented build step), it processes real input, produces structured output matching the project schema, and the output is consumable by the application. Setup instructions (API key, environment variables) are documented |
+
+#### I3: AI Integration Quality (0–1 bonus point)
+| Points | Definition |
+|--------|-----------|
+| 0 | AI code (if any) is disconnected from the application, uses outdated/incorrect model references, has no error handling, or lacks setup instructions |
+| 1 | The AI integration demonstrates production thinking: error handling for API failures, graceful degradation, appropriate model selection, prompt engineering with clear system prompts, output validation (e.g., validates generated frontmatter against schema), and code is consistent with the project's module format and coding conventions |
+
+---
+
 ## 6. Scoring Methodology
 
 ### 6.1 Category Score Calculation
@@ -509,16 +540,16 @@ Weighted Score = Σ(Category Score × Category Weight)
 ### 6.3 Final Score
 
 ```
-Final Score = Weighted Score + Git History Bonus (0–5)
+Final Score = Weighted Score + Git History Bonus (0–5) + AI Integration Bonus (0–5)
 ```
 
-Maximum possible: **105 points** (100 base + 5 bonus)
+Maximum possible: **110 points** (100 base + 5 git bonus + 5 AI bonus)
 
 ### 6.4 Score Interpretation Bands
 
 | Range | Band | Interpretation |
 |-------|------|---------------|
-| 90–105 | **Exceptional** | Top-tier candidate. Recommend hire with high confidence. |
+| 90–110 | **Exceptional** | Top-tier candidate. Recommend hire with high confidence. |
 | 75–89 | **Strong** | Solid developer. Clear hire signal with minor gaps. |
 | 60–74 | **Competent** | Meets baseline expectations. Hire depends on team needs and other signals. |
 | 45–59 | **Below Expectations** | Significant gaps. Proceed only if other factors (interview, portfolio) compensate. |
@@ -546,7 +577,7 @@ Every evaluation produces a JSON object with this structure. This ensures machin
     "repo_url": "string — repository URL",
     "evaluated_at": "ISO 8601 timestamp",
     "evaluator": "string — agent instance or human identifier",
-    "framework_version": "1.0"
+    "framework_version": "1.1"
   },
   "automated_gate": {
     "G1_package_json_exists": { "pass": true, "notes": "" },
@@ -652,6 +683,12 @@ Every evaluation produces a JSON object with this structure. This ensures machin
     "H3_logical_progression": { "points": 0, "evidence": "", "notes": "" },
     "bonus_total": 0
   },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": { "points": 0, "evidence": "", "notes": "" },
+    "I2_ai_implementation": { "points": 0, "evidence": "", "notes": "" },
+    "I3_ai_integration_quality": { "points": 0, "evidence": "", "notes": "" },
+    "bonus_total": 0
+  },
   "scoring_summary": {
     "category_scores": {
       "A_strategy_matrix": 0.0,
@@ -664,6 +701,7 @@ Every evaluation produces a JSON object with this structure. This ensures machin
     },
     "weighted_score": 0.0,
     "git_bonus": 0,
+    "ai_bonus": 0,
     "final_score": 0.0,
     "score_band": "Insufficient | Below Expectations | Competent | Strong | Exceptional",
     "automatic_failure": false,
@@ -704,9 +742,10 @@ INSTRUCTIONS:
    c. Cite specific file:line evidence for your score
    d. Add brief notes explaining your reasoning
 5. Check git history for bonus points (Section 5H). Remember: absence of history is NOT penalized.
-6. Calculate all scores per Section 6.
-7. Write the qualitative summary with specific evidence.
-8. Output the complete JSON evaluation per Section 7.
+6. Check for AI integration bonus points (Section 5I). Remember: absence of AI features is NOT penalized.
+7. Calculate all scores per Section 6.
+8. Write the qualitative summary with specific evidence.
+9. Output the complete JSON evaluation per Section 7.
 
 RULES:
 - Do NOT compare to other submissions. Score against the rubric only.
@@ -750,6 +789,7 @@ Each JSON file validates against `evaluation/schema.json` (JSON Schema 2020-12).
 | **Rubric scores (0–4)** | **Median** per criterion | Robust to one outlier evaluator. A single harsh or generous agent doesn't skew results. |
 | **Automated gate checks** | **Majority pass** (>50% of evaluators) | Majority-rules prevents a single evaluator's transient environment issue (npm timeout, port conflict) from failing a candidate. Split results are flagged for human review. |
 | **Git history bonus** | **Max** across evaluators | If one evaluator noticed good commit practices, credit it. Bonus should not be lost because one agent didn't inspect git. |
+| **AI integration bonus** | **Max** across evaluators | Same rationale as git history bonus. If one evaluator recognized quality AI integration, credit it. |
 | **Recommendation** | **Median by ordinal position** | Maps recommendations to ordinal (Strong Hire=0 ... No Hire=4), takes median, maps back. |
 | **Qualitative notes** | **Collected, not merged** | All strengths, weaknesses, and standout moments from all evaluators are preserved. Human reviewer sees the full picture. |
 
@@ -787,6 +827,7 @@ Each `consensus-C-XXX.json` file contains:
 - **Per-category scores** calculated from consensus criterion scores
 - **Gate check consensus** with per-evaluator results and unanimous/split indicator
 - **Git bonus** (max-based)
+- **AI integration bonus** (max-based)
 - **Final score, band, and automatic failure status**
 - **All qualitative notes** collected from every evaluator
 - **Consensus recommendation** (ordinal median)
@@ -799,11 +840,11 @@ Each `consensus-C-XXX.json` file contains:
 After all submissions are individually evaluated and aggregated, the comparison table is generated automatically by `evaluation/aggregate.js`:
 
 ```
-| Rank | Candidate | Score | Band       | Matrix | Tech | UI/UX | PRD | Code | Bonus | Decision | Rec         | Agreement |
-|------|-----------|-------|------------|--------|------|-------|-----|------|-------|----------|-------------|-----------|
-| 1    | C-003     | 82.5  | Strong     | 87.5   | 81.3 | 85.0  | 75  | 81.3 | 56.3  | 75.0     | Hire        | strong    |
-| 2    | C-001     | 71.2  | Competent  | 79.2   | 68.8 | 70.0  | 62  | 68.8 | 43.8  | 62.5     | Lean Hire   | moderate  |
-| 3    | C-002     | 48.0  | Below Exp. | 54.2   | 50.0 | 45.0  | 50  | 50.0 | 25.0  | 37.5     | Lean No     | weak      |
+| Rank | Candidate | Score | Band       | Matrix | Tech | UI/UX | PRD | Code | Bonus | Decision | AI  | Rec         | Agreement |
+|------|-----------|-------|------------|--------|------|-------|-----|------|-------|----------|-----|-------------|-----------|
+| 1    | C-003     | 82.5  | Strong     | 87.5   | 81.3 | 85.0  | 75  | 81.3 | 56.3  | 75.0     | 0   | Hire        | strong    |
+| 2    | C-001     | 71.2  | Competent  | 79.2   | 68.8 | 70.0  | 62  | 68.8 | 43.8  | 62.5     | 0   | Lean Hire   | moderate  |
+| 3    | C-002     | 48.0  | Below Exp. | 54.2   | 50.0 | 45.0  | 50  | 50.0 | 25.0  | 37.5     | 0   | Lean No     | weak      |
 ```
 
 This table enables rapid comparison while preserving the per-category visibility needed for nuanced hiring decisions. A candidate who scores 95 on UI/UX but 50 on Code Quality is a different profile than one who scores 70/70 — and you can see that immediately.

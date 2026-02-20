@@ -117,6 +117,18 @@ const GATE_CHECKS = [
   "G10_tooltips_implemented",
 ];
 
+const GIT_BONUS_COMPONENTS = [
+  "H1_commit_cadence",
+  "H2_message_quality",
+  "H3_logical_progression",
+];
+
+const AI_BONUS_COMPONENTS = [
+  "I1_ai_vision_planning",
+  "I2_ai_implementation",
+  "I3_ai_integration_quality",
+];
+
 const SCORE_BANDS = [
   { min: 90, label: "Exceptional" },
   { min: 75, label: "Strong" },
@@ -229,6 +241,27 @@ function validateEvaluation(eval_, filePath) {
     }
   }
 
+  // AI integration bonus (optional — v1.0 evals may not have this field)
+  if (eval_.ai_integration_bonus) {
+    const ab = eval_.ai_integration_bonus;
+    const aiComponents = {
+      I1_ai_vision_planning: 2,
+      I2_ai_implementation: 2,
+      I3_ai_integration_quality: 1,
+    };
+    for (const [key, maxPts] of Object.entries(aiComponents)) {
+      if (ab[key] !== undefined) {
+        const pts = ab[key]?.points;
+        if (typeof pts !== "number" || pts < 0 || pts > maxPts || !Number.isInteger(pts)) {
+          warn(`Invalid AI bonus points for ${key}: ${pts} (must be integer 0-${maxPts})`);
+        }
+      }
+    }
+    if (typeof ab.bonus_total !== "number" || ab.bonus_total < 0 || ab.bonus_total > 5) {
+      warn(`Invalid AI bonus_total: ${ab.bonus_total}`);
+    }
+  }
+
   // Scoring summary
   if (!eval_.scoring_summary) {
     warn("Missing scoring_summary");
@@ -264,6 +297,12 @@ function extractGateResults(evals, gateKey) {
 function extractGitBonusComponent(evals, key) {
   return evals
     .map((e) => e.git_history_bonus?.[key]?.points)
+    .filter((s) => typeof s === "number");
+}
+
+function extractAiBonusComponent(evals, key) {
+  return evals
+    .map((e) => e.ai_integration_bonus?.[key]?.points)
     .filter((s) => typeof s === "number");
 }
 
@@ -409,6 +448,22 @@ function buildConsensus(candidateId, evals) {
     ),
   };
 
+  // --- AI integration bonus: take MAX across evaluators (backward-compatible) ---
+  const i1Scores = extractAiBonusComponent(evals, "I1_ai_vision_planning");
+  const i2Scores = extractAiBonusComponent(evals, "I2_ai_implementation");
+  const i3Scores = extractAiBonusComponent(evals, "I3_ai_integration_quality");
+  const aiBonus = {
+    I1_ai_vision_planning: { max: Math.max(0, ...i1Scores.length ? i1Scores : [0]), individual_scores: i1Scores },
+    I2_ai_implementation: { max: Math.max(0, ...i2Scores.length ? i2Scores : [0]), individual_scores: i2Scores },
+    I3_ai_integration_quality: { max: Math.max(0, ...i3Scores.length ? i3Scores : [0]), individual_scores: i3Scores },
+    bonus_total: Math.min(
+      5,
+      Math.max(0, ...i1Scores.length ? i1Scores : [0]) +
+      Math.max(0, ...i2Scores.length ? i2Scores : [0]) +
+      Math.max(0, ...i3Scores.length ? i3Scores : [0])
+    ),
+  };
+
   // --- Final score ---
   let weightedScore = 0;
   const categoryScores = {};
@@ -417,7 +472,7 @@ function buildConsensus(candidateId, evals) {
     weightedScore += rubricConsensus[cat].category_score * WEIGHTS[cat];
   }
   weightedScore = Math.round(weightedScore * 100) / 100;
-  const finalScore = Math.round((weightedScore + gitBonus.bonus_total) * 100) / 100;
+  const finalScore = Math.round((weightedScore + gitBonus.bonus_total + aiBonus.bonus_total) * 100) / 100;
 
   // --- Recommendation consensus: median by ordinal position ---
   const recs = extractRecommendations(evals);
@@ -437,10 +492,12 @@ function buildConsensus(candidateId, evals) {
     },
     rubric_consensus: rubricConsensus,
     git_history_bonus: gitBonus,
+    ai_integration_bonus: aiBonus,
     scoring_summary: {
       category_scores: categoryScores,
       weighted_score: weightedScore,
       git_bonus: gitBonus.bonus_total,
+      ai_bonus: aiBonus.bonus_total,
       final_score: finalScore,
       score_band: scoreBand(finalScore),
       automatic_failure: autoFailTriggered,
@@ -486,6 +543,7 @@ function buildComparison(consensusResults) {
       score_band: c.scoring_summary.score_band,
       weighted_score: c.scoring_summary.weighted_score,
       git_bonus: c.scoring_summary.git_bonus,
+      ai_bonus: c.scoring_summary.ai_bonus,
       automatic_failure: c.scoring_summary.automatic_failure,
       category_scores: c.scoring_summary.category_scores,
       consensus_recommendation: c.qualitative_consensus.consensus_recommendation,
@@ -507,10 +565,10 @@ function buildComparisonMarkdown(comparison) {
   lines.push("## Rankings");
   lines.push("");
   lines.push(
-    "| Rank | Candidate | Score | Band | Matrix | Tech | UI/UX | PRD | Code | Bonus | Decision | Rec | Agreement |"
+    "| Rank | Candidate | Score | Band | Matrix | Tech | UI/UX | PRD | Code | Bonus | Decision | AI | Rec | Agreement |"
   );
   lines.push(
-    "|------|-----------|-------|------|--------|------|-------|-----|------|-------|----------|-----|-----------|"
+    "|------|-----------|-------|------|--------|------|-------|-----|------|-------|----------|----|-----|-----------|"
   );
 
   for (const r of comparison.ranking) {
@@ -528,6 +586,7 @@ function buildComparisonMarkdown(comparison) {
       `| ${cs.E_code_quality} ` +
       `| ${cs.F_bonus_features} ` +
       `| ${cs.G_decision_making} ` +
+      `| ${r.ai_bonus} ` +
       `| ${r.consensus_recommendation} ` +
       `| ${r.evaluator_agreement} |`
     );
@@ -550,14 +609,14 @@ function buildComparisonMarkdown(comparison) {
   lines.push("");
   lines.push("| Range | Band |");
   lines.push("|-------|------|");
-  lines.push("| 90-105 | Exceptional |");
+  lines.push("| 90-110 | Exceptional |");
   lines.push("| 75-89 | Strong |");
   lines.push("| 60-74 | Competent |");
   lines.push("| 45-59 | Below Expectations |");
   lines.push("| 0-44 | Insufficient |");
   lines.push("");
   lines.push(
-    "> **Note:** Final scores include up to 5 bonus points for git history. " +
+    "> **Note:** Final scores include up to 5 bonus points for git history and up to 5 bonus points for AI integration. " +
     "Automatic failure flags are noted but candidates still receive scores for comparative purposes."
   );
 

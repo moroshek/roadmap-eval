@@ -1,14 +1,15 @@
 {
-  "generated_at": "2026-02-17T06:04:29.981Z",
-  "candidate_count": 6,
+  "generated_at": "2026-02-20T06:36:23.967Z",
+  "candidate_count": 7,
   "ranking": [
     {
       "rank": 1,
       "candidate_id": "C-001",
-      "final_score": 89.75,
-      "score_band": "Strong",
-      "weighted_score": 85.75,
+      "final_score": 94.44,
+      "score_band": "Exceptional",
+      "weighted_score": 85.44,
       "git_bonus": 4,
+      "ai_bonus": 5,
       "automatic_failure": false,
       "category_scores": {
         "A_strategy_matrix": 95.83,
@@ -16,7 +17,7 @@
         "C_ui_ux_quality": 80,
         "D_prd_compliance": 93.75,
         "E_code_quality": 81.25,
-        "F_bonus_features": 93.75,
+        "F_bonus_features": 87.5,
         "G_decision_making": 50
       },
       "consensus_recommendation": "Hire",
@@ -30,6 +31,7 @@
       "score_band": "Strong",
       "weighted_score": 84.12,
       "git_bonus": 5,
+      "ai_bonus": 0,
       "automatic_failure": false,
       "category_scores": {
         "A_strategy_matrix": 83.33,
@@ -51,6 +53,7 @@
       "score_band": "Strong",
       "weighted_score": 82.06,
       "git_bonus": 4,
+      "ai_bonus": 0,
       "automatic_failure": false,
       "category_scores": {
         "A_strategy_matrix": 83.33,
@@ -67,11 +70,34 @@
     },
     {
       "rank": 4,
+      "candidate_id": "C-007",
+      "final_score": 81.94,
+      "score_band": "Strong",
+      "weighted_score": 78.94,
+      "git_bonus": 3,
+      "ai_bonus": 0,
+      "automatic_failure": false,
+      "category_scores": {
+        "A_strategy_matrix": 79.17,
+        "B_technical_foundation": 81.25,
+        "C_ui_ux_quality": 70,
+        "D_prd_compliance": 93.75,
+        "E_code_quality": 75,
+        "F_bonus_features": 87.5,
+        "G_decision_making": 75
+      },
+      "consensus_recommendation": "Hire",
+      "evaluator_count": 3,
+      "evaluator_agreement": "moderate"
+    },
+    {
+      "rank": 5,
       "candidate_id": "C-002",
       "final_score": 74.19,
       "score_band": "Competent",
       "weighted_score": 72.19,
       "git_bonus": 2,
+      "ai_bonus": 0,
       "automatic_failure": false,
       "category_scores": {
         "A_strategy_matrix": 75,
@@ -87,12 +113,13 @@
       "evaluator_agreement": "moderate"
     },
     {
-      "rank": 5,
+      "rank": 6,
       "candidate_id": "C-003",
       "final_score": 74.19,
       "score_band": "Competent",
       "weighted_score": 73.19,
       "git_bonus": 1,
+      "ai_bonus": 0,
       "automatic_failure": false,
       "category_scores": {
         "A_strategy_matrix": 75,
@@ -108,12 +135,13 @@
       "evaluator_agreement": "moderate"
     },
     {
-      "rank": 6,
+      "rank": 7,
       "candidate_id": "C-004",
       "final_score": 66.12,
       "score_band": "Competent",
       "weighted_score": 63.12,
       "git_bonus": 3,
+      "ai_bonus": 0,
       "automatic_failure": false,
       "category_scores": {
         "A_strategy_matrix": 70.83,

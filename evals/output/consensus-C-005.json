@@ -513,6 +513,21 @@
     },
     "bonus_total": 5
   },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "max": 0,
+      "individual_scores": []
+    },
+    "I2_ai_implementation": {
+      "max": 0,
+      "individual_scores": []
+    },
+    "I3_ai_integration_quality": {
+      "max": 0,
+      "individual_scores": []
+    },
+    "bonus_total": 0
+  },
   "scoring_summary": {
     "category_scores": {
       "A_strategy_matrix": 83.33,
@@ -525,6 +540,7 @@
     },
     "weighted_score": 84.12,
     "git_bonus": 5,
+    "ai_bonus": 0,
     "final_score": 89.12,
     "score_band": "Strong",
     "automatic_failure": false,

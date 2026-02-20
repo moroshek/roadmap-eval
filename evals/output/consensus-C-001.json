@@ -444,18 +444,18 @@
           "agreement": "moderate"
         },
         "F4_creative_additions": {
-          "consensus_score": 3,
-          "mean": 3.33,
-          "std_dev": 0.58,
+          "consensus_score": 2,
+          "mean": 2,
+          "std_dev": 0,
           "individual_scores": [
-            3,
-            3,
-            4
+            2,
+            2,
+            2
           ],
-          "agreement": "moderate"
+          "agreement": "strong"
         }
       },
-      "category_score": 93.75
+      "category_score": 87.5
     },
     "G_decision_making": {
       "weight": 0.05,
@@ -513,6 +513,33 @@
     },
     "bonus_total": 4
   },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "max": 2,
+      "individual_scores": [
+        2,
+        2,
+        2
+      ]
+    },
+    "I2_ai_implementation": {
+      "max": 2,
+      "individual_scores": [
+        2,
+        2,
+        2
+      ]
+    },
+    "I3_ai_integration_quality": {
+      "max": 1,
+      "individual_scores": [
+        1,
+        1,
+        1
+      ]
+    },
+    "bonus_total": 5
+  },
   "scoring_summary": {
     "category_scores": {
       "A_strategy_matrix": 95.83,
@@ -520,13 +547,14 @@
       "C_ui_ux_quality": 80,
       "D_prd_compliance": 93.75,
       "E_code_quality": 81.25,
-      "F_bonus_features": 93.75,
+      "F_bonus_features": 87.5,
       "G_decision_making": 50
     },
-    "weighted_score": 85.75,
+    "weighted_score": 85.44,
     "git_bonus": 4,
-    "final_score": 89.75,
-    "score_band": "Strong",
+    "ai_bonus": 5,
+    "final_score": 94.44,
+    "score_band": "Exceptional",
     "automatic_failure": false,
     "automatic_failure_reasons": []
   },
