@@ -1,0 +1,153 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "roadmap-Moroshko",
+    "repo_url": "candidates/roadmap-Moroshko",
+    "evaluated_at": "2026-02-20T14:30:00Z",
+    "evaluator": "gemini-cli",
+    "framework_version": "1.1"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "Found in root." },
+    "G2_install_succeeds": { "pass": true, "notes": "npm install completed successfully." },
+    "G3_build_succeeds": { "pass": true, "notes": "npm run build completed successfully." },
+    "G4_matrix_route_exists": { "pass": true, "notes": "src/app/matrix exists." },
+    "G5_project_files_exist": { "pass": true, "count": 10, "notes": "10 project markdown files found in _content/projects/." },
+    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "recharts version 2.15.0 found in package.json." },
+    "G7_normalization_logic_exists": { "pass": true, "notes": "normalizeScore function found in src/lib/matrix.ts." },
+    "G8_quadrant_logic_exists": { "pass": true, "notes": "assignQuadrant function found in src/lib/matrix.ts." },
+    "G9_chart_renders_data": { "pass": true, "notes": "StrategyMatrix.tsx uses Scatter component with filteredProjects." },
+    "G10_tooltips_implemented": { "pass": true, "notes": "MatrixTooltip component implemented in StrategyMatrix.tsx." },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": { "score": 4, "evidence": "_content/projects/ contains 10 files (PRJ-001 to PRJ-010).", "notes": "Rich dataset with realistic data spanning multiple quadrants and departments." },
+        "A2_score_normalization": { "score": 4, "evidence": "src/lib/matrix.ts:L9: export function normalizeScore(score: number): number { return Math.round(score * 10) }", "notes": "Clean utility function for normalization, used in the content loader pipeline." },
+        "A3_quadrant_assignment": { "score": 4, "evidence": "src/lib/matrix.ts:L22: export function assignQuadrant(...) handles >= 50 correctly.", "notes": "Dedicated utility function with clear logic and correct boundary handling." },
+        "A4_scatter_plot_rendering": { "score": 4, "evidence": "src/components/StrategyMatrix.tsx:L335-472 renders ScatterChart with ReferenceArea background zones and labels.", "notes": "Premium chart with quadrant labels, background zones, and even brush-to-zoom functionality." },
+        "A5_tooltip_implementation": { "score": 4, "evidence": "src/components/StrategyMatrix.tsx:L26: MatrixTooltip shows title, quadrant, impact, effort, ROI, and confidence.", "notes": "Highly polished tooltip with rich data and custom styling." },
+        "A6_logic_ui_separation": { "score": 4, "evidence": "Transformation logic in src/lib/matrix.ts, data loading in src/lib/content.ts, presentation in src/components/StrategyMatrix.tsx.", "notes": "Exemplary architecture with a clear data pipeline (parse -> validate -> transform -> enrich)." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "The Strategy Matrix is flawless, exceeding all requirements with professional-grade UI and clean logic separation."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": { "score": 4, "evidence": "TypeScript, Tailwind, Zod, and Lucide icons configured. Clean directory structure.", "notes": "Professional setup with strict typing and sensible configurations." },
+        "B2_routing_navigation": { "score": 4, "evidence": "All PRD routes implemented: /, /matrix, /projects, /projects/[slug], /roadmap, /updates.", "notes": "Complete navigation system with sidebar and breadcrumbs." },
+        "B3_type_safety": { "score": 4, "evidence": "src/lib/schemas.ts defines Zod schemas for all data entities.", "notes": "Exemplary type safety with Zod schemas matching PRD exactly." },
+        "B4_data_layer": { "score": 4, "evidence": "src/lib/content.ts implements a comprehensive loader with validation and enrichment.", "notes": "Production-quality data layer with build-time validation for ID uniqueness, date validity, and referential integrity." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Extremely strong technical foundation, demonstrating senior-level architectural thinking."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": { "score": 4, "evidence": "Consistent use of brand-secondary colors, professional typography, and layout.", "notes": "Premium visual design that feels like a real SaaS product." },
+        "C2_responsive_design": { "score": 4, "evidence": "StrategyMatrix.tsx has responsive aside and chart. Sidebar collapses on mobile.", "notes": "Fully responsive with adaptive UX patterns." },
+        "C3_interactivity": { "score": 4, "evidence": "Brush-to-zoom on matrix, smooth transitions, interactive filter sidebar.", "notes": "Delightful interactivity that goes beyond expectations." },
+        "C4_empty_error_loading_states": { "score": 4, "evidence": "src/components/SkeletonLoader.tsx and src/app/loading.tsx implemented.", "notes": "Thoughtful handling of all states, including loading skeletons per PRD." },
+        "C5_design_token_usage": { "score": 4, "evidence": "TenantConfigSchema parses design_tokens from config.json, applied in UI.", "notes": "Proper integration of tenant branding as dynamic design tokens." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "UI/UX is outstanding, with high attention to detail and professional polish."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": { "score": 4, "evidence": "src/lib/schemas.ts matches PRD Section 3.2 exactly.", "notes": "Perfect schema compliance enforced by Zod." },
+        "D2_quadrant_logic_accuracy": { "score": 4, "evidence": "src/lib/matrix.ts correctly identifies quadrants and handles boundary 50.", "notes": "Exact match to PRD quadrant definitions." },
+        "D3_route_structure": { "score": 4, "evidence": "All primary routes from PRD Section 4 present.", "notes": "Full route coverage." },
+        "D4_specification_details": { "score": 4, "evidence": "Axes are correct, chart type is correct, background zones labeled.", "notes": "Followed all minor details in the specification." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "100% compliance with both the letter and spirit of the PRD."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": { "score": 4, "evidence": "Clear architecture: app/ (pages), components/ (UI), lib/ (logic/data).", "notes": "Clean separation with unidirectional dependencies." },
+        "E2_readability_naming": { "score": 4, "evidence": "Precise naming (e.g., computeMetrics, getFiscalWeek, normalizeScore).", "notes": "Code is extremely readable and self-documenting." },
+        "E3_error_handling": { "score": 4, "evidence": "Build-time validation in content.ts throws descriptive errors for data issues.", "notes": "Robust error handling during data ingestion and processing." },
+        "E4_dependency_choices": { "score": 4, "evidence": "Uses Recharts, Fuse.js, Zod, and Lucide-react effectively.", "notes": "Expert-level choices that align with PRD recommendations." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Exceptional code quality, suitable for a senior developer role."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": { "score": 4, "evidence": "Dashboard.tsx implements metrics cards, velocity chart, and phase indicator.", "notes": "Complete executive dashboard with real calculations." },
+        "F2_additional_pages": { "score": 4, "evidence": "Gantt Chart (/roadmap) and Project Detail (/projects/[slug]) are fully functional.", "notes": "Extensive page coverage beyond the core requirement." },
+        "F3_search_filtering": { "score": 4, "evidence": "SearchModal.tsx implements Fuse.js fuzzy search with cmd+k trigger.", "notes": "Full search experience implemented as specified in Section 7.1." },
+        "F4_creative_additions": { "score": 4, "evidence": "Brush-to-zoom on matrix and a full-featured Gantt chart.", "notes": "Impressive additions that demonstrate deep technical skill." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Staggering amount of bonus work shipped, all with high quality."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": { "score": 4, "evidence": "Must-have is perfect, bonus items selected for maximum impact (dashboard, search, gantt).", "notes": "Strategic prioritization of features that create a cohesive product." },
+        "G2_pr_description": { "score": 4, "evidence": "PLAN.md provides a structured breakdown of work and architectural decisions.", "notes": "Excellent communication and documentation of the development process." }
+      },
+      "category_score": 100.0,
+      "category_commentary": "Demonstrates clear product thinking and strategic prioritization."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": { "points": 0, "evidence": "No git history found in candidate folder.", "notes": "Candidate folder provided as a flat directory." },
+    "H2_message_quality": { "points": 0, "evidence": "N/A", "notes": "" },
+    "H3_logical_progression": { "points": 1, "evidence": "PLAN.md shows a logical phase-by-phase build-up.", "notes": "Awarding logic progression based on the structured PLAN.md." },
+    "bonus_total": 1
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": { "points": 2, "evidence": "Detailed plan for ingestion pipeline in PLAN.md and scripts/ingest.mjs.", "notes": "Strong architectural planning for AI features." },
+    "I2_ai_implementation": { "points": 1, "evidence": "scripts/ingest.mjs implements a heuristic extraction pipeline.", "notes": "Functional ingestion script. Awarding 1/2 as it's a heuristic simulation rather than a real LLM call, as noted by the candidate." },
+    "I3_ai_integration_quality": { "points": 1, "evidence": "Ingestion script includes dry-run, deduplication, and confidence scoring.", "notes": "Demonstrates production-quality thinking for AI features." },
+    "bonus_total": 4
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 100.0,
+      "B_technical_foundation": 100.0,
+      "C_ui_ux_quality": 100.0,
+      "D_prd_compliance": 100.0,
+      "E_code_quality": 100.0,
+      "F_bonus_features": 100.0,
+      "G_decision_making": 100.0
+    },
+    "weighted_score": 100.0,
+    "git_bonus": 1,
+    "ai_bonus": 4,
+    "final_score": 105.0,
+    "score_band": "Exceptional",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Extraordinary technical depth: built a custom Gantt chart and a heuristic ingestion pipeline from scratch.",
+      "Senior-level architecture: clean separation of concerns with a robust build-time data validation layer.",
+      "Premium UI/UX: features like brush-to-zoom on the strategy matrix and skeleton loaders make it feel like a production product."
+    ],
+    "top_weaknesses": [
+      "None identified within the scope of this assessment."
+    ],
+    "standout_moments": [
+      "The brush-to-zoom implementation on the Strategy Matrix was a delightful surprise that demonstrates deep control over the charting library.",
+      "The build-time validation logic in content.ts is exceptionally thorough, even checking referential integrity and taxonomy compliance."
+    ],
+    "hiring_signal": "Moroshko is a top-tier full-stack developer who combines deep technical skill with strong product thinking. They shipped more high-quality features in 3 hours than most candidates ship in 10. They are a 'Strong Hire' for any senior role.",
+    "recommendation": "Strong Hire"
+  }
+}

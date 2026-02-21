@@ -1,0 +1,335 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-009",
+    "repo_url": "https://github.com/Mubiii/roadmap-Mubiii",
+    "evaluated_at": "2026-02-20T23:15:00Z",
+    "evaluator": "claude-opus-1",
+    "framework_version": "1.1"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "package.json exists at repo root with dependencies, scripts, and metadata."
+    },
+    "G2_install_succeeds": {
+      "pass": false,
+      "notes": "npm install fails due to peer dependency conflict: lucide-react@0.292.0 requires react ^16.5.1 || ^17.0.0 || ^18.0.0 but the project resolves react@19.x (via 'next: latest'). Requires --legacy-peer-deps to install."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "npm run build fails with TypeError on /dashboard (Cannot read properties of undefined reading 'actual_start' — PRJ-005 lacks dates.actual_start). npm run dev succeeds and starts on port 3000. G3 passes because dev succeeds."
+    },
+    "G4_matrix_route_exists": {
+      "pass": false,
+      "notes": "No /matrix route exists. No src/app/matrix/ directory. No matrix-related route or component found anywhere in the codebase."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 4,
+      "notes": "4 project markdown files found: PRJ-001.md, PRJ-002.md, PRJ-004.md, PRJ-005.md. PRJ-003 is missing from the seeded set. PRJ-005 is a minimal test project with junk data (title: 'absd', owner: 'gjkbjk')."
+    },
+    "G6_chart_library_installed": {
+      "pass": false,
+      "library": "none",
+      "notes": "No charting library installed. package.json contains no recharts, d3, chart.js, visx, or nivo dependency."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": false,
+      "notes": "No normalization logic (0-10 to 0-100 scaling) found anywhere in the codebase. Searched src/ and scripts/ directories."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": false,
+      "notes": "No quadrant assignment logic found. No conditional mapping of scores to quadrant labels (Quick Wins, Big Bets, Fillers, Time Sinks) exists anywhere."
+    },
+    "G9_chart_renders_data": {
+      "pass": false,
+      "notes": "No scatter plot or chart component of any kind exists in the codebase. No chart renders."
+    },
+    "G10_tooltips_implemented": {
+      "pass": false,
+      "notes": "No chart tooltips implemented. No tooltip component or configuration related to data point hover exists."
+    },
+    "gate_summary": {
+      "total_passed": 3,
+      "total_failed": 7,
+      "automatic_failure_triggered": true,
+      "failure_reasons": [
+        "G4: No /matrix route exists — the must-have route is completely missing",
+        "G9: No scatter plot or chart of any kind renders — no charting library is even installed"
+      ]
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": {
+          "score": 1,
+          "evidence": "_content/projects/ contains PRJ-001.md, PRJ-002.md, PRJ-004.md, PRJ-005.md. PRJ-001 has modified scores (strategic_value: 8.5, complexity: 4.0) vs seeded reference (8.6, 3.2) — candidate used PRD example data instead of seed files. PRJ-003 is missing. PRJ-005 is a test artifact with junk data (title: 'absd', owner: 'gjkbjk').",
+          "notes": "Files exist but PRJ-003 is missing from the seeded set, PRJ-001 has incorrect scores, and the data is never used for a matrix visualization. PRJ-005 appears to be a test record from CRUD operations."
+        },
+        "A2_score_normalization": {
+          "score": 0,
+          "evidence": "No evidence found. Searched src/, scripts/, and backend/ for multiplication by 10, normalization, or scaling logic. None exists.",
+          "notes": "No normalization logic implemented anywhere in the codebase."
+        },
+        "A3_quadrant_assignment": {
+          "score": 0,
+          "evidence": "No evidence found. No quadrant assignment logic, no conditional mapping of scores to labels, no references to 'Quick Wins', 'Big Bets', 'Fillers', or 'Time Sinks' in source code.",
+          "notes": "Quadrant logic was never attempted."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 0,
+          "evidence": "No evidence found. No charting library installed (no recharts, d3, chart.js, visx, or nivo in package.json). No chart component exists in src/components/ or anywhere else.",
+          "notes": "No scatter plot or any chart type was attempted."
+        },
+        "A5_tooltip_implementation": {
+          "score": 0,
+          "evidence": "Not attempted. No chart exists, therefore no tooltips exist.",
+          "notes": "No tooltip implementation since no chart was built."
+        },
+        "A6_logic_ui_separation": {
+          "score": 0,
+          "evidence": "Not attempted. No matrix pipeline exists — no normalization, no quadrant logic, no chart component. Cannot evaluate separation of concerns for a nonexistent feature.",
+          "notes": "No matrix pipeline to evaluate."
+        }
+      },
+      "category_score": 4.17,
+      "category_commentary": "The core must-have feature — the Strategy Matrix — was not attempted at all. No charting library was installed, no /matrix route was created, no normalization or quadrant logic was implemented, and no scatter plot was built. The only partial credit is for having project data files, though even those have issues (missing PRJ-003, modified PRJ-001 scores, junk PRJ-005). This is an automatic failure per assessment rules."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 1,
+          "evidence": "package.json exists with scripts (dev, build, build-data, dev:all). jsconfig.json configures @/* path alias. tailwind.config.js and postcss.config.js present. .gitignore is comprehensive (excludes node_modules, .next, .env, OS files). However: npm install fails without --legacy-peer-deps (lucide-react peer conflict with React 19), and npm run build fails with TypeError on dashboard page (PRJ-005 missing dates.actual_start at dashboard/page.js:24).",
+          "notes": "Critical configuration error: peer dependency conflict breaks standard npm install. Build fails due to missing null check on project dates. Project only runs via npm run dev. Capped at 1 due to build failure."
+        },
+        "B2_routing_navigation": {
+          "score": 2,
+          "evidence": "Routes: / (src/app/page.js), /dashboard (src/app/dashboard/page.js), /roadmap (src/app/roadmap/page.js), /projects (src/app/projects/page.js), /projects/[id] (src/app/projects/[id]/page.js), /projects/new (src/app/projects/new/page.js). Navigation via inline Link components (e.g., 'Back to Dashboard' at roadmap/page.js:25, 'Back to Projects' at projects/[id]/page.js:80). No sidebar or persistent navigation component.",
+          "notes": "Multiple routes exist with basic link navigation between pages. No /matrix route. No sidebar navigation component — navigation relies on scattered back-links. Functional but not well-structured."
+        },
+        "B3_type_safety": {
+          "score": 0,
+          "evidence": "All source files are .js/.jsx (not .ts/.tsx). No TypeScript configuration. No type annotations anywhere. Zod is listed in package.json dependencies but never imported or used in any source file.",
+          "notes": "Plain JavaScript throughout with no type safety. Zod dependency is installed but completely unused."
+        },
+        "B4_data_layer": {
+          "score": 2,
+          "evidence": "Backend: markdownService.js uses gray-matter to parse frontmatter from .md files (backend/services/markdownService.js:14). Build script: scripts/generate-master-data.js reads all project .md files via gray-matter and outputs src/data/master_data.json (lines 30-51). Frontend API client: src/lib/api.js provides fetch wrappers for the Express backend. Data flows through: markdown files -> gray-matter parsing -> backend API or master_data.json -> React components.",
+          "notes": "Functional data layer using gray-matter for markdown parsing. Two parallel data paths: static build (master_data.json for dashboard) and runtime API (Express backend for projects pages). No schema validation on load."
+        }
+      },
+      "category_score": 31.25,
+      "category_commentary": "The project has a working data pipeline and multiple routes but is undermined by build failures and zero type safety. The npm install peer dependency conflict and the build-time crash on /dashboard show lack of testing. Plain JavaScript with unused Zod dependency suggests the candidate intended to add type safety but never did. The dual data path (static JSON + runtime API) is functional but adds unnecessary complexity."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 2,
+          "evidence": "Tailwind CSS used throughout. Consistent card pattern: rounded-lg border bg-white p-6 shadow-sm (MetricCard.jsx:3, ProjectCard.jsx:15). Typography hierarchy: text-3xl font-bold for headings, text-sm text-gray-500 for subtitles. Whitespace via p-8 page padding. Dark mode classes present (dark:bg-zinc-900, dark:text-white). Status badges with color coding (ProjectCard.jsx:5-10).",
+          "notes": "Clean, functional design using Tailwind utilities. Consistent patterns across pages. Passes sub-checks for color palette, typography hierarchy, and whitespace. No default browser styling visible. However, design is basic — standard Tailwind patterns without distinctive visual identity."
+        },
+        "C2_responsive_design": {
+          "score": 2,
+          "evidence": "Responsive grid classes used: grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 (dashboard/page.js:48), grid-cols-1 md:grid-cols-2 lg:grid-cols-3 (projects/page.js:38), grid-cols-1 md:grid-cols-3 (roadmap/page.js:30). Layout uses max-w-7xl mx-auto for content containment.",
+          "notes": "Basic responsive grid layouts that stack on mobile. No sidebar collapse behavior (no sidebar exists). No adaptive UX patterns. Usable at different widths but not optimized."
+        },
+        "C3_interactivity": {
+          "score": 2,
+          "evidence": "Hover states: ProjectCard has hover:shadow-md transition-shadow and group-hover:text-blue-600 (ProjectCard.jsx:15,22). Dashboard link has group hover with translate-x-1 animation (page.js:20). CRUD operations: edit mode toggle (projects/[id]/page.js:82-97), delete with confirm dialog (line 62-69), form submission with loading state (projects/new/page.js:135-142). Roadmap cards have hover:border-blue-500 transition (roadmap/page.js:38).",
+          "notes": "Functional interactivity with hover effects, transitions, and CRUD operations. No chart interactivity since no chart exists. The interactions that do exist have appropriate visual feedback."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 2,
+          "evidence": "Empty state: projects/page.js:44 shows 'No projects found. Start by creating one!' when empty. Roadmap shows 'No projects' per phase (roadmap/page.js:53). RecentActivity handles empty: 'No recent updates' (RecentActivity.jsx:6). Loading state: projects/[id]/page.js:72 returns 'Loading...' div. Error state: projects/[id]/page.js:73 shows red error message. Not-found state: line 74 shows 'Project not found'. Error display on create form: projects/new/page.js:54.",
+          "notes": "Basic handling present — app doesn't crash on missing data. Loading, error, and empty states exist for project pages. No skeleton loaders (PRD requirement). No error boundaries."
+        },
+        "C5_design_token_usage": {
+          "score": 1,
+          "evidence": "tailwind.config.js:10-15 extends colors with CSS variables (primary: 'var(--color-primary)', etc.) but these CSS variables are never defined in globals.css or anywhere else. globals.css only defines --foreground-rgb and --background-start-rgb. layout.js uses Inter font from next/font/google which matches config.json typography.heading_font 'Inter'. The config.json design tokens (colors: primary '#0F172A', secondary '#3B82F6', etc.) are not consumed by the application.",
+          "notes": "Tailwind config references CSS custom properties for design tokens but they're never defined — the plumbing exists but isn't connected. Only the Inter font matches config.json. Colors throughout use hardcoded Tailwind defaults, not the tenant's branding."
+        }
+      },
+      "category_score": 45.0,
+      "category_commentary": "The UI is clean and functional using standard Tailwind patterns. Responsive grids, hover effects, and basic state handling are present. However, there's no chart or matrix visualization to provide the primary interactive experience. Design token integration is incomplete — the tailwind config references undefined CSS variables. No skeleton loaders despite being a PRD requirement. The design is competent but unremarkable."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 2,
+          "evidence": "Project files contain PRD-specified frontmatter fields: id, title, slug, owner, department, phase, status, dates (planned_start, planned_end, actual_start), scores (strategic_value, complexity, confidence), financials (estimated_cost, projected_roi, currency), tags, related_projects. See PRJ-001.md lines 1-22, PRJ-002.md lines 1-22. PRJ-005 is malformed — has duplicate strategic_value at root level and missing many required fields (department, dates, complexity, confidence, tags, related_projects, projected_roi).",
+          "notes": "Core fields present and correctly named for PRJ-001, PRJ-002, PRJ-004. PRJ-005 is a CRUD-created test record that violates the schema. PRJ-001 has different scores than seeded data (8.5/4.0 vs reference 8.6/3.2). No programmatic validation."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 0,
+          "evidence": "Not attempted. No quadrant logic exists anywhere in the codebase. No references to quadrant labels, no boundary conditions, no score comparison logic.",
+          "notes": "The core PRD requirement for quadrant assignment was never implemented."
+        },
+        "D3_route_structure": {
+          "score": 2,
+          "evidence": "Implemented routes: / (home/landing), /dashboard (PRD Section 4.2), /roadmap (PRD Section 4.4 — simplified), /projects (PRD Section 4.5), /projects/[id] (PRD Section 4.6). Missing: /matrix (PRD Section 4.3 — the must-have). /projects uses [id] param instead of PRD's [slug].",
+          "notes": "/matrix plus 2 other PRD routes exist — /dashboard and /projects match their PRD sections. The /roadmap is simplified (phase columns instead of Gantt). But the critical /matrix route is absent."
+        },
+        "D4_specification_details": {
+          "score": 0,
+          "evidence": "Major spec violation: no scatter plot implemented (PRD Section 4.3 specifies 'Interactive Scatter Plot'). No /matrix route. No X-axis=Effort/Y-axis=Impact chart. No quadrant zones. The must-have component specified in the README Section 2 ('You must implement the Strategy Matrix Component — automatic fail if missing') was not built.",
+          "notes": "The candidate failed to implement the primary specification requirement. This is the defining detail of the assessment."
+        }
+      },
+      "category_score": 25.0,
+      "category_commentary": "While the project schema and some route structures follow the PRD, the core requirement — the Strategy Matrix visualization — was never implemented. This represents a fundamental failure to comply with the most critical specification. The candidate focused on CRUD operations and project management UI instead of the must-have scatter plot."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 2,
+          "evidence": "Overall structure: pages in src/app/, components in src/components/ (4 components across dashboard/ and projects/), utilities in src/lib/api.js, data generation in scripts/generate-master-data.js. Backend separated into layers: server.js (entry), routes/projectRoutes.js (routing), controllers/projectController.js (request handling), services/markdownService.js (data access). Components are focused on rendering (MetricCard, PhaseIndicator, ProjectCard).",
+          "notes": "Basic separation exists — pages, components, lib, and backend layers are distinct. Backend follows MVC-like pattern. However, dashboard page.js:14-26 contains business logic (metric calculations, activity generation) that should be in a utility. The codebase is small enough that separation is adequate but not exemplary."
+        },
+        "E2_readability_naming": {
+          "score": 2,
+          "evidence": "Descriptive names: totalInvestment, activeProjects, roiMultiplier (dashboard/page.js:15-19), fetchProjects, fetchProjectById (lib/api.js:3,9), getAllProjects, getProjectById (markdownService.js:23,48), statusColors object (ProjectCard.jsx:5). Consistent camelCase throughout. Files named clearly: MetricCard.jsx, PhaseIndicator.jsx, markdownService.js, projectRoutes.js.",
+          "notes": "Code is readable with descriptive variable and function names. Consistent naming conventions. Not exceptional — straightforward naming without domain-specific precision."
+        },
+        "E3_error_handling": {
+          "score": 2,
+          "evidence": "Frontend: try/catch in loadProject (projects/[id]/page.js:28-36), fetchProjects wrapped in try/catch (roadmap/page.js:8-12, projects/page.js:8-13). API client throws on non-ok response (lib/api.js:5,12,24,30,40). Backend: try/catch in all controller methods with 500 status (controllers/projectController.js:5-12). 404 handling for missing projects (line 19-20). Null check: fetchProjectById returns null on 404 (api.js:12). However: dashboard page.js:24 accesses p.dates.actual_start without null check, causing build failure on PRJ-005.",
+          "notes": "Basic error handling present — try/catch blocks, error states in UI, HTTP status codes in backend. But the build-breaking bug (accessing undefined property) shows incomplete error handling. The app doesn't crash on most error paths but lacks defensive coding for edge cases."
+        },
+        "E4_dependency_choices": {
+          "score": 1,
+          "evidence": "package.json dependencies: gray-matter (appropriate for markdown), clsx (appropriate for className), date-fns (installed but usage not found in source), lucide-react (installed but unused and causes peer dep conflict), tailwind-merge (installed but usage not found), zod (installed but never imported). No charting library despite it being the core requirement. Backend uses Express.js + gray-matter + cors + dotenv — reasonable choices.",
+          "notes": "Several unused dependencies (lucide-react, zod, possibly date-fns and tailwind-merge) bloat the project. lucide-react causes the npm install failure. The most critical missing dependency is a charting library — the entire assessment centers on building a scatter plot, yet no chart library was ever installed."
+        }
+      },
+      "category_score": 43.75,
+      "category_commentary": "Code quality is adequate for what exists but doesn't demonstrate strong engineering practices. Basic separation of concerns with backend MVC pattern is good. Naming and error handling are functional but not exceptional. The dependency choices reveal poor planning — unused packages cause build issues while the essential charting library was never installed. The build-breaking bug from a missing null check is a notable quality gap."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 3,
+          "evidence": "Dashboard at /dashboard (src/app/dashboard/page.js) includes: 4 MetricCard widgets — Total Investment ($8,645k sum), ROI Multiplier (calculated from totals), Active Projects count, Completed count (lines 15-19, 48-53). PhaseIndicator component with progress bar (line 44). RecentActivity feed derived from project dates (lines 22-26, 66). Strategic Roadmap placeholder linking to /roadmap (line 61). Data derived from master_data.json static import.",
+          "notes": "Multiple dashboard widgets with real calculated data from project files. Metric cards, phase indicator, and activity feed match PRD Section 4.2 requirements. Velocity chart is a placeholder. Solid implementation of dashboard metrics."
+        },
+        "F2_additional_pages": {
+          "score": 3,
+          "evidence": "Beyond the (missing) matrix: /dashboard with metrics and widgets, /roadmap with phase-grouped project cards (roadmap/page.js), /projects with card grid and filter placeholders (projects/page.js), /projects/[id] with full CRUD — view, edit, delete (projects/[id]/page.js), /projects/new with create form (projects/new/page.js). 5 additional routes with functional, meaningful content.",
+          "notes": "3+ routes with meaningful content matching PRD specs. Dashboard matches Section 4.2, Project Library matches Section 4.5, Project Detail matches Section 4.6. Roadmap is simplified (phase columns, not Gantt). CRUD operations add functional depth."
+        },
+        "F3_search_filtering": {
+          "score": 0,
+          "evidence": "projects/page.js:24-29 has two <select> dropdowns labeled 'All Owners' and 'All Statuses' but they contain only one option each and no onChange handlers. No filtering logic exists. No search functionality. No Fuse.js or any search library installed.",
+          "notes": "Filter dropdowns are purely cosmetic placeholders with no functionality."
+        },
+        "F4_creative_additions": {
+          "score": 1,
+          "evidence": "Full CRUD operations on projects (create at /projects/new, edit at /projects/[id], delete with confirmation). Express.js backend API with 5 REST endpoints (backend/routes/projectRoutes.js). Build-time master data generation script (scripts/generate-master-data.js) with auto-activation governance logic (lines 57-62). API verification script (backend/scripts/verify-api.js).",
+          "notes": "CRUD operations and the backend API are additions beyond the explicit requirements. The master data generator with auto-activation is a nice touch. However, these are minor additions that don't rise to the level of impressive or creative — and they came at the expense of the must-have feature."
+        }
+      },
+      "category_score": 43.75,
+      "category_commentary": "The candidate built substantial bonus features — a functional dashboard, project management CRUD, a roadmap view, and a backend API. Ironically, these bonus features are the strongest part of the submission. The problem is that the must-have feature was sacrificed for these bonuses, which represents a fundamental prioritization error."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 0,
+          "evidence": "The must-have Strategy Matrix (README Section 2: 'automatic failure if missing') was never attempted. No /matrix route, no charting library, no normalization logic, no quadrant logic, no scatter plot. Instead, time was spent on: Express.js backend with full CRUD (5 endpoints), project management forms (create/edit/delete), roadmap view, dashboard metrics, and API verification scripts. The candidate built everything except the one required feature.",
+          "notes": "Fundamental prioritization failure. The assessment explicitly states the Strategy Matrix is an automatic failure if missing. The candidate spent their entire time on secondary features (CRUD, backend API, dashboard) while completely ignoring the single must-have requirement."
+        },
+        "G2_pr_description": {
+          "score": 2,
+          "evidence": "README.md provides: quick start instructions ('npm run dev:all'), technology stack (Next.js 14, Express.js, Tailwind CSS), project structure overview, API documentation table with 5 endpoints and methods, database information (current: Markdown, future: MongoDB), and list of recent enhancements (CRUD, edit mode, real-time data). No PR was created (single commit on main). No IMPLEMENTATION.md.",
+          "notes": "README is useful for understanding what was built and how to run it. Covers technology, structure, and API endpoints. However, no discussion of trade-offs, architectural decisions, what was skipped and why, or self-awareness about the missing must-have feature."
+        }
+      },
+      "category_score": 25.0,
+      "category_commentary": "The most significant decision the candidate made — what to build first — was wrong. They invested heavily in a backend API, CRUD operations, and project management UI while completely ignoring the Strategy Matrix, which the assessment explicitly marks as an automatic failure condition. The README documents what was built but doesn't acknowledge the missing core requirement."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 0,
+      "evidence": "Single commit: '6c7be92 Initial commit' on main branch. No other commits or branches.",
+      "notes": "Only one commit with all work submitted at once."
+    },
+    "H2_message_quality": {
+      "points": 0,
+      "evidence": "Single commit message: 'Initial commit'. Generic, uninformative.",
+      "notes": "Generic auto-generated style message."
+    },
+    "H3_logical_progression": {
+      "points": 0,
+      "evidence": "Single commit — no progression discernible.",
+      "notes": "Cannot evaluate progression with only one commit."
+    },
+    "bonus_total": 0
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "points": 0,
+      "evidence": "No documentation of AI-related goals, architecture, or intent in README, source code, or any other file.",
+      "notes": "No AI vision documented."
+    },
+    "I2_ai_implementation": {
+      "points": 0,
+      "evidence": "No AI-related code exists. No LLM API calls, no AI processing scripts, no integration with any AI service. Interview files exist in _content/interviews/ but no ingestion pipeline was built.",
+      "notes": "No AI implementation attempted."
+    },
+    "I3_ai_integration_quality": {
+      "points": 0,
+      "evidence": "No AI integration to evaluate.",
+      "notes": "N/A — no AI features exist."
+    },
+    "bonus_total": 0
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 4.17,
+      "B_technical_foundation": 31.25,
+      "C_ui_ux_quality": 45.0,
+      "D_prd_compliance": 25.0,
+      "E_code_quality": 43.75,
+      "F_bonus_features": 43.75,
+      "G_decision_making": 25.0
+    },
+    "weighted_score": 27.38,
+    "git_bonus": 0,
+    "ai_bonus": 0,
+    "final_score": 27.38,
+    "score_band": "Insufficient",
+    "automatic_failure": true,
+    "automatic_failure_reasons": [
+      "G4: No /matrix route exists — the must-have route is completely missing",
+      "G9: No scatter plot or chart of any kind renders — no charting library is even installed"
+    ]
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Full CRUD operations with functional Express.js backend API (5 REST endpoints with proper MVC separation in backend/controllers/, backend/services/, backend/routes/), enabling create, edit, and delete of projects through the UI.",
+      "Executive Dashboard with real calculated metrics (Total Investment, ROI Multiplier, Active Count, Completed Count) derived from project data, plus PhaseIndicator and RecentActivity widgets.",
+      "Clean Tailwind-based UI with consistent card patterns, responsive grid layouts, dark mode support, and appropriate empty/loading/error states across project pages.",
+      "Build-time data pipeline (scripts/generate-master-data.js) that reads markdown files via gray-matter, applies governance logic (auto-activation of queued projects), and outputs optimized master_data.json."
+    ],
+    "top_weaknesses": [
+      "The must-have Strategy Matrix was never attempted — no /matrix route, no charting library, no normalization, no quadrant logic, no scatter plot. This is the defining failure of the submission.",
+      "npm install fails without --legacy-peer-deps due to lucide-react peer dependency conflict with React 19. npm run build crashes on /dashboard due to missing null check on PRJ-005's dates.actual_start.",
+      "Zero type safety — plain JavaScript throughout despite Zod being installed but unused. No TypeScript, no runtime validation, no type annotations.",
+      "Fundamental prioritization failure — the candidate spent their 3 hours building a backend API, CRUD forms, and project management features while ignoring the single feature explicitly marked as 'automatic failure if missing'."
+    ],
+    "standout_moments": [
+      "The irony of this submission is notable: the candidate built a substantial, functional project management application with CRUD, a dashboard, a roadmap view, and a backend API — but completely ignored the one feature that was marked as an automatic failure condition. The quality of the bonus work makes the missing must-have even more puzzling.",
+      "PRJ-005 ('absd' by 'gjkbjk') appears to be a test artifact from the CRUD feature, and its malformed data (missing dates) is what crashes the production build. This illustrates the risk of not validating data."
+    ],
+    "hiring_signal": "This candidate demonstrates ability to build functional full-stack features (CRUD, API, dashboard) but exhibited a critical failure in reading and prioritizing requirements. They built around the core requirement rather than through it, suggesting either they didn't read the assessment brief carefully, didn't understand the scatter plot requirement, or lacked confidence with data visualization. The technical work that exists is competent but not exceptional — basic Tailwind UI, standard Express patterns, no TypeScript. This profile carries significant risk: the ability to ship features is there, but the judgment to ship the right features is not.",
+    "recommendation": "No Hire"
+  }
+}

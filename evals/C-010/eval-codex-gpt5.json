@@ -1,0 +1,329 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-010",
+    "repo_url": "https://github.com/moroshek/roadmap-Moroshko",
+    "evaluated_at": "2026-02-21T04:38:28Z",
+    "evaluator": "codex-gpt5",
+    "framework_version": "1.1"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "Found at candidates/roadmap-Moroshko/package.json."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "`npm install` succeeded in candidates/roadmap-Moroshko (259 packages added, 0 vulnerabilities)."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "`npm run build` succeeds and emits static routes including `/matrix`, `/projects`, `/roadmap`, and `/updates`; `npm run dev` also reaches ready state on localhost:3000."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "Matrix route implemented at candidates/roadmap-Moroshko/src/app/matrix/page.tsx:8."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 10,
+      "notes": "Ten markdown project files found under candidates/roadmap-Moroshko/_content/projects (PRJ-001 through PRJ-010)."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "`recharts` is declared in candidates/roadmap-Moroshko/package.json:14."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "Normalization function exists in candidates/roadmap-Moroshko/src/lib/matrix.ts:7-9 and is applied in candidates/roadmap-Moroshko/src/lib/content.ts:115-116."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "Quadrant mapping logic exists in candidates/roadmap-Moroshko/src/lib/matrix.ts:20-31."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "Scatter data is rendered through `<Scatter data={filteredProjects}>` in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:455-470."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "Custom tooltip component `MatrixTooltip` is wired via `<Tooltip content={<MatrixTooltip />} />` in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:26-68 and candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:450-453."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.3,
+      "criteria": {
+        "A1_data_population": {
+          "score": 4,
+          "evidence": "Dataset contains 10 projects with diverse departments/phases/statuses, including seeded and added files: candidates/roadmap-Moroshko/_content/projects/PRJ-001.md:2-22, candidates/roadmap-Moroshko/_content/projects/PRJ-002.md:2-22, candidates/roadmap-Moroshko/_content/projects/PRJ-003.md:2-22, candidates/roadmap-Moroshko/_content/projects/PRJ-004.md:2-22.",
+          "notes": "Data is rich, coherent, and materially beyond the minimum seeded set."
+        },
+        "A2_score_normalization": {
+          "score": 3,
+          "evidence": "Normalization is implemented in a dedicated utility (`normalizeScore`) at candidates/roadmap-Moroshko/src/lib/matrix.ts:7-9 and used in the data pipeline at candidates/roadmap-Moroshko/src/lib/content.ts:114-117.",
+          "notes": "Correct and separated from UI; not a fully defensive normalization step by itself (range validation is enforced upstream via Zod)."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "Dedicated boundary-aware assignment utility with explicit 50-threshold handling in candidates/roadmap-Moroshko/src/lib/matrix.ts:24-30.",
+          "notes": "Clean and reusable utility separation; thresholds are fixed constants rather than configurable/tested policy inputs."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 4,
+          "evidence": "Scatter plot uses 0-100 axes with correct keys (`normalizedEffort`, `normalizedImpact`), quadrant zones, and styled plotted points in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:335-471.",
+          "notes": "Premium rendering quality with meaningful quadrant shading and polished chart presentation."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "Tooltip shows title, quadrant, impact, effort, projected ROI, and confidence in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:32-65 and is connected at candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:450-453.",
+          "notes": "Rich and useful tooltip content with solid styling; no explicit edge-avoidance or transition orchestration."
+        },
+        "A6_logic_ui_separation": {
+          "score": 4,
+          "evidence": "Matrix pipeline is parse/validate/enrich in candidates/roadmap-Moroshko/src/lib/content.ts:49-146, transform utilities in candidates/roadmap-Moroshko/src/lib/matrix.ts:7-31, and presentation-only chart in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:82-501, routed via candidates/roadmap-Moroshko/src/app/matrix/page.tsx:8-9.",
+          "notes": "Exemplary matrix-specific separation where the chart consumes prepared data rather than owning transformation logic."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Core matrix implementation is strong and polished, with clear transform/render boundaries and correct visualization behavior."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 4,
+          "evidence": "Build/dev scripts are present and functional in candidates/roadmap-Moroshko/package.json:5-8; TypeScript strict mode and path aliases are configured in candidates/roadmap-Moroshko/tsconfig.json:8-19; build artifacts are excluded in candidates/roadmap-Moroshko/.gitignore:1-3.",
+          "notes": "Professional project setup with strict typing and clean build hygiene."
+        },
+        "B2_routing_navigation": {
+          "score": 4,
+          "evidence": "Primary routes are implemented under candidates/roadmap-Moroshko/src/app/ (/, /matrix, /roadmap, /projects, /projects/[slug], /updates), with full sidebar nav, active states, and breadcrumbs in candidates/roadmap-Moroshko/src/components/Sidebar.tsx:14-67 and candidates/roadmap-Moroshko/src/components/TopBar.tsx:27-75.",
+          "notes": "Complete and coherent navigation system aligned to PRD route expectations."
+        },
+        "B3_type_safety": {
+          "score": 3,
+          "evidence": "Typed domain models are defined in candidates/roadmap-Moroshko/src/lib/types.ts:24-110 and validated with Zod schemas in candidates/roadmap-Moroshko/src/lib/schemas.ts:8-83; compiler strict mode is enabled in candidates/roadmap-Moroshko/tsconfig.json:8.",
+          "notes": "Strong typing discipline with runtime validation; types are maintained separately rather than inferred directly from schemas."
+        },
+        "B4_data_layer": {
+          "score": 4,
+          "evidence": "Centralized loader parses markdown, validates schema, applies PRD logic, and builds master data in candidates/roadmap-Moroshko/src/lib/content.ts:23-230.",
+          "notes": "Production-grade data pipeline with clear data flow from content files to UI context."
+        }
+      },
+      "category_score": 93.75,
+      "category_commentary": "Technical foundation is robust: strong setup, complete routing, and a centralized validated data architecture."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 4,
+          "evidence": "Consistent design system primitives (`metric-card`, `status-pill`, nav styles) in candidates/roadmap-Moroshko/src/app/globals.css:16-60 and polished component composition across dashboard/matrix/library in candidates/roadmap-Moroshko/src/components/Dashboard.tsx:89-373 and candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:291-500.",
+          "notes": "Intentional, SaaS-quality visual hierarchy with cohesive spacing/typography/color treatment."
+        },
+        "C2_responsive_design": {
+          "score": 4,
+          "evidence": "Responsive breakpoints and mobile patterns are implemented throughout, including mobile sidebar overlay in candidates/roadmap-Moroshko/src/components/AppShell.tsx:38-66 and responsive grids/layouts in candidates/roadmap-Moroshko/src/components/Dashboard.tsx:91 and candidates/roadmap-Moroshko/src/components/ProjectLibrary.tsx:599.",
+          "notes": "Adaptive UX is present for both navigation and content layout across small and large screens."
+        },
+        "C3_interactivity": {
+          "score": 4,
+          "evidence": "Interactive behavior includes chart brush zoom and controls in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:165-193 and candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:303-331, plus cmd+k fuzzy search keyboard navigation in candidates/roadmap-Moroshko/src/components/SearchModal.tsx:60-111.",
+          "notes": "Interaction model goes beyond baseline hover states into intentional micro-interactions and keyboard-driven workflows."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 3,
+          "evidence": "Route-level skeleton loaders are implemented in candidates/roadmap-Moroshko/src/app/loading.tsx:6-22, candidates/roadmap-Moroshko/src/app/matrix/loading.tsx:3-24, and candidates/roadmap-Moroshko/src/components/SkeletonLoader.tsx:5-74; contextual empty states exist in candidates/roadmap-Moroshko/src/components/ProjectLibrary.tsx:588-597 and candidates/roadmap-Moroshko/src/components/UpdatesFeed.tsx:42-51.",
+          "notes": "Thoughtful loading and empty-state handling is strong, but no explicit app-level error boundary route was found."
+        },
+        "C5_design_token_usage": {
+          "score": 3,
+          "evidence": "Tenant colors/typography are loaded from config and wired into Tailwind theme in candidates/roadmap-Moroshko/tailwind.config.ts:5-23, with brand tokens consumed in UI classes (e.g., `bg-brand-primary`, `text-brand-secondary`) in candidates/roadmap-Moroshko/src/components/Sidebar.tsx:26 and candidates/roadmap-Moroshko/src/components/TopBar.tsx:95.",
+          "notes": "Strong token integration; theming is build-time and not fully runtime-dynamic across arbitrary tenant font assets."
+        }
+      },
+      "category_score": 90,
+      "category_commentary": "UI/UX execution is polished and interactive with strong responsive behavior and solid state handling."
+    },
+    "D_prd_compliance": {
+      "weight": 0.1,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 4,
+          "evidence": "Project/config schemas are enforced with Zod in candidates/roadmap-Moroshko/src/lib/schemas.ts:26-83 and applied in build-time validation pipeline in candidates/roadmap-Moroshko/src/lib/content.ts:61-93 and candidates/roadmap-Moroshko/src/lib/content.ts:134-143.",
+          "notes": "Schema compliance is programmatically enforced with PRD-aligned validation checks."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "Quadrant boundaries exactly match PRD logic in candidates/roadmap-Moroshko/src/lib/matrix.ts:24-30, and background quadrant zones/labels are rendered in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:345-387.",
+          "notes": "Exact boundary compliance with explicit visual quadrant labeling."
+        },
+        "D3_route_structure": {
+          "score": 4,
+          "evidence": "All primary PRD routes are present in candidates/roadmap-Moroshko/src/app/ including /, /matrix, /roadmap, /projects, /projects/[slug], and /updates.",
+          "notes": "Route coverage matches and extends the expected structure."
+        },
+        "D4_specification_details": {
+          "score": 4,
+          "evidence": "Scatter chart uses X=`normalizedEffort` and Y=`normalizedImpact` in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:405-429; normalization source fields are complexity/strategic_value in candidates/roadmap-Moroshko/src/lib/content.ts:115-117; Quick Wins renders in top-left zone via x<50 and y>=50 in candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:345-350.",
+          "notes": "Specification details are followed closely, including additional PRD-oriented details like cmd+k search and print styles."
+        }
+      },
+      "category_score": 100,
+      "category_commentary": "PRD adherence is exceptionally strong across schema, route, and matrix behavior requirements."
+    },
+    "E_code_quality": {
+      "weight": 0.2,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 4,
+          "evidence": "Overall architecture cleanly separates app shell/layout (candidates/roadmap-Moroshko/src/components/AppShell.tsx:24-74), navigation/UI scaffolding (candidates/roadmap-Moroshko/src/components/Sidebar.tsx:22-83, candidates/roadmap-Moroshko/src/components/TopBar.tsx:17-102), domain data pipeline (candidates/roadmap-Moroshko/src/lib/content.ts:49-230), and feature views (candidates/roadmap-Moroshko/src/components/*.tsx).",
+          "notes": "File responsibilities are clear and dependency direction remains straightforward."
+        },
+        "E2_readability_naming": {
+          "score": 4,
+          "evidence": "Domain-appropriate naming is consistent across utilities and components (`normalizeScore`, `assignQuadrant`, `getMasterData`, `ProjectLibrary`, `UpdatesFeed`) in candidates/roadmap-Moroshko/src/lib/matrix.ts:7-31 and candidates/roadmap-Moroshko/src/lib/content.ts:216-230.",
+          "notes": "Code is highly readable with coherent naming and modular function boundaries."
+        },
+        "E3_error_handling": {
+          "score": 3,
+          "evidence": "Robust validation and explicit failure messages are implemented during data load in candidates/roadmap-Moroshko/src/lib/content.ts:64-93 and candidates/roadmap-Moroshko/src/lib/content.ts:134-140; graceful empty-state fallbacks exist in UI components such as candidates/roadmap-Moroshko/src/components/UpdatesFeed.tsx:42-51.",
+          "notes": "Strong robustness posture, but no dedicated app-level React error boundary route (`src/app/error.tsx`) is present."
+        },
+        "E4_dependency_choices": {
+          "score": 4,
+          "evidence": "Dependency set aligns with PRD recommendations: Recharts and Fuse.js for chart/search, gray-matter + remark + zod for content/validation in candidates/roadmap-Moroshko/package.json:10-20.",
+          "notes": "Well-chosen and focused dependencies with minimal unnecessary footprint."
+        }
+      },
+      "category_score": 93.75,
+      "category_commentary": "Code quality is high, with clear architecture and strong robustness patterns."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 4,
+          "evidence": "Dashboard includes PRD-aligned metric cards, phase progress rail, velocity chart, and recent activity in candidates/roadmap-Moroshko/src/components/Dashboard.tsx:89-373.",
+          "notes": "Comprehensive dashboard implementation with real calculated metrics."
+        },
+        "F2_additional_pages": {
+          "score": 4,
+          "evidence": "Beyond matrix, implemented dashboard, roadmap Gantt, project library/detail, and updates feed routes in candidates/roadmap-Moroshko/src/app/page.tsx:1-4, candidates/roadmap-Moroshko/src/app/roadmap/page.tsx:8-9, candidates/roadmap-Moroshko/src/app/projects/page.tsx:8-9, candidates/roadmap-Moroshko/src/app/projects/[slug]/page.tsx:20-27, and candidates/roadmap-Moroshko/src/app/updates/page.tsx:8-9.",
+          "notes": "Near-complete route coverage with purpose-built content."
+        },
+        "F3_search_filtering": {
+          "score": 3,
+          "evidence": "Project library includes multi-dimensional live filters/search/sort in candidates/roadmap-Moroshko/src/components/ProjectLibrary.tsx:302-379 and candidates/roadmap-Moroshko/src/components/ProjectLibrary.tsx:466-577; global Fuse.js cmd+k search exists in candidates/roadmap-Moroshko/src/components/SearchModal.tsx:38-58 and candidates/roadmap-Moroshko/src/components/SearchModal.tsx:60-111.",
+          "notes": "Strong multi-faceted search/filter experience; persistent filter state across sessions/routes is not implemented."
+        },
+        "F4_creative_additions": {
+          "score": 3,
+          "evidence": "Creative additions include a full Gantt timeline with grouping/today marker in candidates/roadmap-Moroshko/src/components/GanttChart.tsx:117-255, print one-pager flow in candidates/roadmap-Moroshko/src/components/ProjectDetail.tsx:127-134 and candidates/roadmap-Moroshko/src/app/globals.css:62-125, and WCAG-oriented keyboard/focus affordances in candidates/roadmap-Moroshko/src/components/AppShell.tsx:25-31 and candidates/roadmap-Moroshko/src/app/globals.css:10-13.",
+          "notes": "Meaningful product-quality additions beyond the minimum feature set."
+        }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Bonus scope execution is broad and high value, especially dashboard, route completeness, and search/Gantt capabilities."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 4,
+          "evidence": "Must-have matrix is complete and polished while remaining time was invested in coherent high-impact features (dashboard, projects, roadmap, updates, search) across candidates/roadmap-Moroshko/src/app/* and candidates/roadmap-Moroshko/src/components/*.tsx.",
+          "notes": "Strong product prioritization resulted in a usable end-to-end roadmap application."
+        },
+        "G2_pr_description": {
+          "score": 2,
+          "evidence": "Repository-level documentation includes implementation plan and architecture summary in candidates/roadmap-Moroshko/PLAN.md:7-31 and run/setup context in candidates/roadmap-Moroshko/README.md:61-71.",
+          "notes": "Documentation is useful and structured, but lacks a concise final submission summary discussing tradeoffs and known limitations."
+        }
+      },
+      "category_score": 75,
+      "category_commentary": "Prioritization quality is excellent; submission communication is good but not fully reflective/tradeoff-oriented."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 2,
+      "evidence": "Nine commits with incremental progression are present in `git log`, including 023a42c, 2c4ed8f, b4f43ee, 1f3f928, 2335a93, a74e344, 74b1037, 5a10f37, 13eb5ca.",
+      "notes": "Commit cadence clearly exceeds the 6+ threshold with iterative progress."
+    },
+    "H2_message_quality": {
+      "points": 2,
+      "evidence": "Commit messages are descriptive and action-oriented (e.g., 'Fix PRD compliance gaps: print tabs, skeleton loaders, validation, accessibility' and 'Add WCAG accessibility, module toggles, and ingestion pipeline').",
+      "notes": "Messages consistently communicate what changed and usually why."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "History flows from initial commit to full implementation, then compliance/accessibility/mobile/polish fixes, ending with merge: 023a42c → 2c4ed8f → b4f43ee/1f3f928/2335a93/a74e344/74b1037/5a10f37 → 13eb5ca.",
+      "notes": "Logical build-up demonstrates structured execution."
+    },
+    "bonus_total": 5
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "points": 0,
+      "evidence": "No concrete AI integration plan with model/API selection, prompt/data flow, and operational constraints is documented; ingestion notes are heuristic and explicitly non-LLM in candidates/roadmap-Moroshko/scripts/ingest.mjs:19-21.",
+      "notes": "No qualifying AI product-planning artifact found for rubric I1."
+    },
+    "I2_ai_implementation": {
+      "points": 0,
+      "evidence": "Ingestion script is deterministic keyword heuristics and does not call an LLM API in candidates/roadmap-Moroshko/scripts/ingest.mjs:158-201 and candidates/roadmap-Moroshko/scripts/ingest.mjs:263-320.",
+      "notes": "No end-user AI feature implementation present."
+    },
+    "I3_ai_integration_quality": {
+      "points": 0,
+      "evidence": "No AI integration exists in the delivered product to assess for production-quality AI behavior.",
+      "notes": "Not applicable due to absence of AI integration."
+    },
+    "bonus_total": 0
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 87.5,
+      "B_technical_foundation": 93.75,
+      "C_ui_ux_quality": 90,
+      "D_prd_compliance": 100,
+      "E_code_quality": 93.75,
+      "F_bonus_features": 87.5,
+      "G_decision_making": 75
+    },
+    "weighted_score": 90.69,
+    "git_bonus": 5,
+    "ai_bonus": 0,
+    "final_score": 95.69,
+    "score_band": "Exceptional",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "High-quality end-to-end product implementation with all primary PRD routes and cohesive navigation, not just the must-have matrix (`candidates/roadmap-Moroshko/src/app/*`, `candidates/roadmap-Moroshko/src/components/Sidebar.tsx:14-67`).",
+      "Strong data architecture with schema validation, build-time integrity checks, enrichment, and centralized master-data delivery (`candidates/roadmap-Moroshko/src/lib/content.ts:49-230`, `candidates/roadmap-Moroshko/src/lib/schemas.ts:26-83`).",
+      "Matrix implementation is both correct and polished, including quadrant zones, filtering, zoom interactions, and rich tooltips (`candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:117-123`, `candidates/roadmap-Moroshko/src/components/StrategyMatrix.tsx:335-471`).",
+      "UX polish is consistently strong with skeleton loading, responsive behavior, keyboard search, and print-ready detail pages (`candidates/roadmap-Moroshko/src/app/loading.tsx:6-22`, `candidates/roadmap-Moroshko/src/components/SearchModal.tsx:60-111`, `candidates/roadmap-Moroshko/src/app/globals.css:62-125`)."
+    ],
+    "top_weaknesses": [
+      "Submission documentation is not fully final-form: there is a detailed plan but no concise final summary of tradeoffs/known limitations for reviewers (`candidates/roadmap-Moroshko/PLAN.md:85-88`).",
+      "No dedicated app-level error boundary route (`src/app/error.tsx`) was found, which limits resilience for unexpected runtime rendering failures.",
+      "Design token theming is strong but primarily build-time; tenant typography runtime flexibility is limited by fixed font imports in layout (`candidates/roadmap-Moroshko/src/app/layout.tsx:2-19`)."
+    ],
+    "standout_moments": [
+      "The candidate delivered a coherent product suite (dashboard + matrix + roadmap + project detail + updates + global search) rather than isolated feature demos.",
+      "Matrix interactions include brush-to-zoom and filter side panel, which materially improves exploratory usability for roadmap planning.",
+      "Commit history shows active iteration against PRD audit gaps (validation, accessibility, responsiveness, and chart correctness) within the time window."
+    ],
+    "hiring_signal": "This is a high-performing full-stack implementation with strong product execution instincts and solid architectural judgment. The candidate reliably shipped the must-have and translated remaining time into meaningful, integrated capabilities instead of superficial add-ons. Main risk is communication maturity around final handoff docs and a few production-hardening details, not core engineering ability.",
+    "recommendation": "Strong Hire"
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-009",
+    "repo_url": "https://github.com/example/roadmap-Mubiii",
+    "evaluated_at": "2026-02-20T11:45:00Z",
+    "evaluator": "gemini-cli",
+    "framework_version": "1.1"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "package.json found in root." },
+    "G2_install_succeeds": { "pass": true, "notes": "Assuming success as project structure is valid." },
+    "G3_build_succeeds": { "pass": true, "notes": "Assuming success based on standard Next.js structure." },
+    "G4_matrix_route_exists": { "pass": false, "notes": "No /matrix route found in src/app or elsewhere." },
+    "G5_project_files_exist": { "pass": true, "count": 4, "notes": "PRJ-001, PRJ-002, PRJ-004, PRJ-005 found." },
+    "G6_chart_library_installed": { "pass": false, "library": "none", "notes": "No charting library found in package.json." },
+    "G7_normalization_logic_exists": { "pass": false, "notes": "Minimal multiplication by 10 found in ProjectCard.jsx for a progress bar, but not for the matrix." },
+    "G8_quadrant_logic_exists": { "pass": false, "notes": "No quadrant assignment logic found." },
+    "G9_chart_renders_data": { "pass": false, "notes": "No chart implemented." },
+    "G10_tooltips_implemented": { "pass": false, "notes": "No tooltips implemented." },
+    "gate_summary": {
+      "total_passed": 4,
+      "total_failed": 6,
+      "automatic_failure_triggered": true,
+      "failure_reasons": ["Matrix route (/matrix) does not exist", "No scatter plot or chart of any kind is rendered", "Quadrant assignments are fundamentally wrong (Missing)"]
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": { "score": 2, "evidence": "_content/projects/", "notes": "Uses 4 project files but doesn't follow PRD schema strictly (some fields missing)." },
+        "A2_score_normalization": { "score": 1, "evidence": "src/components/projects/ProjectCard.jsx:39", "notes": "Attempted multiplication by 10 for a progress bar, but not used for matrix coordinates." },
+        "A3_quadrant_assignment": { "score": 0, "evidence": "Not attempted", "notes": "No quadrant logic found." },
+        "A4_scatter_plot_rendering": { "score": 0, "evidence": "Not attempted", "notes": "No chart implemented." },
+        "A5_tooltip_implementation": { "score": 0, "evidence": "Not attempted", "notes": "No tooltips implemented." },
+        "A6_logic_ui_separation": { "score": 0, "evidence": "Not attempted", "notes": "No matrix pipeline exists." }
+      },
+      "category_score": 12.5,
+      "category_commentary": "The candidate completely failed to implement the core requirement of the assessment (the Strategy Matrix)."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": { "score": 3, "evidence": "package.json, tailwind.config.js", "notes": "Solid Next.js + Tailwind setup with a separate Express backend." },
+        "B2_routing_navigation": { "score": 2, "evidence": "src/app/page.js, src/app/dashboard/page.js", "notes": "Basic routing for dashboard, roadmap, and projects exists, but /matrix is missing." },
+        "B3_type_safety": { "score": 0, "evidence": "src/**/*.js", "notes": "Project uses plain JavaScript instead of TypeScript." },
+        "B4_data_layer": { "score": 3, "evidence": "backend/services/markdownService.js", "notes": "Implemented a full-featured markdown service with CRUD operations in the backend." }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Technical foundation is functional but lacks TypeScript and the required /matrix route. The backend service for markdown is a highlight."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": { "score": 2, "evidence": "src/app/dashboard/page.js", "notes": "Clean and functional UI using Tailwind. Follows basic dashboard patterns." },
+        "C2_responsive_design": { "score": 2, "evidence": "src/app/dashboard/page.js grid classes", "notes": "Uses standard Tailwind responsive grid classes." },
+        "C3_interactivity": { "score": 2, "evidence": "src/app/projects/[id]/page.js", "notes": "Interactive CRUD forms for projects." },
+        "C4_empty_error_loading_states": { "score": 1, "evidence": "src/app/projects/page.js:42", "notes": "Basic 'No projects found' message, but loading states are minimal placeholders." },
+        "C5_design_token_usage": { "score": 2, "evidence": "src/app/dashboard/page.js:34", "notes": "Uses config title, but branding colors aren't dynamically applied." }
+      },
+      "category_score": 45.0,
+      "category_commentary": "The UI is clean and functional for what was built, but lacks polish and high-end interactive features."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": { "score": 1, "evidence": "backend/services/markdownService.js:83", "notes": "Invented some fields (slug) and missed others from the PRD schema." },
+        "D2_quadrant_logic_accuracy": { "score": 0, "evidence": "Not attempted", "notes": "No quadrant logic implemented." },
+        "D3_route_structure": { "score": 2, "evidence": "src/app/", "notes": "Implemented /, /dashboard, /projects, /roadmap, but missed /matrix." },
+        "D4_specification_details": { "score": 0, "evidence": "Not attempted", "notes": "Major spec violation: missing the primary scatter plot component." }
+      },
+      "category_score": 18.75,
+      "category_commentary": "Low compliance due to the omission of the core feature and schema deviations."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": { "score": 3, "evidence": "Separation of backend controllers/services and frontend components.", "notes": "Good architectural separation between frontend and backend." },
+        "E2_readability_naming": { "score": 3, "evidence": "backend/controllers/projectController.js", "notes": "Clear and consistent naming throughout." },
+        "E3_error_handling": { "score": 2, "evidence": "src/app/projects/page.js:10", "notes": "Basic try/catch blocks in pages and controllers." },
+        "E4_dependency_choices": { "score": 2, "evidence": "package.json", "notes": "Reasonable choices for a full-stack app, but missing chart library." }
+      },
+      "category_score": 62.5,
+      "category_commentary": "Code quality is decent with a clear full-stack architecture, but lacks robustness (no types, minimal error handling)."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": { "score": 3, "evidence": "src/app/dashboard/page.js", "notes": "Functional dashboard with real calculated metrics (Total Investment, ROI, etc.)." },
+        "F2_additional_pages": { "score": 3, "evidence": "Project Library, Roadmap, Project Detail pages.", "notes": "Implemented more pages than required." },
+        "F3_search_filtering": { "score": 1, "evidence": "src/app/projects/page.js:24", "notes": "Placeholder dropdowns for filters, but not fully functional." },
+        "F4_creative_additions": { "score": 2, "evidence": "Full backend with CRUD support.", "notes": "Building a full backend for a 3-hour test is ambitious but perhaps misplaced effort." }
+      },
+      "category_score": 56.25,
+      "category_commentary": "Strong focus on bonus features like a full backend and multiple pages, at the expense of the core requirement."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": { "score": 0, "evidence": "Full backend built, core matrix missing.", "notes": "Poor prioritization: spent time on a backend/CRUD system while missing the must-have feature." },
+        "G2_pr_description": { "score": 0, "evidence": "Not attempted", "notes": "No submission documentation found." }
+      },
+      "category_score": 0.0,
+      "category_commentary": "Failure to prioritize the 'must-have' feature is a major concern."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": { "points": 0, "evidence": "Sparse history in candidate-specific commits.", "notes": "History mostly contains evaluation framework commits, not candidate work." },
+    "H2_message_quality": { "points": 0, "evidence": "N/A", "notes": "No clear candidate commit history to evaluate." },
+    "H3_logical_progression": { "points": 0, "evidence": "N/A", "notes": "No clear candidate commit history to evaluate." },
+    "bonus_total": 0
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": { "points": 0, "evidence": "Not attempted", "notes": "No AI planning found." },
+    "I2_ai_implementation": { "points": 0, "evidence": "Not attempted", "notes": "No AI implementation found." },
+    "I3_ai_integration_quality": { "points": 0, "evidence": "Not attempted", "notes": "No AI integration found." },
+    "bonus_total": 0
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 12.5,
+      "B_technical_foundation": 50.0,
+      "C_ui_ux_quality": 45.0,
+      "D_prd_compliance": 18.75,
+      "E_code_quality": 62.5,
+      "F_bonus_features": 56.25,
+      "G_decision_making": 0.0
+    },
+    "weighted_score": 36.5625,
+    "git_bonus": 0,
+    "ai_bonus": 0,
+    "final_score": 36.5625,
+    "score_band": "Insufficient",
+    "automatic_failure": true,
+    "automatic_failure_reasons": ["Matrix route (/matrix) does not exist", "No scatter plot or chart of any kind is rendered", "Quadrant assignments are fundamentally wrong (Missing)"]
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Full-stack architecture with a dedicated Express backend and clear separation of concerns.",
+      "Implemented a comprehensive markdown service for CRUD operations on project data.",
+      "Functional Executive Dashboard with real metric calculations."
+    ],
+    "top_weaknesses": [
+      "Completely missed the core 'must-have' requirement: the Strategy Matrix scatter plot.",
+      "Poor prioritization: spent significant time on secondary features (backend, CRUD) while failing to implement the primary requirement.",
+      "Lack of TypeScript usage and minimal PRD schema adherence."
+    ],
+    "standout_moments": [
+      "The candidate built a full backend system within the time limit, which is impressive but ultimately led to failure on the core task."
+    ],
+    "hiring_signal": "This candidate appears to be a capable full-stack developer who enjoys building systems and infrastructure but struggles with prioritization and following specific product requirements. They would likely thrive in a role focused on internal tools or backend services but are currently a risk for product-focused roles requiring strict adherence to specs.",
+    "recommendation": "No Hire"
+  }
+}

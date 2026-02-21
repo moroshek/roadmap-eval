@@ -1,0 +1,154 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "roadmap-CWKruse",
+    "repo_url": "https://github.com/moroshek/roadmap-CWKruse",
+    "evaluated_at": "2026-02-20T12:00:00Z",
+    "evaluator": "gemini-cli",
+    "framework_version": "1.1"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": { "pass": true, "notes": "package.json found in root." },
+    "G2_install_succeeds": { "pass": true, "notes": "npm install completed successfully." },
+    "G3_build_succeeds": { "pass": true, "notes": "Passed after manual fix for case-sensitivity (Components vs components) and TypeScript error (isFront prop on ReferenceDot)." },
+    "G4_matrix_route_exists": { "pass": true, "notes": "/matrix route implemented." },
+    "G5_project_files_exist": { "pass": true, "count": 7, "notes": "7 project files found in _content/projects." },
+    "G6_chart_library_installed": { "pass": true, "library": "recharts", "notes": "recharts installed and used." },
+    "G7_normalization_logic_exists": { "pass": true, "notes": "normalization logic found in src/lib/matrix.ts." },
+    "G8_quadrant_logic_exists": { "pass": true, "notes": "quadrant logic found in src/lib/matrix.ts." },
+    "G9_chart_renders_data": { "pass": true, "notes": "Scatter plot renders mapped data points." },
+    "G10_tooltips_implemented": { "pass": true, "notes": "Custom tooltips implemented for scatter points." },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": true,
+      "failure_reasons": ["Project failed to build initially due to case-sensitivity and TypeScript errors."]
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": { "score": 4, "evidence": "7 files in _content/projects (PRJ-001 to PRJ-007).", "notes": "Created a rich dataset with realistic data spanning all quadrants." },
+        "A2_score_normalization": { "score": 4, "evidence": "src/lib/matrix.ts:2", "notes": "Correct normalization (x10) in a dedicated utility, handles clamping." },
+        "A3_quadrant_assignment": { "score": 4, "evidence": "src/lib/matrix.ts:18", "notes": "Well-structured reusable utility for quadrant assignment." },
+        "A4_scatter_plot_rendering": { "score": 4, "evidence": "src/components/StrategyMatrix.tsx", "notes": "Premium chart with quadrant background zones and labels." },
+        "A5_tooltip_implementation": { "score": 3, "evidence": "src/components/StrategyMatrix.tsx:32", "notes": "Shows Title, Quadrant, Effort, and Impact. Solid but basic styling." },
+        "A6_logic_ui_separation": { "score": 4, "evidence": "loadProjects.ts, matrix.ts, StrategyMatrix.tsx", "notes": "Exemplary separation of concerns in the matrix pipeline." }
+      },
+      "category_score": 95.8,
+      "category_commentary": "The Strategy Matrix implementation is excellent, with high marks for data quality, transformation logic, and visualization."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": { "score": 2, "evidence": "Build failed on Linux due to case-sensitivity.", "notes": "Functional but has notable issues that break cross-platform builds." },
+        "B2_routing_navigation": { "score": 1, "evidence": "No sidebar or / route content.", "notes": "Only /matrix route implemented; navigation is missing." },
+        "B3_type_safety": { "score": 2, "evidence": "StrategyMatrix.tsx props and loadProjects any types.", "notes": "Basic TypeScript usage; some type safety gaps." },
+        "B4_data_layer": { "score": 2, "evidence": "src/lib/loadProjects.ts", "notes": "Functional pipeline using gray-matter; basic but works." }
+      },
+      "category_score": 43.8,
+      "category_commentary": "Technical foundation is the weakest area, primarily due to the build failure and missing navigation/routing structure."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": { "score": 2, "evidence": "Inline styles in page.tsx.", "notes": "Clean and functional but lacks professional polish and design token usage." },
+        "C2_responsive_design": { "score": 2, "evidence": "ResponsiveContainer used.", "notes": "Chart resizes, but layout is very basic." },
+        "C3_interactivity": { "score": 2, "evidence": "Basic tooltips.", "notes": "Standard interactivity; nothing beyond defaults." },
+        "C4_empty_error_loading_states": { "score": 1, "evidence": "Filtering in loadProjects.", "notes": "No skeletons or dedicated empty/error states." },
+        "C5_design_token_usage": { "score": 0, "evidence": "Hardcoded colors in StrategyMatrix.tsx.", "notes": "Branding from config.json ignored." }
+      },
+      "category_score": 35.0,
+      "category_commentary": "UI/UX meets the bare minimum but misses several PRD requirements like loading skeletons and design token integration."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": { "score": 3, "evidence": "loadProjects.ts validation.", "notes": "Core fields match PRD schema." },
+        "D2_quadrant_logic_accuracy": { "score": 4, "evidence": "src/lib/matrix.ts:18", "notes": "Perfect match to PRD quadrant definitions." },
+        "D3_route_structure": { "score": 1, "evidence": "Only /matrix route exists.", "notes": "Missing Dashboard, Roadmap, and Project Library." },
+        "D4_specification_details": { "score": 3, "evidence": "Scatter plot axes and quadrants.", "notes": "High adherence to matrix specs; missed secondary details like cmd+k." }
+      },
+      "category_score": 68.75,
+      "category_commentary": "High compliance on the core Matrix requirement, but failed to implement the broader application structure."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": { "score": 4, "evidence": "Clean folder structure for src/lib and src/components.", "notes": "Exemplary architecture for the parts implemented." },
+        "E2_readability_naming": { "score": 4, "evidence": "src/lib/matrix.ts", "notes": "Code is very clean, well-named, and self-documenting." },
+        "E3_error_handling": { "score": 3, "evidence": "Type checks in normalizeScore.", "notes": "Thoughtful input validation and filtering." },
+        "E4_dependency_choices": { "score": 3, "evidence": "package.json", "notes": "Well-chosen stack matching PRD recommendations." }
+      },
+      "category_score": 87.5,
+      "category_commentary": "Code quality is very high; the candidate writes clean, maintainable logic."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": { "score": 0, "evidence": "Not attempted.", "notes": "No dashboard widgets found." },
+        "F2_additional_pages": { "score": 0, "evidence": "Not attempted.", "notes": "No additional routes beyond /matrix." },
+        "F3_search_filtering": { "score": 0, "evidence": "Not attempted.", "notes": "fuse.js installed but unused." },
+        "F4_creative_additions": { "score": 0, "evidence": "Not attempted.", "notes": "No major creative additions." }
+      },
+      "category_score": 0.0,
+      "category_commentary": "No bonus features were implemented."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": { "score": 2, "evidence": "Solid matrix, missing dashboard/navigation.", "notes": "Prioritized the core requirement and data quality over breadth." },
+        "G2_pr_description": { "score": 3, "evidence": "Summary.md", "notes": "Structured summary explaining decisions and technical choices." }
+      },
+      "category_score": 62.5,
+      "category_commentary": "Good prioritization of the must-have, but lack of bonus features limits the score."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": { "points": 1, "evidence": "3 commits.", "notes": "Shows incremental progress from scaffold to implementation." },
+    "H2_message_quality": { "points": 1, "evidence": "Descriptive but informal messages.", "notes": "Explains what was changed." },
+    "H3_logical_progression": { "points": 1, "evidence": "Initial -> Implementation -> Summary.", "notes": "Clear progression of work." },
+    "bonus_total": 3
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": { "points": 0, "evidence": "Not attempted.", "notes": "No AI documentation found." },
+    "I2_ai_implementation": { "points": 0, "evidence": "Not attempted.", "notes": "No AI code found." },
+    "I3_ai_integration_quality": { "points": 0, "evidence": "Not attempted.", "notes": "" },
+    "bonus_total": 0
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 95.8,
+      "B_technical_foundation": 43.8,
+      "C_ui_ux_quality": 35.0,
+      "D_prd_compliance": 68.75,
+      "E_code_quality": 87.5,
+      "F_bonus_features": 0.0,
+      "G_decision_making": 62.5
+    },
+    "weighted_score": 68.06,
+    "git_bonus": 3,
+    "ai_bonus": 0,
+    "final_score": 71.06,
+    "score_band": "Competent",
+    "automatic_failure": true,
+    "automatic_failure_reasons": ["Project failed to build initially due to case-sensitivity (Components vs components) and TypeScript errors."]
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Excellent data transformation logic in matrix.ts with perfect PRD adherence.",
+      "High code readability and clean separation of concerns.",
+      "Rich synthetic dataset (7 projects) that tells a coherent story."
+    ],
+    "top_weaknesses": [
+      "Fragile build configuration (case-sensitivity issue) that breaks on Linux.",
+      "Extremely limited scope (only /matrix route implemented).",
+      "Ignored design tokens and global configuration requirements."
+    ],
+    "standout_moments": [
+      "The quadrant background shading and labels in the scatter plot are very well done."
+    ],
+    "hiring_signal": "This candidate is a strong 'logic and data' developer but lacks the holistic 'product' focus required for a senior role. They write very clean, maintainable code for specific features but struggle with cross-platform build considerations and broader application architecture. They would thrive in a backend-leaning frontend role or as part of a team where a senior developer provides the architectural scaffolding.",
+    "recommendation": "Lean Hire"
+  }
+}

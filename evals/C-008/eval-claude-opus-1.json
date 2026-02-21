@@ -1,0 +1,329 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-008",
+    "repo_url": "https://github.com/moroshek/roadmap-CWKruse",
+    "evaluated_at": "2026-02-20T18:00:00Z",
+    "evaluator": "claude-opus-1",
+    "framework_version": "1.1"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "package.json exists with dependencies (next, react, recharts, gray-matter) and scripts (dev, build, start)."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "npm install completes with 0 vulnerabilities."
+    },
+    "G3_build_succeeds": {
+      "pass": false,
+      "notes": "npm run build fails: 'Module not found: Can't resolve @/components/StrategyMatrix' — the file is at src/Components/ (uppercase C) but the import uses lowercase @/components/. npm run dev starts the server successfully but /matrix returns 500 with the same module resolution error on case-sensitive Linux. Candidate likely developed on Windows/macOS where filesystem is case-insensitive."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "src/app/matrix/page.tsx exists and defines the /matrix route."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 7,
+      "notes": "7 markdown files in _content/projects/: PRJ-001 through PRJ-007. The 4 seeded files plus 3 candidate-created files (PRJ-005, PRJ-006, PRJ-007)."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "recharts ^3.7.0 in dependencies. Used for ScatterChart, Scatter, Tooltip, ReferenceArea, ReferenceLine, ReferenceDot."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "src/lib/matrix.ts:2-7 — normalizeScore function: clamps raw value to 0-10 range, then multiplies by 10. Correct transformation."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "src/lib/matrix.ts:17-25 — getQuadrant function with conditional logic: Quick Wins (impact>=50, effort<50), Big Bets (>=50/>=50), Fillers (<50/<50), Time Sinks (<50/>=50)."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "Source inspection: src/Components/StrategyMatrix.tsx renders <Scatter data={points}> with mapped data points. The code is correct and would render all 7 projects. However, the page does not actually render on our Linux test environment due to the case-sensitivity import bug (G3). Scored from source inspection per build failure isolation rule."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "src/Components/StrategyMatrix.tsx:28-46 — CustomTooltip component renders title (bold), quadrantLabel, Effort value, and Impact value on hover."
+    },
+    "gate_summary": {
+      "total_passed": 9,
+      "total_failed": 1,
+      "automatic_failure_triggered": false,
+      "failure_reasons": []
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.30,
+      "criteria": {
+        "A1_data_population": {
+          "score": 3,
+          "evidence": "_content/projects/PRJ-001.md through PRJ-007.md — 7 total files. PRJ-001 to PRJ-004 are seeded. PRJ-005 (strategic_value: 8.2, complexity: 3.6 → Quick Wins), PRJ-006 (9.4, 8.7 → Big Bets), PRJ-007 (3.8, 7.9 → Time Sinks) are candidate-created. Data spans departments: Manufacturing, Supply Chain, Sales, After-Sales, Dealer Operations, Operations, IT. Phases include Foundation, Acceleration, Scale, Transformation, Stabilization.",
+          "notes": "Exceeds the 3-5 required files with 7 total. Added projects have realistic frontmatter and span different quadrants. However, PRJ-005, PRJ-006, PRJ-007 each have 'dummy file' text at the end and contain spelling errors in deliverables, preventing a 4."
+        },
+        "A2_score_normalization": {
+          "score": 3,
+          "evidence": "src/lib/matrix.ts:2-7 — normalizeScore(raw: number): clamps input to 0-10 with Math.max(0, Math.min(10, raw)), then multiplies by 10. Handles typeof check (returns 0 for non-numbers). Correct: PRJ-001 strategic_value 8.6 → 86, complexity 3.2 → 32.",
+          "notes": "Dedicated utility function, clearly separated from rendering. Edge case handling (type guard, clamping) is a nice touch. Borderline 3/4 — chose 3 because the pipeline is simple (single function) rather than part of a larger data transformation layer."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "src/lib/matrix.ts:10-25 — Quadrant union type and getQuadrant(impact, effort) function. Uses boolean variables (highImpact = impact >= 50, highEffort = effort >= 50) for clarity. Returns typed Quadrant value. Separated from rendering in dedicated utility file.",
+          "notes": "Clean, readable implementation in a dedicated function with proper TypeScript typing. Boundary at 50 handled consistently (>= 50 is 'high'). Not quite 4 because thresholds are hardcoded inline (50) rather than configurable constants."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 3,
+          "evidence": "src/Components/StrategyMatrix.tsx:49-93 — ScatterChart with: XAxis (dataKey='effort', domain [0,100], label 'Effort (X)'), YAxis (dataKey='impact', domain [0,100], label 'Impact (Y)'), CartesianGrid, 4 ReferenceArea zones with distinct colors (#f5f5f5 Fillers, #fff7ed Time Sinks, #ecfeff Quick Wins, #fef2f2 Big Bets), ReferenceLine dividers at x=50 and y=50 (dashed), ReferenceDot labels for each quadrant name, Scatter data with blue circle points (r=8).",
+          "notes": "Well-rendered chart with labeled axes, quadrant background zones with colors, quadrant text labels, reference lines. Scaling is correct (0-100 on both axes). Not a 4 because data points are uniform (all same size/color) — no sizing or coloring by meaningful dimension."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "src/Components/StrategyMatrix.tsx:28-46 — CustomTooltip shows: project title (bold), quadrant label, Effort value, Impact value. Styled with white background, 1px solid #ddd border, 8px padding.",
+          "notes": "Shows Title + Quadrant Label (meeting minimum requirement) plus additional useful info (effort and impact normalized scores). Basic inline styling — not themed with design system, no transitions. Meets level 3 definition of 'additional useful info.'"
+        },
+        "A6_logic_ui_separation": {
+          "score": 3,
+          "evidence": "Matrix pipeline files: (1) src/lib/loadProjects.ts — reads and parses markdown files via gray-matter, filters for valid data; (2) src/lib/matrix.ts — normalizeScore, getQuadrant, transformToMatrix functions (all transformation logic); (3) src/Components/StrategyMatrix.tsx — pure presentation component, receives fully prepared MatrixPoint[] data; (4) src/app/matrix/page.tsx — thin orchestrator (loads → transforms → passes to component). No transformation logic in the chart component.",
+          "notes": "Clear separation: data loading → transformation/normalization → quadrant assignment → chart component. Each concern in its own file. The chart component is purely presentational — receives prepared data and only handles rendering."
+        }
+      },
+      "category_score": 75.0,
+      "category_commentary": "The core matrix implementation is solid. All transformation logic (normalization, quadrant assignment) is correct and well-separated into dedicated utility functions. The chart renders quadrant zones with colors and labels. The main gap is the case-sensitivity import bug (Components vs components) that prevents the page from actually rendering on case-sensitive filesystems. The code is logically correct throughout."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 1,
+          "evidence": "package.json exists with Next.js 16.1.6, React 18.2, TypeScript 5. npm run build fails with 'Module not found: Can't resolve @/components/StrategyMatrix' — uppercase Components folder vs lowercase import. npm run dev starts server but /matrix returns 500 with same error. No .gitignore file exists. No linting configured.",
+          "notes": "Build fails due to case-sensitivity mismatch in import path. The dev server starts but the only feature page doesn't work on Linux. Missing .gitignore is another significant gap. TypeScript is configured but strict mode is off."
+        },
+        "B2_routing_navigation": {
+          "score": 1,
+          "evidence": "Only src/app/matrix/page.tsx exists as a route. No home page (no src/app/page.tsx), no /projects, no /roadmap routes. src/app/layout.tsx is a minimal shell with no navigation component.",
+          "notes": "/matrix route exists but there is no navigation between pages because there are no other pages. No sidebar, no nav links."
+        },
+        "B3_type_safety": {
+          "score": 2,
+          "evidence": "src/lib/matrix.ts:10-14 — Quadrant union type. src/lib/matrix.ts:28-36 — ProjectLike type with optional fields. src/Components/StrategyMatrix.tsx:18-25 — MatrixPoint type. TypeScript config: strict: false (tsconfig.json:12). One `any` usage at StrategyMatrix.tsx:87 (shape={(props: any)}).",
+          "notes": "Basic TypeScript: interfaces for project data and component props, typed function signatures, union type for quadrants. Not a 3 because strict mode is off, has one any usage, and no Zod schemas for validation."
+        },
+        "B4_data_layer": {
+          "score": 2,
+          "evidence": "src/lib/loadProjects.ts:1-31 — Uses gray-matter to parse markdown frontmatter. Reads files from _content/projects/, filters for valid entries (checks for id, title, slug, scores). Data flows: files → loadProjects() → map(transformToMatrix) → StrategyMatrix component.",
+          "notes": "Uses gray-matter library appropriately. Basic but functional pipeline. Has some validation (filter for required fields). No schema validation (Zod), no centralized content loader, no error handling for file read failures."
+        }
+      },
+      "category_score": 37.5,
+      "category_commentary": "Technical foundation is weak. The build fails due to a case-sensitivity bug, there's no .gitignore, only one route exists with no navigation, and TypeScript strict mode is off. The data layer is functional but basic. The candidate set up the essential tooling (Next.js, TypeScript, gray-matter, recharts) but didn't invest in project configuration quality."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 1,
+          "evidence": "src/app/matrix/page.tsx:17-18 — Page has inline style padding: 24 and a plain h1. No CSS framework (no Tailwind, no global stylesheet). src/Components/StrategyMatrix.tsx — chart has colored quadrant zones and labels but no broader design system. src/app/layout.tsx — minimal shell with no styling.",
+          "notes": "The chart itself has some visual thought (colored quadrant zones, dashed dividers, colored labels) but the page wrapper is unstyled. No consistent color palette, no typography hierarchy beyond the h1, no design system. Looks like a homework assignment, not a product."
+        },
+        "C2_responsive_design": {
+          "score": 2,
+          "evidence": "src/Components/StrategyMatrix.tsx:51-52 — ResponsiveContainer wraps the chart (width: '100%', height: 520). No other responsive considerations in the codebase — no media queries, no responsive classes, no breakpoint handling.",
+          "notes": "The chart resizes via Recharts' ResponsiveContainer, which handles width responsively. Fixed height of 520px. No broader responsive layout considerations, but the minimal page content wouldn't break at different widths."
+        },
+        "C3_interactivity": {
+          "score": 2,
+          "evidence": "src/Components/StrategyMatrix.tsx:86 — Tooltip component with custom renderer provides hover interaction on data points. No other interactive elements (no filters, no click handlers, no transitions, no animations).",
+          "notes": "Chart tooltips work on hover. That's the only interactivity. No transitions, animations, filter controls, or other interactive elements."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 1,
+          "evidence": "src/lib/matrix.ts:2-7 — normalizeScore returns 0 for non-numbers. src/lib/matrix.ts:40-50 — transformToMatrix uses ?? operator for defaults. src/lib/loadProjects.ts:22-29 — filters out entries missing required fields. No loading skeletons, no empty state messages, no error boundaries in any component.",
+          "notes": "Defensive coding in the data layer prevents crashes from malformed data. However, there is no user-facing error handling: no loading states, no empty state messaging, no error boundaries. If all projects were invalid, the chart would render empty with no explanation."
+        },
+        "C5_design_token_usage": {
+          "score": 0,
+          "evidence": "Not attempted. _content/config.json defines design tokens (primary: #0B1220, secondary: #2563EB, accent: #F59E0B, fonts: Inter/Roboto) but none are referenced anywhere in the application code. Chart colors (#f5f5f5, #fff7ed, #ecfeff, #fef2f2, #2563eb) are hardcoded and do not match config tokens.",
+          "notes": "No attempt to integrate the tenant's branding from config.json. All colors are hardcoded. No font imports for Inter or Roboto."
+        }
+      },
+      "category_score": 30.0,
+      "category_commentary": "UI/UX is minimal. The chart has some visual thought (quadrant shading, labels) but the overall page is unstyled with no design system, no design tokens, and no handling of non-happy-path states. The only interactivity is the default chart tooltip behavior."
+    },
+    "D_prd_compliance": {
+      "weight": 0.10,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 2,
+          "evidence": "_content/projects/PRJ-005.md, PRJ-006.md, PRJ-007.md — Candidate-created files include all PRD fields: id, title, slug, owner, department, phase, status, dates (planned_start, planned_end), scores (strategic_value, complexity, confidence), financials (estimated_cost, projected_roi, currency), tags, related_projects. Matches the structure of the seeded PRJ-001 through PRJ-004 files.",
+          "notes": "Core fields present and correctly typed, following PRD naming conventions. The added files mirror the seeded file schema. No programmatic schema enforcement (Zod/Yup). Score of 2 for correct field usage without enforcement."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "src/lib/matrix.ts:17-25 — Quick Wins: impact>=50 AND effort<50 (matches PRD). Big Bets: impact>=50 AND effort>=50 (matches). Fillers: impact<50 AND effort<50 (matches). Time Sinks: impact<50 AND effort>=50 (matches). Verification: PRJ-001 (86/32→Quick Wins ✓), PRJ-002 (91/82→Big Bets ✓), PRJ-003 (39/28→Fillers ✓), PRJ-004 (41/87→Time Sinks ✓). Boundary at 50 handled consistently. src/Components/StrategyMatrix.tsx:55-58 — Quadrant zones rendered as ReferenceArea background zones. Lines 81-84 — Quadrant labels rendered via ReferenceDot.",
+          "notes": "Perfect compliance with PRD Section 2.1 quadrant definitions. All four quadrant boundaries are exact. Quadrant labels are visually rendered on the chart as colored background zones with text labels, satisfying PRD 4.3 'Background zones labeled' requirement."
+        },
+        "D3_route_structure": {
+          "score": 0,
+          "evidence": "Only src/app/matrix/page.tsx exists. No dashboard route (/), no /projects, no /roadmap, no /projects/[slug]. src/app/layout.tsx is a minimal shell.",
+          "notes": "Only the /matrix route was implemented. No other PRD routes exist."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "Checked details: (1) X-Axis is Effort/Complexity ✓ (StrategyMatrix.tsx:62 dataKey='effort'). (2) Y-Axis is Impact/Strategic Value ✓ (line 69 dataKey='impact'). (3) Scatter plot type ✓ (ScatterChart). (4) strategic_value used for Y-axis ✓ (matrix.ts:40). (5) complexity used for X-axis ✓ (matrix.ts:41). (6) Quick Wins is top-left (high impact, low effort) ✓ (ReferenceDot at x=25, y=75).",
+          "notes": "All specification details are correct. Axes are properly oriented, correct fields are used, chart type is correct, quadrant positioning is accurate. No additional PRD details implemented (no sidebar, no cmd+k, no print styles)."
+        }
+      },
+      "category_score": 56.25,
+      "category_commentary": "Strong PRD compliance for the matrix feature specifically — quadrant logic is perfect with visual zones, axes and fields are correct. However, only /matrix was implemented (no other PRD routes), keeping the overall category score modest."
+    },
+    "E_code_quality": {
+      "weight": 0.20,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 3,
+          "evidence": "Overall architecture: src/lib/loadProjects.ts (data loading/parsing), src/lib/matrix.ts (transformation utilities — normalize, quadrant, transform), src/Components/StrategyMatrix.tsx (pure presentation — receives MatrixPoint[] and renders), src/app/matrix/page.tsx (page-level orchestration), src/app/layout.tsx (app shell). Dependencies flow one direction: lib → Components → app.",
+          "notes": "Clear architecture with distinct layers despite the small codebase. Data loading, transformation, and presentation are in separate files with appropriate responsibility boundaries. The chart component is purely presentational. A new developer could understand the structure quickly."
+        },
+        "E2_readability_naming": {
+          "score": 2,
+          "evidence": "Function names: normalizeScore, getQuadrant, transformToMatrix, loadProjects — all descriptive and domain-appropriate. Variable names: impact, effort, highImpact, highEffort, clamped — clear. Types: Quadrant, MatrixPoint, ProjectLike — descriptive. Comment typos: page.tsx:6 'oorjecs' (objects), page.tsx:12 'purpses' (purposes). Short names: StrategyMatrix.tsx:37 'p' for payload, loadProjects.ts:11 'f' for filter callback.",
+          "notes": "Naming is generally good and domain-appropriate. Consistent camelCase conventions. Some short variable names and comment typos reduce polish."
+        },
+        "E3_error_handling": {
+          "score": 1,
+          "evidence": "src/lib/matrix.ts:3 — typeof check in normalizeScore. src/lib/matrix.ts:40-46 — null coalescing (??) defaults in transformToMatrix. src/lib/loadProjects.ts:22-29 — filter removes entries missing required fields. No try/catch anywhere in the codebase. No error boundaries. If fs.readFileSync or matter() throws, the entire app crashes.",
+          "notes": "Defensive defaults prevent crashes from missing/null data values, but there is no actual error handling for operational failures (filesystem errors, YAML parse errors). A malformed YAML file would crash the server. No try/catch around I/O operations."
+        },
+        "E4_dependency_choices": {
+          "score": 2,
+          "evidence": "package.json dependencies: next ^16.1.6, react ^18.2.0, recharts ^3.7.0, gray-matter ^4.0.3. DevDependencies: @types/node, @types/react, @types/react-dom, typescript. No unnecessary dependencies.",
+          "notes": "Reasonable, minimal choices. Recharts supports scatter plots natively. gray-matter is appropriate for markdown frontmatter. No Tailwind (would have helped with styling). No unnecessary dependencies. Clean dependency footprint."
+        }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Good separation of concerns for the code that exists — clear architecture with distinct layers. Naming is generally solid. Weak spots are error handling (no try/catch for I/O operations) and the lack of Tailwind or other styling framework. The codebase is small but well-organized."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 0,
+          "evidence": "Not attempted. No dashboard route or component exists.",
+          "notes": "No dashboard implemented."
+        },
+        "F2_additional_pages": {
+          "score": 0,
+          "evidence": "Not attempted. Only src/app/matrix/page.tsx exists beyond the layout.",
+          "notes": "Only the /matrix route was built. No additional pages."
+        },
+        "F3_search_filtering": {
+          "score": 0,
+          "evidence": "Not attempted. No search or filtering logic exists anywhere in the codebase.",
+          "notes": "No search or filtering implemented."
+        },
+        "F4_creative_additions": {
+          "score": 0,
+          "evidence": "Not attempted. No features beyond the core matrix requirement.",
+          "notes": "The quadrant shading and labels on the chart are nice touches but are part of the core PRD requirement, not creative additions."
+        }
+      },
+      "category_score": 0.0,
+      "category_commentary": "No bonus features were implemented. The candidate focused entirely on the core matrix requirement."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 2,
+          "evidence": "Candidate spent all available time on the must-have matrix feature. Core logic (normalization, quadrant assignment, scatter plot) is correct and well-structured. However, the deliverable has a critical cross-platform bug (Components vs components case sensitivity) that prevents it from running on case-sensitive filesystems. No bonus features attempted. Summary.md acknowledges focusing on the core.",
+          "notes": "Correct prioritization — focused on the must-have. The matrix logic works correctly. The case-sensitivity bug is a deployment issue rather than a logic issue, but it does mean the deliverable doesn't run on our test environment. No bonus features to evaluate."
+        },
+        "G2_pr_description": {
+          "score": 2,
+          "evidence": "Summary.md provides: system/project/framework requirements, description of what was implemented (data population, transformation logic, render UI), brief explanation of how it was done, notes on path aliasing fix, acknowledgment of not implementing bonus items. No PR was created (code pushed directly). README.md is unchanged from template.",
+          "notes": "Summary.md is useful: explains what was built, how to run it, and what was skipped. Some typos throughout ('uderstanding', 'Requiremnts', 'reuslting'). Lacks depth on architectural decisions and trade-offs. Adequate but not structured."
+        }
+      },
+      "category_score": 50.0,
+      "category_commentary": "Correct prioritization on the core requirement. Documentation in Summary.md covers the basics but lacks polish. The critical oversight was not testing the build on a case-sensitive filesystem (or at least not catching the Components/components mismatch)."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 0,
+      "evidence": "3 commits total: 023a42c (2026-02-13 Initial commit), bbc6b86 (2026-02-19 12:58 — all implementation), e6a0347 (2026-02-19 13:18 — Summary.md update). The implementation was a single commit with a follow-up documentation fix.",
+      "notes": "Essentially a single implementation commit. The initial commit is the scaffold, then everything was added at once, then a minor doc update. Not incremental progress."
+    },
+    "H2_message_quality": {
+      "points": 0,
+      "evidence": "Commit messages: 'Initial commit', 'Here are my implementations. Please let me know if there are any questions or commnets about anything. Thanks', 'Summary update for requirments on running.'",
+      "notes": "Messages are conversational rather than technical. The implementation commit message doesn't describe what was built. Typos present ('commnets', 'requirments'). Not professional commit message style."
+    },
+    "H3_logical_progression": {
+      "points": 0,
+      "evidence": "All implementation work was done in a single commit (bbc6b86). No incremental build-up visible.",
+      "notes": "No discernible logical progression — everything was committed at once."
+    },
+    "bonus_total": 0
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "points": 0,
+      "evidence": "No AI-related documentation or planning found in the repository.",
+      "notes": "No AI features documented or planned."
+    },
+    "I2_ai_implementation": {
+      "points": 0,
+      "evidence": "No AI-related code exists in the repository.",
+      "notes": "No AI features implemented."
+    },
+    "I3_ai_integration_quality": {
+      "points": 0,
+      "evidence": "No AI integration to evaluate.",
+      "notes": "N/A — no AI features present."
+    },
+    "bonus_total": 0
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 75.0,
+      "B_technical_foundation": 37.5,
+      "C_ui_ux_quality": 30.0,
+      "D_prd_compliance": 56.25,
+      "E_code_quality": 50.0,
+      "F_bonus_features": 0.0,
+      "G_decision_making": 50.0
+    },
+    "weighted_score": 50.75,
+    "git_bonus": 0,
+    "ai_bonus": 0,
+    "final_score": 50.75,
+    "score_band": "Below Expectations",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Correct matrix logic: normalization (×10 with clamping) and quadrant assignment are accurate for all four quadrants with proper boundary handling at 50 (src/lib/matrix.ts).",
+      "Clean separation of concerns: data loading (loadProjects.ts), transformation (matrix.ts), and presentation (StrategyMatrix.tsx) are properly separated into dedicated files with one-directional dependency flow.",
+      "Chart visualization includes colored quadrant zones, text labels, dashed reference lines, labeled axes with correct domain (0-100), and custom tooltips — showing care for the core deliverable.",
+      "Added 3 additional project files (PRJ-005 through PRJ-007) with realistic data spanning different quadrants, departments, and phases."
+    ],
+    "top_weaknesses": [
+      "Critical cross-platform bug: file at src/Components/ (uppercase) but imported as @/components/ (lowercase), causing both build failure and dev-mode 500 error on case-sensitive filesystems (Linux). The deliverable does not run on our test environment.",
+      "No features beyond the matrix: no dashboard, no additional pages, no navigation, no search/filtering. The application is a single page with a chart.",
+      "Minimal UI polish: inline styles only, no CSS framework, no design tokens from config.json, no loading/error states. The page looks like a bare prototype.",
+      "Missing .gitignore, TypeScript strict mode off, no linting — project configuration gaps that suggest limited experience with production-quality project setup."
+    ],
+    "standout_moments": [
+      "The defensive coding in normalizeScore (typeof check + clamping) and transformToMatrix (null coalescing defaults) shows thoughtfulness about data quality, even though broader error handling is missing.",
+      "The candidate's Summary.md is candid about what was and wasn't accomplished, including a personal note about enjoying the challenge."
+    ],
+    "hiring_signal": "This candidate demonstrates understanding of core programming concepts — they correctly implemented data transformation logic with proper separation of concerns. However, the delivery is minimal (single feature, no polish, broken build) and the cross-platform bug suggests limited experience with CI/CD or multi-environment testing. This profile suggests a junior developer who can implement specified logic but needs mentorship on project setup, testing discipline, and end-to-end delivery.",
+    "recommendation": "Lean No Hire"
+  }
+}

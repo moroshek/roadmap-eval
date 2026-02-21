@@ -1,0 +1,627 @@
+{
+  "candidate_id": "C-008",
+  "evaluator_count": 3,
+  "evaluators": [
+    "claude-opus-1",
+    "codex-gpt5",
+    "gemini-cli"
+  ],
+  "confidence": "full",
+  "automated_gate": {
+    "checks": {
+      "G1_package_json_exists": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G2_install_succeeds": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G3_build_succeeds": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          false,
+          true,
+          true
+        ],
+        "pass_count": 2,
+        "fail_count": 1,
+        "agreement": "split"
+      },
+      "G4_matrix_route_exists": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G5_project_files_exist": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G6_chart_library_installed": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G7_normalization_logic_exists": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G8_quadrant_logic_exists": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G9_chart_renders_data": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      },
+      "G10_tooltips_implemented": {
+        "consensus_pass": true,
+        "evaluator_results": [
+          true,
+          true,
+          true
+        ],
+        "pass_count": 3,
+        "fail_count": 0,
+        "agreement": "unanimous"
+      }
+    },
+    "automatic_failure": false,
+    "failure_reasons": []
+  },
+  "rubric_consensus": {
+    "A_strategy_matrix": {
+      "weight": 0.3,
+      "criteria": {
+        "A1_data_population": {
+          "consensus_score": 4,
+          "mean": 3.67,
+          "std_dev": 0.58,
+          "individual_scores": [
+            3,
+            4,
+            4
+          ],
+          "agreement": "moderate"
+        },
+        "A2_score_normalization": {
+          "consensus_score": 4,
+          "mean": 3.67,
+          "std_dev": 0.58,
+          "individual_scores": [
+            3,
+            4,
+            4
+          ],
+          "agreement": "moderate"
+        },
+        "A3_quadrant_assignment": {
+          "consensus_score": 3,
+          "mean": 3.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            3,
+            3,
+            4
+          ],
+          "agreement": "moderate"
+        },
+        "A4_scatter_plot_rendering": {
+          "consensus_score": 3,
+          "mean": 3.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            3,
+            3,
+            4
+          ],
+          "agreement": "moderate"
+        },
+        "A5_tooltip_implementation": {
+          "consensus_score": 3,
+          "mean": 3,
+          "std_dev": 0,
+          "individual_scores": [
+            3,
+            3,
+            3
+          ],
+          "agreement": "strong"
+        },
+        "A6_logic_ui_separation": {
+          "consensus_score": 3,
+          "mean": 3.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            3,
+            3,
+            4
+          ],
+          "agreement": "moderate"
+        }
+      },
+      "category_score": 83.33
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "consensus_score": 1,
+          "mean": 1.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            1,
+            1,
+            2
+          ],
+          "agreement": "moderate"
+        },
+        "B2_routing_navigation": {
+          "consensus_score": 1,
+          "mean": 0.67,
+          "std_dev": 0.58,
+          "individual_scores": [
+            1,
+            0,
+            1
+          ],
+          "agreement": "moderate"
+        },
+        "B3_type_safety": {
+          "consensus_score": 2,
+          "mean": 2,
+          "std_dev": 0,
+          "individual_scores": [
+            2,
+            2,
+            2
+          ],
+          "agreement": "strong"
+        },
+        "B4_data_layer": {
+          "consensus_score": 2,
+          "mean": 2,
+          "std_dev": 0,
+          "individual_scores": [
+            2,
+            2,
+            2
+          ],
+          "agreement": "strong"
+        }
+      },
+      "category_score": 37.5
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "consensus_score": 1,
+          "mean": 1.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            1,
+            1,
+            2
+          ],
+          "agreement": "moderate"
+        },
+        "C2_responsive_design": {
+          "consensus_score": 2,
+          "mean": 2,
+          "std_dev": 0,
+          "individual_scores": [
+            2,
+            2,
+            2
+          ],
+          "agreement": "strong"
+        },
+        "C3_interactivity": {
+          "consensus_score": 2,
+          "mean": 2,
+          "std_dev": 0,
+          "individual_scores": [
+            2,
+            2,
+            2
+          ],
+          "agreement": "strong"
+        },
+        "C4_empty_error_loading_states": {
+          "consensus_score": 1,
+          "mean": 1,
+          "std_dev": 0,
+          "individual_scores": [
+            1,
+            1,
+            1
+          ],
+          "agreement": "strong"
+        },
+        "C5_design_token_usage": {
+          "consensus_score": 0,
+          "mean": 0,
+          "std_dev": 0,
+          "individual_scores": [
+            0,
+            0,
+            0
+          ],
+          "agreement": "strong"
+        }
+      },
+      "category_score": 30
+    },
+    "D_prd_compliance": {
+      "weight": 0.1,
+      "criteria": {
+        "D1_schema_adherence": {
+          "consensus_score": 2,
+          "mean": 2.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            2,
+            2,
+            3
+          ],
+          "agreement": "moderate"
+        },
+        "D2_quadrant_logic_accuracy": {
+          "consensus_score": 4,
+          "mean": 4,
+          "std_dev": 0,
+          "individual_scores": [
+            4,
+            4,
+            4
+          ],
+          "agreement": "strong"
+        },
+        "D3_route_structure": {
+          "consensus_score": 0,
+          "mean": 0.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            0,
+            0,
+            1
+          ],
+          "agreement": "moderate"
+        },
+        "D4_specification_details": {
+          "consensus_score": 3,
+          "mean": 3,
+          "std_dev": 0,
+          "individual_scores": [
+            3,
+            3,
+            3
+          ],
+          "agreement": "strong"
+        }
+      },
+      "category_score": 56.25
+    },
+    "E_code_quality": {
+      "weight": 0.2,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "consensus_score": 3,
+          "mean": 3,
+          "std_dev": 1,
+          "individual_scores": [
+            3,
+            2,
+            4
+          ],
+          "agreement": "moderate"
+        },
+        "E2_readability_naming": {
+          "consensus_score": 2,
+          "mean": 2.67,
+          "std_dev": 1.15,
+          "individual_scores": [
+            2,
+            2,
+            4
+          ],
+          "agreement": "weak"
+        },
+        "E3_error_handling": {
+          "consensus_score": 2,
+          "mean": 2,
+          "std_dev": 1,
+          "individual_scores": [
+            1,
+            2,
+            3
+          ],
+          "agreement": "moderate"
+        },
+        "E4_dependency_choices": {
+          "consensus_score": 2,
+          "mean": 2.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            2,
+            2,
+            3
+          ],
+          "agreement": "moderate"
+        }
+      },
+      "category_score": 56.25
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "consensus_score": 0,
+          "mean": 0,
+          "std_dev": 0,
+          "individual_scores": [
+            0,
+            0,
+            0
+          ],
+          "agreement": "strong"
+        },
+        "F2_additional_pages": {
+          "consensus_score": 0,
+          "mean": 0,
+          "std_dev": 0,
+          "individual_scores": [
+            0,
+            0,
+            0
+          ],
+          "agreement": "strong"
+        },
+        "F3_search_filtering": {
+          "consensus_score": 0,
+          "mean": 0,
+          "std_dev": 0,
+          "individual_scores": [
+            0,
+            0,
+            0
+          ],
+          "agreement": "strong"
+        },
+        "F4_creative_additions": {
+          "consensus_score": 0,
+          "mean": 0,
+          "std_dev": 0,
+          "individual_scores": [
+            0,
+            0,
+            0
+          ],
+          "agreement": "strong"
+        }
+      },
+      "category_score": 0
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "consensus_score": 2,
+          "mean": 1.67,
+          "std_dev": 0.58,
+          "individual_scores": [
+            2,
+            1,
+            2
+          ],
+          "agreement": "moderate"
+        },
+        "G2_pr_description": {
+          "consensus_score": 2,
+          "mean": 2.33,
+          "std_dev": 0.58,
+          "individual_scores": [
+            2,
+            2,
+            3
+          ],
+          "agreement": "moderate"
+        }
+      },
+      "category_score": 50
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "max": 1,
+      "individual_scores": [
+        0,
+        1,
+        1
+      ]
+    },
+    "H2_message_quality": {
+      "max": 1,
+      "individual_scores": [
+        0,
+        1,
+        1
+      ]
+    },
+    "H3_logical_progression": {
+      "max": 1,
+      "individual_scores": [
+        0,
+        1,
+        1
+      ]
+    },
+    "bonus_total": 3
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "max": 0,
+      "individual_scores": [
+        0,
+        0,
+        0
+      ]
+    },
+    "I2_ai_implementation": {
+      "max": 0,
+      "individual_scores": [
+        0,
+        0,
+        0
+      ]
+    },
+    "I3_ai_integration_quality": {
+      "max": 0,
+      "individual_scores": [
+        0,
+        0,
+        0
+      ]
+    },
+    "bonus_total": 0
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 83.33,
+      "B_technical_foundation": 37.5,
+      "C_ui_ux_quality": 30,
+      "D_prd_compliance": 56.25,
+      "E_code_quality": 56.25,
+      "F_bonus_features": 0,
+      "G_decision_making": 50
+    },
+    "weighted_score": 54.5,
+    "git_bonus": 3,
+    "ai_bonus": 0,
+    "final_score": 57.5,
+    "score_band": "Below Expectations",
+    "automatic_failure": false,
+    "automatic_failure_reasons": []
+  },
+  "qualitative_consensus": {
+    "all_strengths": [
+      "Correct matrix logic: normalization (×10 with clamping) and quadrant assignment are accurate for all four quadrants with proper boundary handling at 50 (src/lib/matrix.ts).",
+      "Clean separation of concerns: data loading (loadProjects.ts), transformation (matrix.ts), and presentation (StrategyMatrix.tsx) are properly separated into dedicated files with one-directional dependency flow.",
+      "Chart visualization includes colored quadrant zones, text labels, dashed reference lines, labeled axes with correct domain (0-100), and custom tooltips — showing care for the core deliverable.",
+      "Added 3 additional project files (PRJ-005 through PRJ-007) with realistic data spanning different quadrants, departments, and phases.",
+      "Strong matrix transformation pipeline with dedicated normalization and quadrant logic utilities (`src/lib/matrix.ts:2-50`).",
+      "Scatter matrix visualization includes properly oriented axes, quadrant shading/labels, and useful tooltip content (`src/Components/StrategyMatrix.tsx:53-87`).",
+      "Candidate expanded dataset to seven projects across varied departments and score ranges (`_content/projects/PRJ-001.md:2`, `_content/projects/PRJ-007.md:2`).",
+      "Excellent data transformation logic in matrix.ts with perfect PRD adherence.",
+      "High code readability and clean separation of concerns.",
+      "Rich synthetic dataset (7 projects) that tells a coherent story."
+    ],
+    "all_weaknesses": [
+      "Critical cross-platform bug: file at src/Components/ (uppercase) but imported as @/components/ (lowercase), causing both build failure and dev-mode 500 error on case-sensitive filesystems (Linux). The deliverable does not run on our test environment.",
+      "No features beyond the matrix: no dashboard, no additional pages, no navigation, no search/filtering. The application is a single page with a chart.",
+      "Minimal UI polish: inline styles only, no CSS framework, no design tokens from config.json, no loading/error states. The page looks like a bare prototype.",
+      "Missing .gitignore, TypeScript strict mode off, no linting — project configuration gaps that suggest limited experience with production-quality project setup.",
+      "Production build fails due import path/case mismatch (`src/app/matrix/page.tsx:3` vs `src/Components/StrategyMatrix.tsx`).",
+      "PRD route scope is largely unimplemented: only `/matrix` route exists in `src/app`.",
+      "No design-token integration from tenant config; colors are hardcoded instead (`_content/config.json:8-18`, `src/Components/StrategyMatrix.tsx:55-58`).",
+      "Fragile build configuration (case-sensitivity issue) that breaks on Linux.",
+      "Extremely limited scope (only /matrix route implemented).",
+      "Ignored design tokens and global configuration requirements."
+    ],
+    "all_standout_moments": [
+      "The defensive coding in normalizeScore (typeof check + clamping) and transformToMatrix (null coalescing defaults) shows thoughtfulness about data quality, even though broader error handling is missing.",
+      "The candidate's Summary.md is candid about what was and wasn't accomplished, including a personal note about enjoying the challenge.",
+      "Quadrant compliance is notably strong: logic boundaries and visual placement match PRD expectations.",
+      "The quadrant background shading and labels in the scatter plot are very well done."
+    ],
+    "hiring_signals": [
+      "This candidate demonstrates understanding of core programming concepts — they correctly implemented data transformation logic with proper separation of concerns. However, the delivery is minimal (single feature, no polish, broken build) and the cross-platform bug suggests limited experience with CI/CD or multi-environment testing. This profile suggests a junior developer who can implement specified logic but needs mentorship on project setup, testing discipline, and end-to-end delivery.",
+      "This submission shows the candidate can implement core data-to-visualization logic quickly and structure matrix-specific code reasonably well. The main risk is delivery reliability: a straightforward path/case import issue leaves the production build broken, and overall feature coverage is narrow. Best fit appears to be a junior-to-mid role with stronger release/checklist rigor and broader product-scope execution needed.",
+      "This candidate is a strong 'logic and data' developer but lacks the holistic 'product' focus required for a senior role. They write very clean, maintainable code for specific features but struggle with cross-platform build considerations and broader application architecture. They would thrive in a backend-leaning frontend role or as part of a team where a senior developer provides the architectural scaffolding."
+    ],
+    "individual_recommendations": [
+      "Lean No Hire",
+      "Lean No Hire",
+      "Lean Hire"
+    ],
+    "consensus_recommendation": "Lean No Hire"
+  },
+  "inter_evaluator_analysis": {
+    "total_criteria_evaluated": 29,
+    "high_divergence_criteria": [
+      {
+        "criterion": "E2_readability_naming",
+        "category": "E_code_quality",
+        "scores": [
+          2,
+          2,
+          4
+        ],
+        "evaluators": [
+          "claude-opus-1",
+          "codex-gpt5",
+          "gemini-cli"
+        ],
+        "std_dev": 1.15,
+        "note": "High disagreement — flag for human review"
+      }
+    ],
+    "divergence_count": 1,
+    "overall_agreement": "moderate"
+  }
+}

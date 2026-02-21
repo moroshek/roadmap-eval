@@ -1,0 +1,330 @@
+{
+  "evaluation_metadata": {
+    "candidate_id": "C-008",
+    "repo_url": "https://github.com/moroshek/roadmap-CWKruse",
+    "evaluated_at": "2026-02-20T06:52:46Z",
+    "evaluator": "codex-gpt5",
+    "framework_version": "1.1"
+  },
+  "automated_gate": {
+    "G1_package_json_exists": {
+      "pass": true,
+      "notes": "Found at package.json:1."
+    },
+    "G2_install_succeeds": {
+      "pass": true,
+      "notes": "`npm install` completed successfully (111 packages added, 0 vulnerabilities)."
+    },
+    "G3_build_succeeds": {
+      "pass": true,
+      "notes": "`npm run build` failed due import-case mismatch (src/app/matrix/page.tsx:3 imports '@/components/StrategyMatrix' while file is src/Components/StrategyMatrix.tsx). Per protocol fallback, `npm run dev` started successfully on http://localhost:3000."
+    },
+    "G4_matrix_route_exists": {
+      "pass": true,
+      "notes": "Matrix route implemented at src/app/matrix/page.tsx:5."
+    },
+    "G5_project_files_exist": {
+      "pass": true,
+      "count": 7,
+      "notes": "Seven markdown project files found under _content/projects (PRJ-001..PRJ-007)."
+    },
+    "G6_chart_library_installed": {
+      "pass": true,
+      "library": "recharts",
+      "notes": "Dependency present in package.json:7."
+    },
+    "G7_normalization_logic_exists": {
+      "pass": true,
+      "notes": "Normalization is implemented via multiply-by-10 in src/lib/matrix.ts:6."
+    },
+    "G8_quadrant_logic_exists": {
+      "pass": true,
+      "notes": "Quadrant conditional mapping implemented in src/lib/matrix.ts:17-24."
+    },
+    "G9_chart_renders_data": {
+      "pass": true,
+      "notes": "Scatter plot binds dynamic points via <Scatter data={points} ...> in src/Components/StrategyMatrix.tsx:87."
+    },
+    "G10_tooltips_implemented": {
+      "pass": true,
+      "notes": "Tooltip component configured with custom tooltip content in src/Components/StrategyMatrix.tsx:27-46 and src/Components/StrategyMatrix.tsx:86."
+    },
+    "gate_summary": {
+      "total_passed": 10,
+      "total_failed": 0,
+      "automatic_failure_triggered": true,
+      "failure_reasons": [
+        "Project does not build (`npm run build` fails)"
+      ]
+    }
+  },
+  "rubric_scores": {
+    "A_strategy_matrix": {
+      "weight": 0.3,
+      "criteria": {
+        "A1_data_population": {
+          "score": 4,
+          "evidence": "Project data includes seven files spanning multiple departments and score profiles: _content/projects/PRJ-001.md:2, _content/projects/PRJ-004.md:2, _content/projects/PRJ-005.md:2, _content/projects/PRJ-006.md:2, _content/projects/PRJ-007.md:2.",
+          "notes": "Rich dataset beyond seed files with meaningful diversity across quadrants and functions."
+        },
+        "A2_score_normalization": {
+          "score": 4,
+          "evidence": "normalizeScore clamps input and scales to 0-100 in src/lib/matrix.ts:5-6; transform usage in src/lib/matrix.ts:40-41.",
+          "notes": "Dedicated normalization utility with edge-case handling (non-number and out-of-range values)."
+        },
+        "A3_quadrant_assignment": {
+          "score": 3,
+          "evidence": "Dedicated quadrant utility function in src/lib/matrix.ts:17-24 with boundary handling at >= 50.",
+          "notes": "Cleanly separated and readable implementation; thresholds are not externally configurable or tested."
+        },
+        "A4_scatter_plot_rendering": {
+          "score": 3,
+          "evidence": "Scatter chart has 0-100 axes, quadrant backgrounds, labels, and plotted points in src/Components/StrategyMatrix.tsx:53-58, src/Components/StrategyMatrix.tsx:61-74, src/Components/StrategyMatrix.tsx:81-87.",
+          "notes": "Well-rendered matrix with axis labeling and quadrant zones."
+        },
+        "A5_tooltip_implementation": {
+          "score": 3,
+          "evidence": "Tooltip shows title and quadrant plus effort/impact in src/Components/StrategyMatrix.tsx:40-43; wired at src/Components/StrategyMatrix.tsx:86.",
+          "notes": "Meets and exceeds minimum tooltip content requirement with basic styling."
+        },
+        "A6_logic_ui_separation": {
+          "score": 3,
+          "evidence": "Pipeline is split across src/lib/loadProjects.ts:9-30 (load/parse), src/lib/matrix.ts:2-50 (transform/enrich), and src/Components/StrategyMatrix.tsx:49-94 (rendering), orchestrated in src/app/matrix/page.tsx:7-19.",
+          "notes": "Good matrix-specific separation; not a full parse-validate-transform architecture with strict schema validation."
+        }
+      },
+      "category_score": 83.33,
+      "category_commentary": "Core strategy matrix implementation is strong and complete at the feature level, with good transform/render separation and accurate plotting mechanics."
+    },
+    "B_technical_foundation": {
+      "weight": 0.15,
+      "criteria": {
+        "B1_project_setup": {
+          "score": 1,
+          "evidence": "Build fails with module resolution error from src/app/matrix/page.tsx:3; scripts are present in package.json:15-18.",
+          "notes": "Project scaffolding exists and dev server starts, but production build failure is a critical setup issue."
+        },
+        "B2_routing_navigation": {
+          "score": 0,
+          "evidence": "Only matrix route file is present: src/app/matrix/page.tsx; no dashboard/projects/roadmap routes found under src/app.",
+          "notes": "Routing implementation is minimal and does not provide a navigable multi-page app."
+        },
+        "B3_type_safety": {
+          "score": 2,
+          "evidence": "Typed project transform and quadrant types in src/lib/matrix.ts:10-35, but tsconfig strict mode is disabled at tsconfig.json:11 and `any` is used in src/Components/StrategyMatrix.tsx:87.",
+          "notes": "Basic TypeScript usage is present but not strongly enforced."
+        },
+        "B4_data_layer": {
+          "score": 2,
+          "evidence": "Uses gray-matter parser in src/lib/loadProjects.ts:3 and src/lib/loadProjects.ts:18 with file-system loading from _content/projects.",
+          "notes": "Functional markdown ingestion pipeline, but no schema validation/error reporting layer."
+        }
+      },
+      "category_score": 31.25,
+      "category_commentary": "Foundation is partially functional but materially limited by the build break and minimal route coverage."
+    },
+    "C_ui_ux_quality": {
+      "weight": 0.15,
+      "criteria": {
+        "C1_visual_design": {
+          "score": 1,
+          "evidence": "UI styling is mostly inline and minimal in src/app/matrix/page.tsx:17-18 and src/Components/StrategyMatrix.tsx:39, src/Components/StrategyMatrix.tsx:51.",
+          "notes": "Some visual treatment exists in the chart, but overall product polish is limited."
+        },
+        "C2_responsive_design": {
+          "score": 2,
+          "evidence": "Responsive container is used for chart resizing at src/Components/StrategyMatrix.tsx:52.",
+          "notes": "Basic responsive behavior exists for the chart area, without broader adaptive layout patterns."
+        },
+        "C3_interactivity": {
+          "score": 2,
+          "evidence": "Interactive tooltip behavior is implemented in src/Components/StrategyMatrix.tsx:27-46 and src/Components/StrategyMatrix.tsx:86.",
+          "notes": "Baseline interactivity is present; no notable animation/transitions or advanced interactions."
+        },
+        "C4_empty_error_loading_states": {
+          "score": 1,
+          "evidence": "No loading/empty/error UI states are rendered in src/app/matrix/page.tsx:16-20; only direct chart render path exists.",
+          "notes": "Non-happy-path handling is minimal beyond data filtering in loader/transform functions."
+        },
+        "C5_design_token_usage": {
+          "score": 0,
+          "evidence": "Tenant design tokens exist in _content/config.json:8-18 but chart colors are hardcoded in src/Components/StrategyMatrix.tsx:55-58 and src/Components/StrategyMatrix.tsx:87-89.",
+          "notes": "No evidence of consuming tenant branding tokens from config.json."
+        }
+      },
+      "category_score": 30,
+      "category_commentary": "The matrix has functional UI affordances, but design-system integration and polished state handling are largely absent."
+    },
+    "D_prd_compliance": {
+      "weight": 0.1,
+      "criteria": {
+        "D1_schema_adherence": {
+          "score": 2,
+          "evidence": "Core schema fields are present in seeded files (_content/projects/PRJ-001.md:2-22), while added files vary and omit some seeded fields (e.g., no actual_start in _content/projects/PRJ-005.md:9-21).",
+          "notes": "Core PRD-shaped structure is preserved, but not full strict schema enforcement/completeness."
+        },
+        "D2_quadrant_logic_accuracy": {
+          "score": 4,
+          "evidence": "Quadrant rules exactly match PRD boundaries in src/lib/matrix.ts:21-24, and quadrant zones/labels are rendered in src/Components/StrategyMatrix.tsx:55-58 and src/Components/StrategyMatrix.tsx:81-84.",
+          "notes": "Accurate boundary logic plus chart-level quadrant labeling."
+        },
+        "D3_route_structure": {
+          "score": 0,
+          "evidence": "Only `/matrix` route implemented at src/app/matrix/page.tsx; no files for `/`, `/projects`, `/roadmap`, or `/projects/[slug]`.",
+          "notes": "PRD route coverage is not implemented beyond the core matrix page."
+        },
+        "D4_specification_details": {
+          "score": 3,
+          "evidence": "X axis uses `effort` and Y axis uses `impact` in src/Components/StrategyMatrix.tsx:63 and src/Components/StrategyMatrix.tsx:70; values are derived from complexity/strategic_value via src/lib/matrix.ts:40-41.",
+          "notes": "Core matrix spec details are correctly implemented."
+        }
+      },
+      "category_score": 56.25,
+      "category_commentary": "Matrix-specific PRD compliance is strong, but broader PRD route scope is largely unimplemented."
+    },
+    "E_code_quality": {
+      "weight": 0.2,
+      "criteria": {
+        "E1_separation_of_concerns": {
+          "score": 2,
+          "evidence": "Codebase separates page/component/lib layers across src/app/matrix/page.tsx, src/Components/StrategyMatrix.tsx, src/lib/loadProjects.ts, and src/lib/matrix.ts.",
+          "notes": "Basic layering is present, though architecture remains minimal and narrow in scope."
+        },
+        "E2_readability_naming": {
+          "score": 2,
+          "evidence": "Core function naming is clear (`normalizeScore`, `getQuadrant`, `transformToMatrix` in src/lib/matrix.ts:2, src/lib/matrix.ts:17, src/lib/matrix.ts:39), but comments and prose include frequent typos in src/app/matrix/page.tsx:6-13 and Summary.md:1-44.",
+          "notes": "Readable overall, but consistency/professional polish is uneven."
+        },
+        "E3_error_handling": {
+          "score": 2,
+          "evidence": "Robustness basics exist via field filtering in src/lib/loadProjects.ts:22-29 and safe defaults/clamping in src/lib/matrix.ts:3-6 and src/lib/matrix.ts:40-46.",
+          "notes": "Handles malformed/missing values to avoid obvious crashes, but lacks explicit error UX and validation messaging."
+        },
+        "E4_dependency_choices": {
+          "score": 2,
+          "evidence": "Dependencies are focused and appropriate for task scope: gray-matter and recharts in package.json:3 and package.json:7.",
+          "notes": "Reasonable library choices; implementation quality issues are not due to dependency sprawl."
+        }
+      },
+      "category_score": 50,
+      "category_commentary": "Code quality is serviceable with sensible utility extraction, but not at a production-ready robustness/consistency level."
+    },
+    "F_bonus_features": {
+      "weight": 0.05,
+      "criteria": {
+        "F1_dashboard": {
+          "score": 0,
+          "evidence": "Not attempted: no dashboard route/widgets found under src/app.",
+          "notes": "No executive dashboard implementation present."
+        },
+        "F2_additional_pages": {
+          "score": 0,
+          "evidence": "Not attempted: only src/app/matrix/page.tsx exists as a page route.",
+          "notes": "No additional PRD pages beyond matrix."
+        },
+        "F3_search_filtering": {
+          "score": 0,
+          "evidence": "Not attempted: no search/filter code or dependencies (e.g., Fuse.js) found in src or package.json.",
+          "notes": "No search/filtering feature implemented."
+        },
+        "F4_creative_additions": {
+          "score": 0,
+          "evidence": "No substantive creative feature beyond baseline matrix rendering; repo contains only core matrix implementation files.",
+          "notes": "No additional product features beyond requirements."
+        }
+      },
+      "category_score": 0,
+      "category_commentary": "Submission focuses on core matrix implementation and does not materially extend into bonus feature scope."
+    },
+    "G_decision_making": {
+      "weight": 0.05,
+      "criteria": {
+        "G1_prioritization": {
+          "score": 1,
+          "evidence": "Candidate focused on must-have matrix implementation (Summary.md:21-39), but build is broken due unresolved import path mismatch at src/app/matrix/page.tsx:3.",
+          "notes": "Prioritization targeted the right feature area but stopped short of release-quality completion."
+        },
+        "G2_pr_description": {
+          "score": 2,
+          "evidence": "Submission summary explains implemented items and runtime expectations in Summary.md:20-43.",
+          "notes": "Brief, useful documentation exists but lacks clear trade-off discussion and contains substantial spelling/clarity issues."
+        }
+      },
+      "category_score": 37.5,
+      "category_commentary": "Communication is present and useful, but execution quality (build reliability) weakens prioritization signal."
+    }
+  },
+  "git_history_bonus": {
+    "H1_commit_cadence": {
+      "points": 1,
+      "evidence": "Three commits: 023a42c, bbc6b86, e6a0347 from `git log --oneline -n 8`.",
+      "notes": "Shows incremental progress but limited cadence depth."
+    },
+    "H2_message_quality": {
+      "points": 1,
+      "evidence": "Messages are descriptive but informal and error-prone (e.g., bbc6b86, e6a0347).",
+      "notes": "Some intent is clear, but message quality is not consistently professional."
+    },
+    "H3_logical_progression": {
+      "points": 1,
+      "evidence": "Commit order progresses from scaffold/content (023a42c) to implementation (bbc6b86) to summary update (e6a0347).",
+      "notes": "Clear high-level progression exists."
+    },
+    "bonus_total": 3
+  },
+  "ai_integration_bonus": {
+    "I1_ai_vision_planning": {
+      "points": 0,
+      "evidence": "No repository documentation describing an in-product AI integration plan; Summary.md focuses on matrix implementation only.",
+      "notes": "No AI planning artifact found."
+    },
+    "I2_ai_implementation": {
+      "points": 0,
+      "evidence": "No AI-related code paths, API calls, or scripts found in src/, scripts/, or docs/.",
+      "notes": "No AI feature implementation present."
+    },
+    "I3_ai_integration_quality": {
+      "points": 0,
+      "evidence": "No AI integration exists to evaluate for production quality.",
+      "notes": "Not applicable due to absence of AI feature code."
+    },
+    "bonus_total": 0
+  },
+  "scoring_summary": {
+    "category_scores": {
+      "A_strategy_matrix": 83.33,
+      "B_technical_foundation": 31.25,
+      "C_ui_ux_quality": 30,
+      "D_prd_compliance": 56.25,
+      "E_code_quality": 50,
+      "F_bonus_features": 0,
+      "G_decision_making": 37.5
+    },
+    "weighted_score": 51.69,
+    "git_bonus": 3,
+    "ai_bonus": 0,
+    "final_score": 54.69,
+    "score_band": "Below Expectations",
+    "automatic_failure": true,
+    "automatic_failure_reasons": [
+      "Project does not build (`npm run build` fails)"
+    ]
+  },
+  "qualitative_summary": {
+    "top_strengths": [
+      "Strong matrix transformation pipeline with dedicated normalization and quadrant logic utilities (`src/lib/matrix.ts:2-50`).",
+      "Scatter matrix visualization includes properly oriented axes, quadrant shading/labels, and useful tooltip content (`src/Components/StrategyMatrix.tsx:53-87`).",
+      "Candidate expanded dataset to seven projects across varied departments and score ranges (`_content/projects/PRJ-001.md:2`, `_content/projects/PRJ-007.md:2`)."
+    ],
+    "top_weaknesses": [
+      "Production build fails due import path/case mismatch (`src/app/matrix/page.tsx:3` vs `src/Components/StrategyMatrix.tsx`).",
+      "PRD route scope is largely unimplemented: only `/matrix` route exists in `src/app`.",
+      "No design-token integration from tenant config; colors are hardcoded instead (`_content/config.json:8-18`, `src/Components/StrategyMatrix.tsx:55-58`)."
+    ],
+    "standout_moments": [
+      "Quadrant compliance is notably strong: logic boundaries and visual placement match PRD expectations."
+    ],
+    "hiring_signal": "This submission shows the candidate can implement core data-to-visualization logic quickly and structure matrix-specific code reasonably well. The main risk is delivery reliability: a straightforward path/case import issue leaves the production build broken, and overall feature coverage is narrow. Best fit appears to be a junior-to-mid role with stronger release/checklist rigor and broader product-scope execution needed.",
+    "recommendation": "Lean No Hire"
+  }
+}
